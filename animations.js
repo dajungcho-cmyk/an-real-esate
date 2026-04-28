@@ -173,26 +173,62 @@ if (aboutGrid) {
 }
 
 /* ================================
-   10. Testimonials — word-by-word scroll scrub
+   10. Testimonials — randomized slider + word scrub
    ================================ */
-gsap.utils.toArray('.testi-big-quote').forEach(el => {
-  // Split into word spans preserving punctuation
-  const raw = el.textContent.trim()
-  el.innerHTML = raw.split(/\s+/).map(w => `<span class="word">${w}</span>`).join(' ')
+const testiItems = Array.from(document.querySelectorAll('.testi-item'))
+const testiDots  = Array.from(document.querySelectorAll('.testi-dot'))
+let testiCurrent = Math.floor(Math.random() * testiItems.length)
+let activeST     = null
 
-  const words = el.querySelectorAll('.word')
+function buildScrub(item) {
+  if (activeST) { activeST.kill(); activeST = null }
+
+  const quote = item.querySelector('.testi-big-quote')
+  if (!quote) return
+
+  // Cache original text on first run, then restore it before re-splitting
+  if (!quote.dataset.raw) quote.dataset.raw = quote.textContent.trim()
+  quote.innerHTML = quote.dataset.raw
+    .split(/\s+/)
+    .map(w => `<span class="word">${w}</span>`)
+    .join(' ')
+
+  const words = quote.querySelectorAll('.word')
   gsap.set(words, { opacity: 0.12 })
 
   const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: el,
+      trigger: quote,
       start: 'top 88%',
       end: 'bottom 25%',
       scrub: 1.2,
     }
   })
   tl.to(words, { opacity: 1, ease: 'none', stagger: { each: 0.06 } })
+  activeST = tl.scrollTrigger
+}
+
+function showTesti(index, animate = true) {
+  testiItems.forEach((item, i) => item.classList.toggle('is-active', i === index))
+  testiDots.forEach((dot,  i) => dot.classList.toggle('is-active',  i === index))
+  testiCurrent = index
+  const delay = animate ? 300 : 0
+  setTimeout(() => {
+    buildScrub(testiItems[index])
+    ScrollTrigger.refresh()
+  }, delay)
+}
+
+// Boot with random slide
+showTesti(testiCurrent, false)
+
+document.getElementById('testi-prev')?.addEventListener('click', () => {
+  showTesti((testiCurrent - 1 + testiItems.length) % testiItems.length)
 })
+document.getElementById('testi-next')?.addEventListener('click', () => {
+  showTesti((testiCurrent + 1) % testiItems.length)
+})
+testiDots.forEach((dot, i) => dot.addEventListener('click', () => showTesti(i)))
 
 /* ================================
    11. Join section

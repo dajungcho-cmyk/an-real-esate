@@ -868,13 +868,63 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   color: var(--gold);
 }
 
-.testi-list {}
+.testi-list {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  min-height: 280px;
+}
 
 .testi-item {
+  display: none;
   padding-block: clamp(3rem, 6vw, 5rem);
-  border-top: 1px solid var(--border);
 }
-.testi-item:last-child { border-bottom: 1px solid var(--border); }
+.testi-item.is-active {
+  display: block;
+  animation: testi-in .45s ease both;
+}
+
+@keyframes testi-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Nav — arrows + dots */
+.testi-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding-top: 2rem;
+}
+
+.testi-arrow {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  color: var(--cream-dim);
+  cursor: pointer;
+  transition: border-color var(--fast), color var(--fast);
+  flex-shrink: 0;
+}
+.testi-arrow:hover { border-color: rgba(240,235,224,.35); color: var(--cream); }
+
+.testi-dots {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+}
+
+.testi-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: background var(--fast), transform var(--fast);
+  border: none;
+}
+.testi-dot.is-active {
+  background: var(--gold);
+  transform: scale(1.4);
+}
 
 .testi-big-quote {
   font-family: var(--serif);
