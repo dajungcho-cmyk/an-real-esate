@@ -7,14 +7,21 @@ async function initListings() {
 
   let listings = []
 
-  try {
-    const res = await fetch('/data/listings.json')
-    if (!res.ok) throw new Error('fetch failed ' + res.status)
-    const data = await res.json()
-    listings = Array.isArray(data) ? data : (data.listings || [])
-  } catch (err) {
-    grid.innerHTML = `<p style="color:red;font-size:12px;">Error: ${err.message}</p>`
-    return
+  const inline = document.getElementById('listings-data')
+  if (inline) {
+    try {
+      const data = JSON.parse(inline.textContent)
+      listings = Array.isArray(data) ? data : (data.listings || [])
+    } catch { /* malformed inline JSON */ }
+  }
+
+  if (!listings.length) {
+    try {
+      const res = await fetch('/data/listings.json')
+      if (!res.ok) throw new Error()
+      const data = await res.json()
+      listings = Array.isArray(data) ? data : (data.listings || [])
+    } catch { return }
   }
 
   const published = listings.filter(l => l.published)
