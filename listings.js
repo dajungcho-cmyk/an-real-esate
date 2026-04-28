@@ -9,11 +9,11 @@ async function initListings() {
 
   try {
     const res = await fetch('/data/listings.json')
-    if (!res.ok) throw new Error('fetch failed')
+    if (!res.ok) throw new Error('fetch failed ' + res.status)
     const data = await res.json()
     listings = Array.isArray(data) ? data : (data.listings || [])
-  } catch {
-    // Running locally via file:// — grid stays empty, no error thrown
+  } catch (err) {
+    grid.innerHTML = `<p style="color:red;font-size:12px;">Error: ${err.message}</p>`
     return
   }
 
