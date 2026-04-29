@@ -518,7 +518,8 @@
 
       sha256(canonical).then(function (docHash) {
         pdfDoc = buildPDF(name, docType, docNum, phone, email, visitDateStr, tss, clientIP, docHash)
-        sendEmail(name, docType, docNum, phone, email, visitDateStr, tss, clientIP, docHash)
+        var agentPdfDoc = buildAgentPDF(name, docType, docNum, phone, email, visitDateStr, tss, clientIP, docHash)
+        sendEmailWithPDFs(name, email, visitDateStr, pdfDoc, agentPdfDoc)
         saveVisitLocally(name, docType, docNum, phone, email, visitDateStr, tss, clientIP, docHash)
         saveVisitRemote(name, docType, docNum, phone, email, visitDateStr, tss, clientIP, docHash)
 
@@ -765,6 +766,174 @@
       return doc
     }
 
+    /* ── Agent PDF (includes address + AI verification) ── */
+    function buildAgentPDF(name, docType, docNum, phone, email, visitDate, timestamp, ip, docHash) {
+      var jsPDF = window.jspdf.jsPDF
+      var doc   = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+      var W  = 210
+      var M  = 18
+      var TW = W - 2 * M
+      var y  = 0
+
+      doc.setFillColor(22, 22, 14)
+      doc.rect(0, 0, W, 38, 'F')
+
+      doc.setFillColor(140, 100, 40)
+      doc.rect(W - 46, 0, 46, 38, 'F')
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(6.5)
+      doc.setTextColor(255, 248, 230)
+      doc.text('COPIA AGENTE', W - 23, 17, { align: 'center' })
+      doc.setFontSize(5.5)
+      doc.setFont('helvetica', 'normal')
+      doc.text('USO INTERNO', W - 23, 23, { align: 'center' })
+
+      doc.setFontSize(7)
+      doc.setFont('helvetica', 'normal')
+      doc.setTextColor(200, 169, 110)
+      doc.text('AN HIGH END REAL ESTATE', M, 11)
+      doc.setTextColor(155, 145, 125)
+      doc.text('Agente autónomo · AICAT 13069 · DNI 46242509C · anrealestate.es', M, 16)
+
+      doc.setFontSize(15)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(240, 235, 224)
+      doc.text('HOJA DE VISITA', (W - 46) / 2, 26, { align: 'center' })
+
+      doc.setFontSize(6.5)
+      doc.setFont('helvetica', 'normal')
+      doc.setTextColor(155, 145, 125)
+      doc.text('Documento de registro oficial de intermediación inmobiliaria', (W - 46) / 2, 32, { align: 'center' })
+
+      y = 46
+
+      function section(title) {
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(7)
+        doc.setTextColor(200, 169, 110)
+        doc.text(title, M, y)
+        doc.setDrawColor(200, 169, 110)
+        doc.setLineWidth(0.25)
+        doc.line(M, y + 1.5, W - M, y + 1.5)
+        y += 7
+      }
+
+      function kv(key, val) {
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(130, 120, 100)
+        doc.text(key, M, y)
+        doc.setFont('helvetica', 'normal')
+        doc.setTextColor(28, 26, 18)
+        var lines = doc.splitTextToSize(String(val), TW - 44)
+        doc.text(lines, M + 44, y)
+        y += lines.length * 4.8
+      }
+
+      section('INMUEBLE')
+      kv('Referencia:', propRef)
+      kv('Denominación:', propTitle)
+      kv('Zona:', propZone)
+      if (propAddress)   kv('Dirección:', propAddress)
+      if (propDoorFloor) kv('Piso:', propDoorFloor)
+      if (propDoorNum)   kv('Puerta:', propDoorNum)
+      if (propZip)       kv('Código postal:', propZip)
+      kv('Fecha de visita:', visitDate)
+      y += 4
+
+      section('AGENTE INMOBILIARIO')
+      kv('Nombre:', 'D. Álvaro Navarro Mosca')
+      kv('AICAT núm.:', '13069')
+      kv('DNI:', '46242509C')
+      kv('Actividad:', 'Agente inmobiliario autónomo · AN High End Real Estate')
+      kv('Email:', 'alvaro@anrealestate.es')
+      y += 4
+
+      section('VISITANTE')
+      kv('Nombre completo:', name)
+      kv('Documento:', docType + ' ' + docNum)
+      kv('Teléfono:', phone)
+      kv('Email:', email)
+      kv('Fecha / hora firma:', timestamp + ' (firma electrónica)')
+      kv('IP de firma:', ip)
+      y += 4
+
+      section('DECLARACIONES DEL VISITANTE')
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(7.5)
+      doc.setTextColor(28, 26, 18)
+      var clauses = [
+        '1.  El/la firmante declara haber visitado el inmueble referenciado en la presente hoja en presencia del agente inmobiliario autónomo D. Álvaro Navarro Mosca (AICAT 13069, DNI 46242509C), actuando en nombre propio bajo la marca comercial AN High End Real Estate.',
+        '2.  El/la firmante se compromete expresamente a no realizar ninguna operación sobre el inmueble descrito —compraventa, arrendamiento u otra modalidad— sin la intervención del agente D. Álvaro Navarro Mosca (AICAT 13069) durante 24 meses desde la fecha de visita. Cualquier operación realizada al margen del agente en dicho período dará lugar al pago de los honorarios de intermediación correspondientes.',
+        '3.  El/la firmante declara que los datos aportados son verídicos y corresponden a su identidad real, siendo responsable de cualquier falsedad en los mismos.',
+        '4.  Consiente el tratamiento de sus datos personales por D. Álvaro Navarro Mosca (DNI 46242509C), agente inmobiliario autónomo, conforme al RGPD (UE) 2016/679 y la LOPDGDD 3/2018, con finalidad de gestionar la relación inmobiliaria. Derechos en: alvaro@anrealestate.es.'
+      ]
+      clauses.forEach(function (clause) {
+        var lines = doc.splitTextToSize(clause, TW)
+        doc.text(lines, M, y)
+        y += lines.length * 4.2 + 2.5
+      })
+      y += 3
+
+      section('FIRMA DEL VISITANTE')
+      doc.setDrawColor(210, 205, 195)
+      doc.setLineWidth(0.25)
+      doc.rect(M, y, 85, 30)
+      doc.addImage(canvas.toDataURL('image/png'), 'PNG', M + 1, y + 1, 83, 28)
+      var tx = M + 92
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(9)
+      doc.setTextColor(28, 26, 18)
+      doc.text(name, tx, y + 9)
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(7.5)
+      doc.setTextColor(130, 120, 100)
+      doc.text(docType + ': ' + docNum, tx, y + 15)
+      doc.text('Tel: ' + phone, tx, y + 21)
+      doc.text(timestamp, tx, y + 27)
+      doc.text('IP: ' + ip, tx, y + 33)
+      y += 36
+
+      if (aiVerifyResult) {
+        y += 4
+        section('VERIFICACIÓN IA')
+        var ai = aiVerifyResult
+        kv('Documento válido:', ai.isIdDocument ? 'Sí' : 'No')
+        if (ai.docType)    kv('Tipo documento:', ai.docType)
+        if (ai.nameOnDoc)  kv('Nombre en doc:', ai.nameOnDoc)
+        kv('Nombre coincide:', ai.nameMatch === true ? 'Sí' : ai.nameMatch === false ? 'No' : '—')
+        if (ai.confidence) kv('Confianza IA:', ai.confidence)
+        if (ai.message)    kv('Mensaje IA:', ai.message)
+        y += 4
+      }
+
+      doc.setDrawColor(210, 205, 195)
+      doc.setLineWidth(0.2)
+      doc.line(M, y + 2, W - M, y + 2)
+      y += 8
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(6.5)
+      doc.setTextColor(155, 145, 125)
+      doc.text('Firma electrónica simple con plena validez legal conforme a la Ley 6/2020 reguladora de determinados aspectos de los servicios electrónicos de confianza', W / 2, y, { align: 'center' })
+      y += 4
+      doc.text('y el Reglamento eIDAS (UE) nº 910/2014. Álvaro Navarro Mosca · Agente inmobiliario autónomo · AICAT 13069 · Barcelona · anrealestate.es', W / 2, y, { align: 'center' })
+
+      if (docHash) {
+        y += 7
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(6)
+        doc.setTextColor(130, 120, 100)
+        doc.text('INTEGRIDAD DEL DOCUMENTO — SHA-256:', M, y)
+        y += 4
+        doc.setFont('courier', 'normal')
+        doc.setFontSize(5.5)
+        doc.setTextColor(70, 65, 55)
+        doc.text(docHash, M, y)
+      }
+
+      return doc
+    }
+
     /* ── Save to shared localStorage (same device as admin) ── */
     function saveVisitLocally(name, docType, docNum, phone, email, visitDate, timestamp, ip, docHash) {
       try {
@@ -797,58 +966,33 @@
       } catch {}
     }
 
-    /* ── Email notification ── */
-    function sendEmail(name, docType, docNum, phone, email, visitDate, timestamp, ip, docHash) {
-      var record = {
-        propSlug: propSlug, propRef: propRef, propTitle: propTitle, propZone: propZone,
-        propAddress: propAddress, doorFloor: propDoorFloor, doorNum: propDoorNum, zip: propZip,
-        name: name, docType: docType, docNum: docNum, phone: phone, email: email,
-        visitDate: visitDate, timestamp: timestamp, ip: ip, savedAt: new Date().toISOString(),
-        docHash: docHash || '', aiVerify: aiVerifyResult || null
-      }
-      var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(record))))
-      var adminUrl = window.location.origin + '/admin/index.html?visit=' + encodeURIComponent(encoded)
-
-      var fd = new FormData()
-      fd.append('_subject',  'Hoja de visita firmada — ' + propRef + ' — ' + name)
-      fd.append('_template', 'table')
-      fd.append('_captcha',  'false')
-      fd.append('_replyto',  email || 'alvaro@anrealestate.es')
-      if (email) fd.append('_cc', email)
-      fd.append('Propiedad', propRef + ' · ' + propTitle)
-      fd.append('Zona',      propZone)
-      fd.append('Visitante', name)
-      fd.append('Documento', docType + ' ' + docNum)
-      fd.append('Teléfono',  phone)
-      fd.append('Email visitante', email)
-      fd.append('Fecha de visita', visitDate)
-      fd.append('Fecha / hora firma', timestamp)
-      fd.append('IP de firma',     ip)
-      fd.append('Hash SHA-256',   docHash || '—')
-      fd.append('Agente', 'D. Álvaro Navarro Mosca · Agente autónomo · AICAT 13069 · DNI 46242509C')
-      fd.append('Guardar en admin', adminUrl)
-      if (aiVerifyResult) {
-        var ai = aiVerifyResult
-        fd.append('IA · Documento válido', ai.isIdDocument ? 'Sí' : 'No')
-        fd.append('IA · Tipo documento',   ai.docType || '—')
-        fd.append('IA · Nombre en doc',    ai.nameOnDoc || '—')
-        fd.append('IA · Nombre coincide',  ai.nameMatch === true ? 'Sí' : ai.nameMatch === false ? 'No' : '—')
-        fd.append('IA · Confianza',        ai.confidence || '—')
-        fd.append('IA · Mensaje',          ai.message || '—')
-      }
-      fd.append('Nota', 'El visitante ha firmado y descargado el PDF. Haz clic en «Guardar en admin» para registrar la visita en el panel.')
-
-      fetch('https://formsubmit.co/ajax/alvaro@anrealestate.es', { method: 'POST', body: fd })
-        .then(function (r) {
-          if (!r.ok) {
+    /* ── Email (Resend) — client PDF to client, agent PDF to agent ── */
+    function sendEmailWithPDFs(name, email, visitDate, clientPdfDoc, agentPdfDoc) {
+      try {
+        var clientB64 = clientPdfDoc.output('datauristring').split(',')[1]
+        var agentB64  = agentPdfDoc.output('datauristring').split(',')[1]
+        fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            clientEmail: email,
+            clientName: name,
+            propRef: propRef,
+            propTitle: propTitle,
+            visitDate: visitDate,
+            clientPdfBase64: clientB64,
+            agentPdfBase64: agentB64
+          })
+        })
+        .then(function (r) { return r.json() })
+        .then(function (d) {
+          if (!d.ok) {
             var el = document.getElementById('vs-email-sent')
-            if (el) el.innerHTML = '⚠️ El email no se pudo enviar (error ' + r.status + '). El registro local sí se ha guardado.'
+            if (el) el.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.35 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.61a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/></svg> ⚠ El email no se pudo enviar. Descargue el PDF directamente.'
           }
         })
-        .catch(function () {
-          var el = document.getElementById('vs-email-sent')
-          if (el) el.innerHTML = '⚠️ Sin conexión — el email no se envió. El registro local sí se ha guardado.'
-        })
+        .catch(function () {})
+      } catch (e) {}
     }
 
     /* ── Remote storage (server-side) ── */
