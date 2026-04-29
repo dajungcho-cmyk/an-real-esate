@@ -48,14 +48,18 @@ export default async function handler(req, res) {
           { text: PROMPT(name, docType) }
         ]
       }],
-      generationConfig: { max_output_tokens: 512 }
+      generationConfig: { max_output_tokens: 512 },
+      thinkingConfig: { thinkingBudget: 0 }
     })
   })
 
   const data = await r.json()
   if (!r.ok) return res.status(500).json({ error: data.error?.message || 'Gemini API error' })
 
-  const raw = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || ''
+  // Find first non-thought text part
+  const parts = data.candidates?.[0]?.content?.parts || []
+  const textPart = parts.find(p => !p.thought && p.text) || parts.find(p => p.text)
+  const raw = textPart?.text?.trim() || ''
   const cleaned = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim()
   try {
     return res.json(JSON.parse(cleaned))
