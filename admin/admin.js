@@ -1979,7 +1979,8 @@ async function syncRemoteVisits() {
   try {
     const r = await fetch('/api/get-visits')
     const data = await r.json()
-    if (!data.configured || !data.visits?.length) return
+    if (!data.configured) { toast('⚠ Almacenamiento remoto no configurado', 'error'); return }
+    if (!data.visits?.length) { toast('Sync: 0 visitas en servidor', ''); return }
     const local = JSON.parse(localStorage.getItem(VISITS_KEY) || '[]')
     const localKeys = new Set(local.map(v => v.timestamp + '|' + v.docNum))
     let added = 0
@@ -1995,8 +1996,13 @@ async function syncRemoteVisits() {
     if (added > 0) {
       localStorage.setItem(VISITS_KEY, JSON.stringify(local))
       renderVisitLog()
+      toast(`✓ ${added} visita(s) sincronizada(s) del servidor`, 'success')
+    } else {
+      toast(`Sync OK — ${data.visits.length} en servidor, todas ya locales`, '')
     }
-  } catch {}
+  } catch (e) {
+    toast('Error sync: ' + e.message, 'error')
+  }
 }
 
 function renderVisitLog() {
