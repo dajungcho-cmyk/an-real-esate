@@ -48,7 +48,7 @@ export default async function handler(req, res) {
           { text: PROMPT(name, docType) }
         ]
       }],
-      generationConfig: { response_mime_type: 'application/json', max_output_tokens: 256 }
+      generationConfig: { max_output_tokens: 512 }
     })
   })
 
