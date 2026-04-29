@@ -432,7 +432,7 @@
 
         if (data.error) {
           result.className = 'vs-ai-result vs-ai-result--info'
-          result.textContent = 'La verificación IA no está disponible ahora. El agente comprobará el documento manualmente.'
+          result.textContent = 'Error: ' + data.error
           return
         }
 
