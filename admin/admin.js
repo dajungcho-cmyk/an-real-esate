@@ -1810,9 +1810,11 @@ function buildAgentPDF(v) {
 
   // Resolve address: record → an_addresses store → _listings
   const addrs = JSON.parse(localStorage.getItem('an_addresses') || '{}')
-  const address = v.propAddress
-    || (v.propSlug && addrs[v.propSlug])
-    || (() => { const l = _listings.find(l => (v.propSlug && l.slug === v.propSlug) || (v.propRef && v.propRef !== '—' && l.ref === v.propRef) || l.title === v.propTitle); return l?.address || '' })()
+  const _resolvedListing = _listings.find(l => (v.propSlug && l.slug === v.propSlug) || (v.propRef && v.propRef !== '—' && l.ref === v.propRef) || l.title === v.propTitle)
+  const address   = v.propAddress || (v.propSlug && addrs[v.propSlug]) || _resolvedListing?.address || ''
+  const doorFloor = _resolvedListing?.doorFloor || ''
+  const doorNum   = _resolvedListing?.doorNum || ''
+  const zip       = _resolvedListing?.zip || ''
 
   const { jsPDF } = window.jspdf
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
@@ -1853,7 +1855,10 @@ function buildAgentPDF(v) {
   kv('Referencia:', v.propRef)
   kv('Denominación:', v.propTitle)
   kv('Zona:', v.propZone)
-  if (address) kv('Dirección exacta:', address + (v.doorFloor ? ', ' + v.doorFloor + 'º' : '') + (v.doorNum ? ' ' + v.doorNum : ''))
+  if (address)   kv('Dirección exacta:', address)
+  if (doorFloor) kv('Piso:', doorFloor)
+  if (doorNum)   kv('Puerta:', doorNum)
+  if (zip)       kv('Código postal:', zip)
   kv('Fecha de visita:', v.visitDate || '—')
   y += 4
 
@@ -2193,12 +2198,11 @@ function initVisits() {
     _listings.forEach(l => {
       const opt = document.createElement('option')
       opt.value = l.slug
-      const fullAddr = [l.address, l.doorFloor ? l.doorFloor + 'º' : '', l.doorNum || ''].filter(Boolean).join(' ')
-      opt.textContent = l.ref + ' — ' + l.title + (fullAddr ? ' · ' + fullAddr : '')
+      opt.textContent = l.ref + ' — ' + l.title + (l.address ? ' · ' + l.address : '')
       opt.dataset.ref     = l.ref
       opt.dataset.title   = l.title
       opt.dataset.zone    = l.neighbourhood
-      opt.dataset.address = fullAddr
+      opt.dataset.address = l.address || ''
       sel.insertBefore(opt, customOpt)
     })
 
