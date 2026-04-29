@@ -395,7 +395,7 @@ function switchView(name) {
 }
 
 // ── SAVE ──────────────────────────────────────
-function saveProperty() {
+async function saveProperty() {
   const slug = document.getElementById('f-slug').value.trim()
     .toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
 
@@ -406,6 +406,19 @@ function saveProperty() {
   // Check slug conflict
   if (slug !== original && _listings.find(l => l.slug === slug)) {
     toast('Ya existe una propiedad con ese slug', 'error'); return
+  }
+
+  // Auto-translate before saving if there's content
+  const hasContent = document.getElementById('f-title').value.trim() ||
+    [...document.querySelectorAll('#desc-list .desc-textarea')].some(t => t.value.trim())
+  if (hasContent) {
+    const saveBtn = document.getElementById('btn-save')
+    const origText = saveBtn.textContent
+    saveBtn.disabled = true
+    saveBtn.textContent = '⏳ Traduciendo…'
+    await translateListing()
+    saveBtn.disabled = false
+    saveBtn.textContent = origText
   }
 
   // Build description

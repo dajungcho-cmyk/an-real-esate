@@ -1383,6 +1383,7 @@ details[open] .vl-import-toggle::before { transform: rotate(90deg); }
 
 /* ── TRANSLATE WRAP ──────────────────────────── */
 .translate-wrap { display: flex; gap: .35rem; align-items: center; }
+.source-lang-label { font-size: .72rem; color: var(--muted); white-space: nowrap; }
 .source-lang-select {
   padding: .35rem .5rem; font-size: .75rem; font-family: inherit;
   background: var(--bg2); border: 1px solid var(--border);
