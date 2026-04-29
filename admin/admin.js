@@ -3,6 +3,11 @@
    ============================================= */
 
 const ADMIN_PASSWORD    = 'ANadmin2026'  // cambia esto en producción
+
+// Si la web está en Hostinger u otro hosting sin serverless,
+// pon aquí la URL completa del endpoint en Vercel:
+// const IMPROVE_API = 'https://tu-proyecto.vercel.app/api/improve'
+const IMPROVE_API = '/api/improve'
 const DATA_URL          = '/data/listings.json'
 const SESSION_KEY       = 'an_admin_auth'
 const CLD_CLOUD         = 'dbume3eak'
@@ -745,7 +750,7 @@ async function improveDesc(rowDiv) {
     const address = document.getElementById('f-address')?.value || ''
     const price   = document.getElementById('f-price-num')?.value || ''
 
-    const res  = await fetch('/api/improve', {
+    const res  = await fetch(IMPROVE_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, lang, address, price }),
