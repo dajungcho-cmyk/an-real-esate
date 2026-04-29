@@ -734,6 +734,7 @@
       fd.append('_subject',  'Hoja de visita firmada — ' + propRef + ' — ' + name)
       fd.append('_template', 'table')
       fd.append('_captcha',  'false')
+      fd.append('_replyto',  email || 'alvaro@anrealestate.es')
       if (email) fd.append('_cc', email)
       fd.append('Propiedad', propRef + ' · ' + propTitle)
       fd.append('Zona',      propZone)
@@ -750,7 +751,16 @@
       fd.append('Nota', 'El visitante ha firmado y descargado el PDF. Haz clic en «Guardar en admin» para registrar la visita en el panel.')
 
       fetch('https://formsubmit.co/ajax/alvaro@anrealestate.es', { method: 'POST', body: fd })
-        .catch(function () {})
+        .then(function (r) {
+          if (!r.ok) {
+            var el = document.getElementById('vs-email-sent')
+            if (el) el.innerHTML = '⚠️ El email no se pudo enviar (error ' + r.status + '). El registro local sí se ha guardado.'
+          }
+        })
+        .catch(function () {
+          var el = document.getElementById('vs-email-sent')
+          if (el) el.innerHTML = '⚠️ Sin conexión — el email no se envió. El registro local sí se ha guardado.'
+        })
     }
   })()
   </script>
