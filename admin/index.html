@@ -112,13 +112,13 @@
     <!-- VIEW: property form -->
     <section class="view" id="view-form">
       <header class="view-hd">
-        <button class="btn-back" id="btn-back">← Volver</button>
+        <button class="btn-back" id="btn-back" data-i18n="btn.back">← Volver</button>
         <h1 id="form-title">Nueva propiedad</h1>
         <div class="hd-actions">
-          <button class="btn-outline" id="btn-delete" style="display:none">Eliminar</button>
+          <button class="btn-outline" id="btn-delete" style="display:none" data-i18n="btn.delete">Eliminar</button>
           <div class="translate-wrap">
-            <label class="source-lang-label">Idioma de entrada:</label>
-            <select id="f-source-lang" class="source-lang-select" title="Idioma en el que has escrito la propiedad">
+            <label class="source-lang-label" data-i18n="lang.label">Idioma de entrada:</label>
+            <select id="f-source-lang" class="source-lang-select">
               <option value="auto">🌐 Auto</option>
               <option value="es">ES</option>
               <option value="en">EN</option>
@@ -128,19 +128,19 @@
               <option value="it">IT</option>
               <option value="ru">RU</option>
             </select>
-            <button class="btn-outline" id="btn-translate" title="Traducir manualmente">🌐</button>
+            <button class="btn-outline" id="btn-translate">🌐</button>
           </div>
-          <button class="btn-gold" id="btn-save">Guardar</button>
+          <button class="btn-gold" id="btn-save" data-i18n="btn.save">Guardar</button>
         </div>
       </header>
 
       <div class="form-tabs-bar">
-        <button class="ftab active" data-tab="basic">Básico</button>
-        <button class="ftab" data-tab="images">Imágenes</button>
-        <button class="ftab" data-tab="desc">Descripción</button>
-        <button class="ftab" data-tab="details">Detalles</button>
-        <button class="ftab" data-tab="feats">Características</button>
-        <button class="ftab" data-tab="nearby">Ubicación</button>
+        <button class="ftab active" data-tab="basic" data-i18n="tab.basic">Básico</button>
+        <button class="ftab" data-tab="images" data-i18n="tab.images">Imágenes</button>
+        <button class="ftab" data-tab="desc" data-i18n="tab.desc">Descripción</button>
+        <button class="ftab" data-tab="details" data-i18n="tab.details">Detalles</button>
+        <button class="ftab" data-tab="feats" data-i18n="tab.feats">Características</button>
+        <button class="ftab" data-tab="nearby" data-i18n="tab.nearby">Ubicación</button>
       </div>
 
       <form id="prop-form" autocomplete="off">
@@ -152,56 +152,56 @@
           <div class="form-grid">
 
             <div class="fg fg-2">
-              <label>Título</label>
-              <input type="text" id="f-title" placeholder="Ej: Elegant Penthouse with Sea Views" />
+              <label data-i18n="label.title">Título</label>
+              <input type="text" id="f-title" data-i18n-ph="ph.title" placeholder="Ej: Elegant Penthouse with Sea Views" />
             </div>
             <div class="fg">
-              <label>Slug <em>(URL)</em></label>
-              <input type="text" id="f-slug" placeholder="ej: gracia-garden" />
+              <label data-i18n="label.slug">Slug (URL)</label>
+              <input type="text" id="f-slug" data-i18n-ph="ph.slug" placeholder="ej: gracia-garden" />
             </div>
             <div class="fg">
-              <label>Referencia</label>
-              <input type="text" id="f-ref" placeholder="ej: AN-2026-001" />
+              <label data-i18n="label.ref">Referencia</label>
+              <input type="text" id="f-ref" data-i18n-ph="ph.ref" placeholder="ej: AN-2026-001" />
             </div>
 
             <div class="fg">
-              <label>Estado</label>
+              <label data-i18n="label.status">Estado</label>
               <div class="radio-group">
-                <label class="radio-opt"><input type="radio" name="f-status" value="sale" checked /> En venta</label>
-                <label class="radio-opt"><input type="radio" name="f-status" value="rent" /> En alquiler</label>
+                <label class="radio-opt"><input type="radio" name="f-status" value="sale" checked /><span data-i18n="label.status.sale">En venta</span></label>
+                <label class="radio-opt"><input type="radio" name="f-status" value="rent" /><span data-i18n="label.status.rent">En alquiler</span></label>
               </div>
             </div>
             <div class="fg">
-              <label>Tipo de propiedad</label>
+              <label data-i18n="label.type">Tipo de propiedad</label>
               <select id="f-type">
-                <option value="apartment">Apartamento</option>
-                <option value="penthouse">Ático</option>
-                <option value="villa">Villa</option>
-                <option value="house">Casa</option>
-                <option value="townhouse">Casa adosada</option>
-                <option value="studio">Estudio</option>
-                <option value="office">Oficina / Comercial</option>
-                <option value="land">Solar / Terreno</option>
+                <option value="apartment" data-i18n="opt.type.apartment">Apartamento</option>
+                <option value="penthouse" data-i18n="opt.type.penthouse">Ático</option>
+                <option value="villa" data-i18n="opt.type.villa">Villa</option>
+                <option value="house" data-i18n="opt.type.house">Casa</option>
+                <option value="townhouse" data-i18n="opt.type.townhouse">Casa adosada</option>
+                <option value="studio" data-i18n="opt.type.studio">Estudio</option>
+                <option value="office" data-i18n="opt.type.office">Oficina / Comercial</option>
+                <option value="land" data-i18n="opt.type.land">Solar / Terreno</option>
               </select>
             </div>
 
             <div class="fg">
-              <label>Precio</label>
+              <label data-i18n="label.price">Precio</label>
               <div class="price-wrap">
                 <span class="price-sym">€</span>
                 <input type="text" id="f-price-num" class="price-input" placeholder="830,000" />
                 <select id="f-price-postfix" class="price-postfix">
-                  <option value="">— venta —</option>
-                  <option value="/mes">/mes</option>
-                  <option value="/semana">/semana</option>
-                  <option value="/noche">/noche</option>
+                  <option value="" data-i18n="opt.sale">— venta —</option>
+                  <option value="/mes" data-i18n="opt.month">/mes</option>
+                  <option value="/semana" data-i18n="opt.week">/semana</option>
+                  <option value="/noche" data-i18n="opt.night">/noche</option>
                 </select>
               </div>
             </div>
             <div class="fg">
-              <label>Barrio</label>
+              <label data-i18n="label.neighbourhood">Barrio</label>
               <select id="f-neighbourhood">
-                <option value="">— Selecciona —</option>
+                <option value="" data-i18n="opt.select">— Selecciona —</option>
                 <option value="Gràcia, Barcelona">Gràcia</option>
                 <option value="Eixample, Barcelona">Eixample</option>
                 <option value="Dreta de l'Eixample, Barcelona">Dreta de l'Eixample</option>
@@ -221,27 +221,27 @@
             </div>
 
             <div class="fg fg-2">
-              <label>Dirección exacta <em>(solo visible en admin y hoja de visita)</em></label>
-              <input type="text" id="f-address" placeholder="Busca la dirección…" autocomplete="off" />
+              <label data-i18n="label.address">Dirección exacta <em data-i18n="label.address.hint">(solo visible en admin y hoja de visita)</em></label>
+              <input type="text" id="f-address" data-i18n-ph="ph.address" placeholder="Busca la dirección…" autocomplete="off" />
             </div>
             <div class="fg">
-              <label>Código postal</label>
-              <input type="text" id="f-zip" placeholder="ej: 08012" maxlength="10" />
-            </div>
-
-            <div class="fg">
-              <label>Superficie construida (m²)</label>
-              <input type="number" id="f-size" min="0" placeholder="ej: 94" />
-            </div>
-            <div class="fg">
-              <label>Superficie terreno (m²) <em>(opcional)</em></label>
-              <input type="number" id="f-land" min="0" placeholder="ej: 450" />
+              <label data-i18n="label.zip">Código postal</label>
+              <input type="text" id="f-zip" data-i18n-ph="ph.zip" placeholder="ej: 08012" maxlength="10" />
             </div>
 
             <div class="fg">
-              <label>Habitaciones</label>
+              <label data-i18n="label.size">Superficie construida (m²)</label>
+              <input type="number" id="f-size" min="0" data-i18n-ph="ph.size" placeholder="ej: 94" />
+            </div>
+            <div class="fg">
+              <label data-i18n="label.land">Superficie terreno (m²) <em data-i18n="opt.optional">(opcional)</em></label>
+              <input type="number" id="f-land" min="0" data-i18n-ph="ph.land" placeholder="ej: 450" />
+            </div>
+
+            <div class="fg">
+              <label data-i18n="label.beds">Habitaciones</label>
               <select id="f-beds">
-                <option value="0">Estudio / 0</option>
+                <option value="0" data-i18n="opt.beds.studio">Estudio / 0</option>
                 <option value="1">1</option>
                 <option value="2" selected>2</option>
                 <option value="3">3</option>
@@ -253,7 +253,7 @@
               </select>
             </div>
             <div class="fg">
-              <label>Baños</label>
+              <label data-i18n="label.baths">Baños</label>
               <select id="f-baths">
                 <option value="1" selected>1</option>
                 <option value="2">2</option>
@@ -264,59 +264,59 @@
               </select>
             </div>
             <div class="fg">
-              <label>Garaje</label>
+              <label data-i18n="label.garage">Garaje</label>
               <select id="f-garage">
-                <option value="">No</option>
-                <option value="1">1 plaza</option>
-                <option value="2">2 plazas</option>
-                <option value="3">3 plazas</option>
-                <option value="4">4 plazas</option>
-                <option value="7">7 plazas</option>
+                <option value="" data-i18n="opt.garage.no">No</option>
+                <option value="1" data-i18n="opt.garage.1">1 plaza</option>
+                <option value="2" data-i18n="opt.garage.2">2 plazas</option>
+                <option value="3" data-i18n="opt.garage.3">3 plazas</option>
+                <option value="4" data-i18n="opt.garage.4">4 plazas</option>
+                <option value="7" data-i18n="opt.garage.7">7 plazas</option>
               </select>
             </div>
             <div class="fg">
-              <label>Planta</label>
+              <label data-i18n="label.floor">Planta</label>
               <select id="f-floor">
-                <option value="">— Selecciona —</option>
-                <option value="Ground">Planta baja</option>
-                <option value="Mezzanine">Entresuelo</option>
-                <option value="Principal">Principal</option>
+                <option value="" data-i18n="opt.select">— Selecciona —</option>
+                <option value="Ground" data-i18n="opt.floor.ground">Planta baja</option>
+                <option value="Mezzanine" data-i18n="opt.floor.mezz">Entresuelo</option>
+                <option value="Principal" data-i18n="opt.floor.principal">Principal</option>
                 <option value="1st">1ª</option>
                 <option value="2nd">2ª</option>
                 <option value="3rd">3ª</option>
                 <option value="4th">4ª</option>
                 <option value="5th">5ª</option>
-                <option value="Upper">Planta alta</option>
-                <option value="Penthouse">Ático</option>
-                <option value="3 levels">3 niveles</option>
-                <option value="4 levels">4 niveles</option>
+                <option value="Upper" data-i18n="opt.floor.upper">Planta alta</option>
+                <option value="Penthouse" data-i18n="opt.floor.penthouse">Ático</option>
+                <option value="3 levels" data-i18n="opt.floor.3lev">3 niveles</option>
+                <option value="4 levels" data-i18n="opt.floor.4lev">4 niveles</option>
               </select>
             </div>
 
             <div class="fg">
-              <label>Año de construcción</label>
-              <input type="number" id="f-year" min="1800" max="2030" placeholder="ej: 1920" />
+              <label data-i18n="label.year">Año de construcción</label>
+              <input type="number" id="f-year" min="1800" max="2030" data-i18n-ph="ph.year" placeholder="ej: 1920" />
             </div>
             <div class="fg">
-              <label>Año de renovación <em>(opcional)</em></label>
-              <input type="number" id="f-year-renovated" min="1900" max="2030" placeholder="ej: 2022" />
+              <label data-i18n="label.year_ren">Año de renovación <em data-i18n="opt.optional">(opcional)</em></label>
+              <input type="number" id="f-year-renovated" min="1900" max="2030" data-i18n-ph="ph.year_ren" placeholder="ej: 2022" />
             </div>
             <div class="fg">
-              <label>Condición</label>
+              <label data-i18n="label.condition">Condición</label>
               <select id="f-condition">
-                <option value="">— Selecciona —</option>
-                <option value="New construction">Nueva construcción</option>
-                <option value="New — under renovation">En renovación</option>
-                <option value="Newly renovated">Recién renovado</option>
-                <option value="Turn-key renovation">Reforma llave en mano</option>
-                <option value="Good condition">Buen estado</option>
-                <option value="To renovate">A reformar</option>
+                <option value="" data-i18n="opt.select">— Selecciona —</option>
+                <option value="New construction" data-i18n="opt.cond.new">Nueva construcción</option>
+                <option value="New — under renovation" data-i18n="opt.cond.renov">En renovación</option>
+                <option value="Newly renovated" data-i18n="opt.cond.newly">Recién renovado</option>
+                <option value="Turn-key renovation" data-i18n="opt.cond.turnkey">Reforma llave en mano</option>
+                <option value="Good condition" data-i18n="opt.cond.good">Buen estado</option>
+                <option value="To renovate" data-i18n="opt.cond.torenovate">A reformar</option>
               </select>
             </div>
             <div class="fg">
-              <label>Clase energética</label>
+              <label data-i18n="label.energy">Clase energética</label>
               <select id="f-energy">
-                <option value="">— N/A —</option>
+                <option value="" data-i18n="opt.energy.na">— N/A —</option>
                 <option value="A">A</option>
                 <option value="B">B</option>
                 <option value="C">C</option>
@@ -333,11 +333,11 @@
 
           <div class="toggles-row">
             <label class="toggle-wrap">
-              <span>Publicada en la web</span>
+              <span data-i18n="label.published">Publicada en la web</span>
               <div class="toggle"><input type="checkbox" id="f-published" checked /><span class="slider"></span></div>
             </label>
             <label class="toggle-wrap">
-              <span>Marcada como vendida / alquilada</span>
+              <span data-i18n="label.sold">Marcada como vendida / alquilada</span>
               <div class="toggle"><input type="checkbox" id="f-sold" /><span class="slider"></span></div>
             </label>
           </div>
@@ -348,9 +348,9 @@
           <input type="hidden" id="f-image" />
           <div class="list-block">
             <div class="list-hd">
-              <span class="list-title">Fotos — arrastra para ordenar</span>
+              <span class="list-title" data-i18n="list.photos">Fotos — arrastra para ordenar</span>
               <div style="display:flex;gap:.5rem;align-items:center">
-                <label class="btn-add btn-upload-lbl">
+                <label class="btn-add btn-upload-lbl" data-i18n="btn.upload">
                   <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
                   + Subir fotos
                   <input type="file" id="upload-gallery-files" accept="image/*" multiple style="display:none" />
@@ -358,10 +358,10 @@
                 <button type="button" class="btn-add" id="add-gallery-url">+ URL</button>
               </div>
             </div>
-            <p class="gal-hint">La primera foto es la imagen principal (portada). Arrastra para reordenar.</p>
+            <p class="gal-hint" data-i18n="hint.photos">La primera foto es la imagen principal (portada). Arrastra para reordenar.</p>
             <div class="upload-progress hidden" id="upload-gallery-progress">
               <div class="progress-bar"><div class="progress-fill" id="upload-gallery-fill"></div></div>
-              <span id="upload-gallery-status">Subiendo…</span>
+              <span id="upload-gallery-status" data-i18n="uploading">Subiendo…</span>
             </div>
             <div id="gallery-list"></div>
           </div>
@@ -371,8 +371,8 @@
         <div class="tab-panel" id="tab-desc">
           <div class="list-block">
             <div class="list-hd">
-              <span class="list-title">Párrafos de descripción</span>
-              <button type="button" class="btn-add" id="add-para">+ Párrafo</button>
+              <span class="list-title" data-i18n="list.desc">Párrafos de descripción</span>
+              <button type="button" class="btn-add" id="add-para" data-i18n="btn.add_para">+ Párrafo</button>
             </div>
             <div id="desc-list" class="dyn-list"></div>
           </div>
@@ -382,8 +382,8 @@
         <div class="tab-panel" id="tab-details">
           <div class="list-block">
             <div class="list-hd">
-              <span class="list-title">Tabla de detalles de la ficha</span>
-              <button type="button" class="btn-add" id="add-detail">+ Fila</button>
+              <span class="list-title" data-i18n="list.details">Tabla de detalles de la ficha</span>
+              <button type="button" class="btn-add" id="add-detail" data-i18n="btn.add_row">+ Fila</button>
             </div>
             <div id="details-list" class="dyn-list"></div>
           </div>
@@ -394,7 +394,7 @@
           <div class="feats-grid">
 
             <div class="feat-group">
-              <h3 class="feat-group-title">Interior</h3>
+              <h3 class="feat-group-title" data-i18n="feat.interior">Interior</h3>
               <div class="feat-checks">
                 <label><input type="checkbox" value="High Ceilings"> High Ceilings</label>
                 <label><input type="checkbox" value="Vaulted Ceiling(s)"> Vaulted Ceiling(s)</label>
@@ -416,7 +416,7 @@
             </div>
 
             <div class="feat-group">
-              <h3 class="feat-group-title">Suelos</h3>
+              <h3 class="feat-group-title" data-i18n="feat.flooring">Suelos</h3>
               <div class="feat-checks">
                 <label><input type="checkbox" value="Solid Wooden Floor"> Solid Wooden Floor</label>
                 <label><input type="checkbox" value="Wooden Flooring"> Wooden Flooring</label>
@@ -427,7 +427,7 @@
             </div>
 
             <div class="feat-group">
-              <h3 class="feat-group-title">Cocina</h3>
+              <h3 class="feat-group-title" data-i18n="feat.kitchen">Cocina</h3>
               <div class="feat-checks">
                 <label><input type="checkbox" value="Equipped Kitchen"> Equipped Kitchen</label>
                 <label><input type="checkbox" value="Open kitchen"> Open kitchen</label>
@@ -448,7 +448,7 @@
             </div>
 
             <div class="feat-group">
-              <h3 class="feat-group-title">Climatización</h3>
+              <h3 class="feat-group-title" data-i18n="feat.climate">Climatización</h3>
               <div class="feat-checks">
                 <label><input type="checkbox" value="Air conditioning"> Air conditioning</label>
                 <label><input type="checkbox" value="Heating"> Heating</label>
@@ -466,7 +466,7 @@
             </div>
 
             <div class="feat-group">
-              <h3 class="feat-group-title">Exterior</h3>
+              <h3 class="feat-group-title" data-i18n="feat.outdoor">Exterior</h3>
               <div class="feat-checks">
                 <label><input type="checkbox" value="Balcony"> Balcony</label>
                 <label><input type="checkbox" value="Terrace"> Terrace</label>
@@ -485,7 +485,7 @@
             </div>
 
             <div class="feat-group">
-              <h3 class="feat-group-title">Edificio</h3>
+              <h3 class="feat-group-title" data-i18n="feat.building">Edificio</h3>
               <div class="feat-checks">
                 <label><input type="checkbox" value="Elevator"> Elevator</label>
                 <label><input type="checkbox" value="Concierge Service"> Concierge Service</label>
@@ -498,7 +498,7 @@
             </div>
 
             <div class="feat-group">
-              <h3 class="feat-group-title">Vistas & Entorno</h3>
+              <h3 class="feat-group-title" data-i18n="feat.views">Vistas & Entorno</h3>
               <div class="feat-checks">
                 <label><input type="checkbox" value="City Views"> City Views</label>
                 <label><input type="checkbox" value="Sea Views"> Sea Views</label>
@@ -508,7 +508,7 @@
             </div>
 
             <div class="feat-group feat-group--custom">
-              <h3 class="feat-group-title">Características adicionales <em>(una por línea)</em></h3>
+              <h3 class="feat-group-title" data-i18n="feat.custom">Características adicionales <em data-i18n="feat.custom.hint">(una por línea)</em></h3>
               <textarea id="f-feats-custom" rows="4" placeholder="Smart home automation&#10;Radiant floor heating&#10;Finnish sauna"></textarea>
             </div>
 
@@ -519,8 +519,8 @@
         <div class="tab-panel" id="tab-nearby">
           <div class="list-block">
             <div class="list-hd">
-              <span class="list-title">Lugares cercanos</span>
-              <button type="button" class="btn-add" id="add-nearby">+ Lugar</button>
+              <span class="list-title" data-i18n="list.nearby">Lugares cercanos</span>
+              <button type="button" class="btn-add" id="add-nearby" data-i18n="btn.add_place">+ Lugar</button>
             </div>
             <div id="nearby-list" class="dyn-list"></div>
           </div>

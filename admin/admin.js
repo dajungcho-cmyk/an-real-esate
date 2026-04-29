@@ -710,11 +710,17 @@ function bindGalCardBtns(card) {
   }
 }
 
+function uiStr(key) {
+  const raw = document.getElementById('f-source-lang')?.value || 'es'
+  const lang = raw === 'auto' ? 'es' : raw
+  return (ADMIN_UI[lang] || ADMIN_UI.es)[key] || ''
+}
+
 function addDescRow(text = '') {
   const div = document.createElement('div')
   div.className = 'dyn-row'
   div.innerHTML = `
-    <textarea class="desc-textarea" rows="3" placeholder="Párrafo de descripción…" style="flex:1">${text}</textarea>
+    <textarea class="desc-textarea" rows="3" data-i18n-ph="ph.desc_para" placeholder="${uiStr('ph.desc_para')}" style="flex:1">${text}</textarea>
     <button type="button" class="dyn-row-del" title="Eliminar">×</button>`
   div.querySelector('.dyn-row-del').onclick = () => div.remove()
   document.getElementById('desc-list').appendChild(div)
@@ -724,8 +730,8 @@ function addDetailRow(d = {}) {
   const div = document.createElement('div')
   div.className = 'dyn-row detail-row'
   div.innerHTML = `
-    <input class="det-key" type="text" placeholder="Campo (ej: Superficie)" value="${d.key || ''}" style="flex:1" />
-    <input class="det-val" type="text" placeholder="Valor (ej: 94 m²)" value="${d.val || ''}" style="flex:1" />
+    <input class="det-key" type="text" data-i18n-ph="ph.det_key" placeholder="${uiStr('ph.det_key')}" value="${d.key || ''}" style="flex:1" />
+    <input class="det-val" type="text" data-i18n-ph="ph.det_val" placeholder="${uiStr('ph.det_val')}" value="${d.val || ''}" style="flex:1" />
     <button type="button" class="dyn-row-del" title="Eliminar">×</button>`
   div.querySelector('.dyn-row-del').onclick = () => div.remove()
   document.getElementById('details-list').appendChild(div)
@@ -771,8 +777,8 @@ function addNearbyRow(n = {}) {
   const div = document.createElement('div')
   div.className = 'dyn-row nearby-row'
   div.innerHTML = `
-    <input class="nb-name" type="text" placeholder="Lugar (ej: Passeig de Gràcia)" value="${n.name || ''}" style="flex:2" />
-    <input class="nb-dist" type="text" placeholder="Distancia (ej: 5 min walk)" value="${n.dist || ''}" style="flex:1" />
+    <input class="nb-name" type="text" data-i18n-ph="ph.nb_name" placeholder="${uiStr('ph.nb_name')}" value="${n.name || ''}" style="flex:2" />
+    <input class="nb-dist" type="text" data-i18n-ph="ph.nb_dist" placeholder="${uiStr('ph.nb_dist')}" value="${n.dist || ''}" style="flex:1" />
     <button type="button" class="dyn-row-del" title="Eliminar">×</button>`
   div.querySelector('.dyn-row-del').onclick = () => div.remove()
   document.getElementById('nearby-list').appendChild(div)
@@ -1295,6 +1301,13 @@ const ADMIN_UI = {
     'feat.interior':'Interior','feat.flooring':'Suelos','feat.kitchen':'Cocina','feat.climate':'Climatización',
     'feat.outdoor':'Exterior','feat.building':'Edificio','feat.views':'Vistas & Entorno',
     'feat.custom':'Características adicionales','feat.custom.hint':'(una por línea)',
+    'list.photos':'Fotos — arrastra para ordenar','btn.upload':'+ Subir fotos',
+    'hint.photos':'La primera foto es la imagen principal. Arrastra para reordenar.','uploading':'Subiendo…',
+    'list.desc':'Párrafos de descripción','btn.add_para':'+ Párrafo',
+    'list.details':'Tabla de detalles','btn.add_row':'+ Fila',
+    'list.nearby':'Lugares cercanos','btn.add_place':'+ Lugar',
+    'ph.desc_para':'Párrafo de descripción…','ph.det_key':'Campo (ej: Superficie)','ph.det_val':'Valor (ej: 94 m²)',
+    'ph.nb_name':'Lugar (ej: Passeig de Gràcia)','ph.nb_dist':'Distancia (ej: 5 min a pie)',
     'saving':'⏳ Traduciendo…',
   },
   en: {
@@ -1326,6 +1339,13 @@ const ADMIN_UI = {
     'feat.interior':'Interior','feat.flooring':'Flooring','feat.kitchen':'Kitchen','feat.climate':'Climate',
     'feat.outdoor':'Outdoor','feat.building':'Building','feat.views':'Views & Surroundings',
     'feat.custom':'Additional features','feat.custom.hint':'(one per line)',
+    'list.photos':'Photos — drag to reorder','btn.upload':'+ Upload photos',
+    'hint.photos':'First photo is the main image (cover). Drag to reorder.','uploading':'Uploading…',
+    'list.desc':'Description paragraphs','btn.add_para':'+ Paragraph',
+    'list.details':'Details table','btn.add_row':'+ Row',
+    'list.nearby':'Nearby places','btn.add_place':'+ Place',
+    'ph.desc_para':'Description paragraph…','ph.det_key':'Field (e.g.: Area)','ph.det_val':'Value (e.g.: 94 m²)',
+    'ph.nb_name':'Place (e.g.: Passeig de Gràcia)','ph.nb_dist':'Distance (e.g.: 5 min walk)',
     'saving':'⏳ Translating…',
   },
   ca: {
@@ -1357,6 +1377,13 @@ const ADMIN_UI = {
     'feat.interior':'Interior','feat.flooring':'Sòls','feat.kitchen':'Cuina','feat.climate':'Climatització',
     'feat.outdoor':'Exterior','feat.building':'Edifici','feat.views':'Vistes & Entorn',
     'feat.custom':'Característiques addicionals','feat.custom.hint':'(una per línia)',
+    'list.photos':'Fotos — arrossega per ordenar','btn.upload':'+ Pujar fotos',
+    'hint.photos':'La primera foto és la imatge principal. Arrossega per reordenar.','uploading':'Pujant…',
+    'list.desc':'Paràgrafs de descripció','btn.add_para':'+ Paràgraf',
+    'list.details':'Taula de detalls','btn.add_row':'+ Fila',
+    'list.nearby':'Llocs propers','btn.add_place':'+ Lloc',
+    'ph.desc_para':'Paràgraf de descripció…','ph.det_key':'Camp (ex: Superfície)','ph.det_val':'Valor (ex: 94 m²)',
+    'ph.nb_name':'Lloc (ex: Passeig de Gràcia)','ph.nb_dist':'Distància (ex: 5 min caminant)',
     'saving':'⏳ Traduint…',
   },
   fr: {
@@ -1388,6 +1415,13 @@ const ADMIN_UI = {
     'feat.interior':'Intérieur','feat.flooring':'Sols','feat.kitchen':'Cuisine','feat.climate':'Climatisation',
     'feat.outdoor':'Extérieur','feat.building':'Bâtiment','feat.views':'Vues & Environnement',
     'feat.custom':'Caractéristiques supplémentaires','feat.custom.hint':'(une par ligne)',
+    'list.photos':'Photos — glisser pour trier','btn.upload':'+ Téléverser photos',
+    'hint.photos':'La première photo est l\'image principale. Glisser pour réorganiser.','uploading':'Téléversement…',
+    'list.desc':'Paragraphes de description','btn.add_para':'+ Paragraphe',
+    'list.details':'Tableau de détails','btn.add_row':'+ Ligne',
+    'list.nearby':'Lieux proches','btn.add_place':'+ Lieu',
+    'ph.desc_para':'Paragraphe de description…','ph.det_key':'Champ (ex : Surface)','ph.det_val':'Valeur (ex : 94 m²)',
+    'ph.nb_name':'Lieu (ex : Passeig de Gràcia)','ph.nb_dist':'Distance (ex : 5 min à pied)',
     'saving':'⏳ Traduction…',
   },
   de: {
@@ -1419,6 +1453,13 @@ const ADMIN_UI = {
     'feat.interior':'Innenausstattung','feat.flooring':'Bodenbeläge','feat.kitchen':'Küche','feat.climate':'Klimatisierung',
     'feat.outdoor':'Außenbereich','feat.building':'Gebäude','feat.views':'Aussicht & Umgebung',
     'feat.custom':'Weitere Ausstattung','feat.custom.hint':'(eine pro Zeile)',
+    'list.photos':'Fotos — ziehen zum Sortieren','btn.upload':'+ Fotos hochladen',
+    'hint.photos':'Das erste Foto ist das Hauptbild. Ziehen zum Neuordnen.','uploading':'Hochladen…',
+    'list.desc':'Beschreibungsabsätze','btn.add_para':'+ Absatz',
+    'list.details':'Detailtabelle','btn.add_row':'+ Zeile',
+    'list.nearby':'Nahegelegene Orte','btn.add_place':'+ Ort',
+    'ph.desc_para':'Beschreibungsabsatz…','ph.det_key':'Feld (z.B.: Fläche)','ph.det_val':'Wert (z.B.: 94 m²)',
+    'ph.nb_name':'Ort (z.B.: Passeig de Gràcia)','ph.nb_dist':'Entfernung (z.B.: 5 min zu Fuß)',
     'saving':'⏳ Übersetze…',
   },
   it: {
@@ -1450,6 +1491,13 @@ const ADMIN_UI = {
     'feat.interior':'Interni','feat.flooring':'Pavimentazione','feat.kitchen':'Cucina','feat.climate':'Climatizzazione',
     'feat.outdoor':'Esterno','feat.building':'Edificio','feat.views':'Viste & Ambiente',
     'feat.custom':'Caratteristiche aggiuntive','feat.custom.hint':'(una per riga)',
+    'list.photos':'Foto — trascina per ordinare','btn.upload':'+ Carica foto',
+    'hint.photos':'La prima foto è l\'immagine principale. Trascina per riordinare.','uploading':'Caricamento…',
+    'list.desc':'Paragrafi di descrizione','btn.add_para':'+ Paragrafo',
+    'list.details':'Tabella dettagli','btn.add_row':'+ Riga',
+    'list.nearby':'Luoghi vicini','btn.add_place':'+ Luogo',
+    'ph.desc_para':'Paragrafo di descrizione…','ph.det_key':'Campo (es.: Superficie)','ph.det_val':'Valore (es.: 94 m²)',
+    'ph.nb_name':'Luogo (es.: Passeig de Gràcia)','ph.nb_dist':'Distanza (es.: 5 min a piedi)',
     'saving':'⏳ Traduzione…',
   },
   ru: {
@@ -1481,6 +1529,13 @@ const ADMIN_UI = {
     'feat.interior':'Интерьер','feat.flooring':'Полы','feat.kitchen':'Кухня','feat.climate':'Климат',
     'feat.outdoor':'Улица','feat.building':'Здание','feat.views':'Виды & Окружение',
     'feat.custom':'Доп. характеристики','feat.custom.hint':'(по одной на строку)',
+    'list.photos':'Фото — перетащите для сортировки','btn.upload':'+ Загрузить фото',
+    'hint.photos':'Первое фото — главное изображение. Перетащите для изменения порядка.','uploading':'Загрузка…',
+    'list.desc':'Параграфы описания','btn.add_para':'+ Параграф',
+    'list.details':'Таблица деталей','btn.add_row':'+ Строка',
+    'list.nearby':'Близлежащие места','btn.add_place':'+ Место',
+    'ph.desc_para':'Параграф описания…','ph.det_key':'Поле (напр.: Площадь)','ph.det_val':'Значение (напр.: 94 м²)',
+    'ph.nb_name':'Место (напр.: Passeig de Gràcia)','ph.nb_dist':'Расстояние (напр.: 5 мин пешком)',
     'saving':'⏳ Перевод…',
   },
 }
@@ -1490,10 +1545,10 @@ function applyAdminLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n
     if (!ui[key]) return
-    // For elements that contain child nodes (like <label> with <em>), only update the text node
+    // For elements that contain child nodes (like <label> with <em> or <svg>), update the non-empty text node
     if (el.children.length > 0) {
-      const firstText = [...el.childNodes].find(n => n.nodeType === 3)
-      if (firstText) firstText.textContent = ui[key] + ' '
+      const textNode = [...el.childNodes].find(n => n.nodeType === 3 && n.textContent.trim())
+      if (textNode) textNode.textContent = ' ' + ui[key] + ' '
     } else {
       el.textContent = ui[key]
     }
