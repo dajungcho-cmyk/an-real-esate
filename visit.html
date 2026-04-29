@@ -33,140 +33,199 @@
     </div>
   </div>
 
+  <!-- Step progress bar -->
+  <div class="vs-progress" id="vs-progress">
+    <div class="vs-prog-item vs-prog-item--active" id="vs-prog-1">
+      <div class="vs-prog-dot">1</div>
+      <span class="vs-prog-lbl">Datos</span>
+    </div>
+    <div class="vs-prog-connector"></div>
+    <div class="vs-prog-item" id="vs-prog-2">
+      <div class="vs-prog-dot">2</div>
+      <span class="vs-prog-lbl">Documento</span>
+    </div>
+    <div class="vs-prog-connector"></div>
+    <div class="vs-prog-item" id="vs-prog-3">
+      <div class="vs-prog-dot">3</div>
+      <span class="vs-prog-lbl">Firma</span>
+    </div>
+  </div>
+
   <!-- Main Form -->
   <main class="vs-main" id="vs-main">
 
-    <!-- 01 — Client data -->
-    <div class="vs-card">
-      <div class="vs-card-head">
-        <span class="vs-step">01</span>
-        <div>
-          <h2 class="vs-card-title">Sus datos personales</h2>
-          <p class="vs-card-sub">Necesarios para registrar la visita oficialmente.</p>
-        </div>
-      </div>
-
-      <div class="vs-fields">
-        <div class="vs-field">
-          <label class="vs-label" for="vs-name">Nombre completo <span class="vs-req">*</span></label>
-          <input class="vs-input" type="text" id="vs-name" autocomplete="name" placeholder="Nombre y apellidos completos">
-        </div>
-
-        <div class="vs-field-row">
-          <div class="vs-field vs-field--narrow">
-            <label class="vs-label" for="vs-doctype">Tipo de documento <span class="vs-req">*</span></label>
-            <select class="vs-input vs-select" id="vs-doctype">
-              <option value="DNI">DNI</option>
-              <option value="NIE">NIE</option>
-              <option value="Pasaporte">Pasaporte</option>
-            </select>
+    <!-- STEP 1 — Personal data -->
+    <div id="vs-panel-1" class="vs-step-panel">
+      <div class="vs-card">
+        <div class="vs-card-head">
+          <span class="vs-step">01</span>
+          <div>
+            <h2 class="vs-card-title">Sus datos personales</h2>
+            <p class="vs-card-sub">Necesarios para registrar la visita oficialmente.</p>
           </div>
-          <div class="vs-field vs-field--grow">
-            <label class="vs-label" for="vs-docnum">Número de documento <span class="vs-req">*</span></label>
-            <div class="vs-input-wrap">
-              <input class="vs-input" type="text" id="vs-docnum" autocomplete="off" placeholder="12345678A" spellcheck="false">
-              <span class="vs-doc-icon" id="vs-doc-icon"></span>
+        </div>
+
+        <div class="vs-fields">
+          <div class="vs-field">
+            <label class="vs-label" for="vs-name">Nombre completo <span class="vs-req">*</span></label>
+            <input class="vs-input" type="text" id="vs-name" autocomplete="name" placeholder="Nombre y apellidos completos">
+          </div>
+
+          <div class="vs-field-row">
+            <div class="vs-field vs-field--narrow">
+              <label class="vs-label" for="vs-doctype">Tipo de documento <span class="vs-req">*</span></label>
+              <select class="vs-input vs-select" id="vs-doctype">
+                <option value="DNI">DNI</option>
+                <option value="NIE">NIE</option>
+                <option value="Pasaporte">Pasaporte</option>
+              </select>
             </div>
-            <p class="vs-doc-hint" id="vs-doc-hint"></p>
+            <div class="vs-field vs-field--grow">
+              <label class="vs-label" for="vs-docnum">Número de documento <span class="vs-req">*</span></label>
+              <div class="vs-input-wrap">
+                <input class="vs-input" type="text" id="vs-docnum" autocomplete="off" placeholder="12345678A" spellcheck="false">
+                <span class="vs-doc-icon" id="vs-doc-icon"></span>
+              </div>
+              <p class="vs-doc-hint" id="vs-doc-hint"></p>
+            </div>
+          </div>
+
+          <div class="vs-field-row">
+            <div class="vs-field vs-field--grow">
+              <label class="vs-label" for="vs-phone">Teléfono móvil <span class="vs-req">*</span></label>
+              <input class="vs-input" type="tel" id="vs-phone" autocomplete="tel" placeholder="+34 600 000 000">
+            </div>
+            <div class="vs-field vs-field--grow">
+              <label class="vs-label" for="vs-email">Email <span class="vs-req">*</span></label>
+              <input class="vs-input" type="email" id="vs-email" autocomplete="email" placeholder="su@email.com">
+            </div>
+          </div>
+
+          <div class="vs-field">
+            <label class="vs-label" for="vs-visitdate">Fecha y hora de la visita <span class="vs-req">*</span></label>
+            <input class="vs-input vs-input--date" type="datetime-local" id="vs-visitdate">
+            <p class="vs-field-hint">Confirme el día y la hora en que tuvo lugar la visita al inmueble.</p>
           </div>
         </div>
-
-        <div class="vs-field">
-          <label class="vs-label">Foto del documento de identidad <span class="vs-req">*</span></label>
-          <label class="vs-photo-wrap" id="vs-photo-wrap" for="vs-photo-input">
-            <span class="vs-photo-placeholder" id="vs-photo-placeholder">
-              <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-              Pulse para fotografiar su DNI / NIE / Pasaporte
-            </span>
-            <img id="vs-photo-preview" class="vs-photo-preview" alt="Documento" hidden>
-            <span class="vs-photo-change" id="vs-photo-change" hidden>Tocar para cambiar</span>
-          </label>
-          <input type="file" id="vs-photo-input" accept="image/*" capture="environment" class="vs-photo-input-hidden">
-          <p class="vs-field-hint">Fotografíe el anverso del documento. Es confidencial — solo la verá el agente para verificar su identidad.</p>
-          <div id="vs-ai-verify-wrap" hidden>
-            <button type="button" id="vs-ai-verify-btn" class="vs-ai-verify-btn">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-              Verificar documento con IA
-            </button>
-            <div id="vs-ai-result" class="vs-ai-result" hidden></div>
-          </div>
-        </div>
-
-        <div class="vs-field-row">
-          <div class="vs-field vs-field--grow">
-            <label class="vs-label" for="vs-phone">Teléfono móvil <span class="vs-req">*</span></label>
-            <input class="vs-input" type="tel" id="vs-phone" autocomplete="tel" placeholder="+34 600 000 000">
-          </div>
-          <div class="vs-field vs-field--grow">
-            <label class="vs-label" for="vs-email">Email <span class="vs-req">*</span></label>
-            <input class="vs-input" type="email" id="vs-email" autocomplete="email" placeholder="su@email.com">
-          </div>
-        </div>
-
-        <div class="vs-field">
-          <label class="vs-label" for="vs-visitdate">Fecha y hora de la visita <span class="vs-req">*</span></label>
-          <input class="vs-input vs-input--date" type="datetime-local" id="vs-visitdate">
-          <p class="vs-field-hint">Confirme el día y la hora en que tuvo lugar la visita al inmueble.</p>
-        </div>
       </div>
-    </div>
-
-    <!-- 02 — Legal -->
-    <div class="vs-card">
-      <div class="vs-card-head">
-        <span class="vs-step">02</span>
-        <div>
-          <h2 class="vs-card-title">Condiciones de visita</h2>
-          <p class="vs-card-sub">Lea atentamente antes de firmar.</p>
-        </div>
-      </div>
-
-      <div class="vs-legal">
-        <p>El/la firmante declara haber visitado el inmueble referenciado en la presente hoja en presencia del agente inmobiliario autónomo <strong>D. Álvaro Navarro Mosca</strong> (AICAT nº 13069, DNI 46242509C), actuando en nombre propio bajo la marca comercial AN High End Real Estate.</p>
-
-        <p>El/la firmante se compromete expresamente a no realizar ninguna operación sobre el inmueble descrito —ya sea compraventa, arrendamiento u otra modalidad— sin la intervención del agente <strong>D. Álvaro Navarro Mosca</strong> (AICAT 13069), durante un período de <strong>24 meses</strong> desde la fecha de la presente visita. Cualquier operación realizada al margen del agente en dicho período dará lugar al pago de los honorarios de intermediación correspondientes conforme a los usos del sector.</p>
-
-        <p>El/la firmante declara que los datos aportados en este documento son verídicos y corresponden a su identidad real, siendo responsable de cualquier falsedad en los mismos.</p>
-
-        <p class="vs-rgpd"><strong>Protección de datos:</strong> De conformidad con el RGPD (UE) 2016/679 y la LOPDGDD 3/2018, los datos personales facilitados serán tratados por D. Álvaro Navarro Mosca (DNI 46242509C), agente inmobiliario autónomo, con la finalidad de gestionar la relación inmobiliaria y dejar constancia oficial de la visita. Puede ejercer sus derechos de acceso, rectificación, supresión y oposición en <a href="mailto:alvaro@anrealestate.es">alvaro@anrealestate.es</a>.</p>
-      </div>
-
-      <div class="vs-checks">
-        <label class="vs-check-label">
-          <input type="checkbox" class="vs-checkbox" id="chk-nocirc">
-          <span class="vs-checkmark"></span>
-          <span>He leído y acepto las condiciones de visita, incluido el compromiso de no elusión de intermediación durante 24 meses.</span>
-        </label>
-        <label class="vs-check-label">
-          <input type="checkbox" class="vs-checkbox" id="chk-rgpd">
-          <span class="vs-checkmark"></span>
-          <span>Consiento el tratamiento de mis datos personales por D. Álvaro Navarro Mosca, agente inmobiliario autónomo, conforme a lo indicado anteriormente.</span>
-        </label>
-      </div>
-    </div>
-
-    <!-- 03 — Signature -->
-    <div class="vs-card">
-      <div class="vs-card-head">
-        <span class="vs-step">03</span>
-        <div>
-          <h2 class="vs-card-title">Firma electrónica</h2>
-          <p class="vs-card-sub">Firme en el recuadro con el dedo o el ratón.</p>
-        </div>
-      </div>
-
-      <div class="vs-canvas-wrap" id="vs-canvas-wrap">
-        <canvas id="sig-canvas"></canvas>
-        <p class="vs-canvas-hint" id="sig-hint">Firme aquí</p>
-      </div>
-      <button class="vs-clear-btn" id="vs-clear-sig" type="button">Borrar y repetir firma</button>
-
-      <div class="vs-submit-area">
-        <button class="vs-submit-btn" id="vs-submit" type="button">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
-          Firmar y registrar visita
+      <div class="vs-step-nav">
+        <button class="vs-nav-next" id="vs-next-1" type="button">
+          Continuar
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </button>
-        <p class="vs-submit-note">Al firmar, el documento quedará registrado con su nombre, número de documento, fecha, hora e IP de firma, conforme a la Ley 6/2020 de firma electrónica y el Reglamento eIDAS (UE) nº 910/2014.</p>
+      </div>
+    </div>
+
+    <!-- STEP 2 — Document photo -->
+    <div id="vs-panel-2" class="vs-step-panel" hidden>
+      <div class="vs-card">
+        <div class="vs-card-head">
+          <span class="vs-step">02</span>
+          <div>
+            <h2 class="vs-card-title">Foto del documento</h2>
+            <p class="vs-card-sub">Fotografíe el anverso de su DNI, NIE o Pasaporte.</p>
+          </div>
+        </div>
+
+        <div class="vs-fields">
+          <div class="vs-field">
+            <label class="vs-label">Foto del documento de identidad <span class="vs-req">*</span></label>
+            <label class="vs-photo-wrap vs-photo-wrap--large" id="vs-photo-wrap" for="vs-photo-input">
+              <span class="vs-photo-placeholder" id="vs-photo-placeholder">
+                <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                Pulse para fotografiar su DNI / NIE / Pasaporte
+              </span>
+              <img id="vs-photo-preview" class="vs-photo-preview" alt="Documento" hidden>
+              <span class="vs-photo-change" id="vs-photo-change" hidden>Tocar para cambiar</span>
+            </label>
+            <input type="file" id="vs-photo-input" accept="image/*" capture="environment" class="vs-photo-input-hidden">
+            <p class="vs-field-hint">Es confidencial — solo la verá el agente para verificar su identidad.</p>
+            <div id="vs-ai-verify-wrap" hidden>
+              <button type="button" id="vs-ai-verify-btn" class="vs-ai-verify-btn">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                Verificar documento con IA
+              </button>
+              <div id="vs-ai-result" class="vs-ai-result" hidden></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vs-step-nav vs-step-nav--split">
+        <button class="vs-nav-back" id="vs-back-2" type="button">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Atrás
+        </button>
+        <button class="vs-nav-next" id="vs-next-2" type="button">
+          Continuar
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3 — Conditions + signature -->
+    <div id="vs-panel-3" class="vs-step-panel" hidden>
+      <div class="vs-card">
+        <div class="vs-card-head">
+          <span class="vs-step">03</span>
+          <div>
+            <h2 class="vs-card-title">Condiciones de visita</h2>
+            <p class="vs-card-sub">Lea atentamente antes de firmar.</p>
+          </div>
+        </div>
+
+        <div class="vs-legal">
+          <p>El/la firmante declara haber visitado el inmueble referenciado en la presente hoja en presencia del agente inmobiliario autónomo <strong>D. Álvaro Navarro Mosca</strong> (AICAT nº 13069, DNI 46242509C), actuando en nombre propio bajo la marca comercial AN High End Real Estate.</p>
+
+          <p>El/la firmante se compromete expresamente a no realizar ninguna operación sobre el inmueble descrito —ya sea compraventa, arrendamiento u otra modalidad— sin la intervención del agente <strong>D. Álvaro Navarro Mosca</strong> (AICAT 13069), durante un período de <strong>24 meses</strong> desde la fecha de la presente visita. Cualquier operación realizada al margen del agente en dicho período dará lugar al pago de los honorarios de intermediación correspondientes conforme a los usos del sector.</p>
+
+          <p>El/la firmante declara que los datos aportados en este documento son verídicos y corresponden a su identidad real, siendo responsable de cualquier falsedad en los mismos.</p>
+
+          <p class="vs-rgpd"><strong>Protección de datos:</strong> De conformidad con el RGPD (UE) 2016/679 y la LOPDGDD 3/2018, los datos personales facilitados serán tratados por D. Álvaro Navarro Mosca (DNI 46242509C), agente inmobiliario autónomo, con la finalidad de gestionar la relación inmobiliaria y dejar constancia oficial de la visita. Puede ejercer sus derechos de acceso, rectificación, supresión y oposición en <a href="mailto:alvaro@anrealestate.es">alvaro@anrealestate.es</a>.</p>
+        </div>
+
+        <div class="vs-checks">
+          <label class="vs-check-label">
+            <input type="checkbox" class="vs-checkbox" id="chk-nocirc">
+            <span class="vs-checkmark"></span>
+            <span>He leído y acepto las condiciones de visita, incluido el compromiso de no elusión de intermediación durante 24 meses.</span>
+          </label>
+          <label class="vs-check-label">
+            <input type="checkbox" class="vs-checkbox" id="chk-rgpd">
+            <span class="vs-checkmark"></span>
+            <span>Consiento el tratamiento de mis datos personales por D. Álvaro Navarro Mosca, agente inmobiliario autónomo, conforme a lo indicado anteriormente.</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="vs-card">
+        <div class="vs-card-head">
+          <span class="vs-step" style="opacity:0" aria-hidden="true">03</span>
+          <div>
+            <h2 class="vs-card-title">Firma electrónica</h2>
+            <p class="vs-card-sub">Firme en el recuadro con el dedo o el ratón.</p>
+          </div>
+        </div>
+
+        <div class="vs-canvas-wrap" id="vs-canvas-wrap">
+          <canvas id="sig-canvas"></canvas>
+          <p class="vs-canvas-hint" id="sig-hint">Firme aquí</p>
+        </div>
+        <button class="vs-clear-btn" id="vs-clear-sig" type="button">Borrar y repetir firma</button>
+
+        <div class="vs-submit-area">
+          <button class="vs-submit-btn" id="vs-submit" type="button">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+            Firmar y registrar visita
+          </button>
+          <p class="vs-submit-note">Al firmar, el documento quedará registrado con su nombre, número de documento, fecha, hora e IP de firma, conforme a la Ley 6/2020 de firma electrónica y el Reglamento eIDAS (UE) nº 910/2014.</p>
+        </div>
+      </div>
+
+      <div class="vs-step-nav">
+        <button class="vs-nav-back" id="vs-back-3" type="button">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Atrás
+        </button>
       </div>
     </div>
 
@@ -278,6 +337,51 @@
     }
     setupCanvas()
     window.addEventListener('resize', function () { setupCanvas() })
+
+    /* ── Step navigation ── */
+    function showStep(n) {
+      for (var i = 1; i <= 3; i++) {
+        var panel = document.getElementById('vs-panel-' + i)
+        var prog  = document.getElementById('vs-prog-' + i)
+        if (panel) panel.hidden = (i !== n)
+        if (prog) {
+          prog.classList.toggle('vs-prog-item--active', i === n)
+          prog.classList.toggle('vs-prog-item--done',   i < n)
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
+    function validateStep1() {
+      var name         = document.getElementById('vs-name').value.trim()
+      var docNum       = document.getElementById('vs-docnum').value.trim()
+      var phone        = document.getElementById('vs-phone').value.trim()
+      var email        = document.getElementById('vs-email').value.trim()
+      var visitDateRaw = document.getElementById('vs-visitdate').value
+      if (!name)         { showError('vs-name',      'Por favor, introduzca su nombre completo.'); return false }
+      if (!docNum)       { showError('vs-docnum',    'Por favor, introduzca su número de documento.'); return false }
+      if (validateDoc() === false) { showError('vs-docnum', 'El número de documento no es válido.'); return false }
+      if (!phone)        { showError('vs-phone',     'Por favor, introduzca su teléfono móvil.'); return false }
+      if (!email)        { showError('vs-email',     'Por favor, introduzca su email.'); return false }
+      if (!visitDateRaw) { showError('vs-visitdate', 'Por favor, indique la fecha y hora de la visita.'); return false }
+      return true
+    }
+
+    document.getElementById('vs-next-1').addEventListener('click', function () {
+      if (validateStep1()) showStep(2)
+    })
+    document.getElementById('vs-back-2').addEventListener('click', function () { showStep(1) })
+    document.getElementById('vs-next-2').addEventListener('click', function () {
+      if (!dniPhotoDataUrl) {
+        var wrap = document.getElementById('vs-photo-wrap')
+        wrap.classList.add('vs-photo--err')
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        alert('Por favor, fotografíe su documento de identidad antes de continuar.')
+        return
+      }
+      showStep(3)
+    })
+    document.getElementById('vs-back-3').addEventListener('click', function () { showStep(2) })
 
     function getPos(e) {
       var r   = canvas.getBoundingClientRect()
@@ -478,20 +582,6 @@
       var chkN         = document.getElementById('chk-nocirc').checked
       var chkR         = document.getElementById('chk-rgpd').checked
 
-      if (!name)        { showError('vs-name',      'Por favor, introduzca su nombre completo.'); return }
-      if (!docNum)      { showError('vs-docnum',    'Por favor, introduzca su número de documento.'); return }
-      var docOk = validateDoc()
-      if (docOk === false) { showError('vs-docnum', 'El número de documento no es válido.'); return }
-      if (!dniPhotoDataUrl) {
-        var wrap = document.getElementById('vs-photo-wrap')
-        wrap.classList.add('vs-photo--err')
-        wrap.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        alert('Por favor, fotografíe su documento de identidad.')
-        return
-      }
-      if (!phone)       { showError('vs-phone',     'Por favor, introduzca su teléfono móvil.'); return }
-      if (!email)       { showError('vs-email',     'Por favor, introduzca su email.'); return }
-      if (!visitDateRaw){ showError('vs-visitdate', 'Por favor, indique la fecha y hora de la visita.'); return }
       if (!chkN) { alert('Debe aceptar las condiciones de visita para continuar.'); return }
       if (!chkR) { alert('Debe aceptar el tratamiento de datos para continuar.'); return }
       if (!hasSig) { flashCanvas(); return }
@@ -537,6 +627,7 @@
         adminBtn.hidden = false
 
         document.getElementById('vs-main').style.display = 'none'
+        document.getElementById('vs-progress').style.display = 'none'
         document.getElementById('vs-success').hidden = false
 
         /* Show hash on success screen */

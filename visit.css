@@ -629,6 +629,119 @@ body {
   letter-spacing: .04em;
 }
 
+/* ── Step progress bar ── */
+.vs-progress {
+  background: var(--vs-dark);
+  border-bottom: 1px solid rgba(240,235,224,.06);
+  padding: .9rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.vs-prog-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  min-width: 60px;
+}
+
+.vs-prog-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(240,235,224,.18);
+  color: rgba(240,235,224,.25);
+  font-size: .7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 200ms ease;
+}
+
+.vs-prog-lbl {
+  font-size: .6rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,.22);
+  white-space: nowrap;
+  transition: color 200ms ease;
+}
+
+.vs-prog-connector {
+  flex: 1;
+  max-width: 52px;
+  height: 1px;
+  background: rgba(240,235,224,.1);
+  margin-top: 13px;
+  transition: background 200ms ease;
+}
+
+.vs-prog-item--active .vs-prog-dot { border-color: var(--vs-gold); color: var(--vs-gold); }
+.vs-prog-item--active .vs-prog-lbl { color: var(--vs-gold); }
+.vs-prog-item--done   .vs-prog-dot { background: var(--vs-gold); border-color: var(--vs-gold); color: var(--vs-dark); }
+.vs-prog-item--done   .vs-prog-lbl { color: rgba(200,169,110,.5); }
+.vs-prog-item--done + .vs-prog-connector { background: rgba(200,169,110,.35); }
+
+/* ── Step panels ── */
+.vs-step-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.vs-step-panel[hidden] { display: none !important; }
+
+/* ── Step navigation ── */
+.vs-step-nav {
+  display: flex;
+  justify-content: flex-end;
+}
+.vs-step-nav--split {
+  justify-content: space-between;
+}
+
+.vs-nav-next {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .85rem 2rem;
+  font-family: var(--vs-sans);
+  font-size: var(--vs-sm);
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--vs-dark);
+  background: var(--vs-gold);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background var(--vs-fast);
+}
+.vs-nav-next:hover { background: #d4b57a; }
+
+.vs-nav-back {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .85rem 1.5rem;
+  font-family: var(--vs-sans);
+  font-size: var(--vs-sm);
+  font-weight: 400;
+  color: var(--vs-muted);
+  background: transparent;
+  border: 1px solid var(--vs-border);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: color var(--vs-fast), border-color var(--vs-fast);
+}
+.vs-nav-back:hover { color: var(--vs-text); border-color: #b8b2a8; }
+
+/* ── Larger photo area in step 2 ── */
+.vs-photo-wrap--large { min-height: 160px; }
+.vs-photo-wrap--large .vs-photo-placeholder { min-height: 160px; gap: .75rem; }
+
 /* ── Responsive ── */
 @media (max-width: 500px) {
   .vs-field-row { flex-direction: column; }
