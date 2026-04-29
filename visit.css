@@ -503,6 +503,16 @@ body {
 .vs-share-btn:hover { background: rgba(200,169,110,.09); border-color: var(--vs-gold); }
 .vs-share-btn[hidden] { display: none; }
 
+.vs-save-admin-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 10px; padding: 10px 20px;
+  background: rgba(200,169,110,.12); border: 1px solid var(--vs-gold);
+  color: var(--vs-gold); border-radius: 6px; font-size: var(--vs-sm);
+  text-decoration: none; cursor: pointer;
+}
+.vs-save-admin-btn:hover { background: rgba(200,169,110,.22); }
+.vs-save-admin-btn[hidden] { display: none; }
+
 .vs-success-note {
   font-size: var(--vs-xs);
   color: var(--vs-muted);

@@ -201,8 +201,11 @@
         Copia de confirmación enviada a <strong id="vs-email-addr"></strong>
       </div>
 
+      <a id="vs-save-admin-btn" class="vs-save-admin-btn" href="#" target="_blank" hidden>
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Guardar en sistema (agente)
+      </a>
       <p class="vs-success-note">D. Álvaro Navarro Mosca ha recibido una copia de este registro.</p>
-      <p id="vs-server-status" style="font-size:11px;color:#888;margin-top:6px;"></p>
     </div>
   </div>
 
@@ -518,6 +521,19 @@
         sendEmail(name, docType, docNum, phone, email, visitDateStr, tss, clientIP, docHash)
         saveVisitLocally(name, docType, docNum, phone, email, visitDateStr, tss, clientIP, docHash)
         saveVisitRemote(name, docType, docNum, phone, email, visitDateStr, tss, clientIP, docHash)
+
+        /* Botón guardar en admin */
+        var adminRecord = {
+          propSlug: propSlug, propRef: propRef, propTitle: propTitle, propZone: propZone,
+          propAddress: propAddress, doorFloor: propDoorFloor, doorNum: propDoorNum, zip: propZip,
+          name: name, docType: docType, docNum: docNum, phone: phone, email: email,
+          visitDate: visitDateStr, timestamp: tss, ip: clientIP, savedAt: new Date().toISOString(),
+          docHash: docHash || '', aiVerify: aiVerifyResult || null
+        }
+        var adminEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(adminRecord))))
+        var adminBtn = document.getElementById('vs-save-admin-btn')
+        adminBtn.href = window.location.origin + '/admin/index.html?visit=' + encodeURIComponent(adminEncoded)
+        adminBtn.hidden = false
 
         document.getElementById('vs-main').style.display = 'none'
         document.getElementById('vs-success').hidden = false
