@@ -720,10 +720,43 @@ function addDescRow(text = '') {
   const div = document.createElement('div')
   div.className = 'dyn-row'
   div.innerHTML = `
-    <textarea class="desc-textarea" rows="3" data-i18n-ph="ph.desc_para" placeholder="${uiStr('ph.desc_para')}" style="flex:1">${text}</textarea>
+    <div class="desc-wrap">
+      <textarea class="desc-textarea" rows="3" data-i18n-ph="ph.desc_para" placeholder="${uiStr('ph.desc_para')}">${text}</textarea>
+      <button type="button" class="btn-improve" data-i18n="btn.improve">${uiStr('btn.improve')}</button>
+    </div>
     <button type="button" class="dyn-row-del" title="Eliminar">×</button>`
   div.querySelector('.dyn-row-del').onclick = () => div.remove()
+  div.querySelector('.btn-improve').onclick = () => improveDesc(div)
   document.getElementById('desc-list').appendChild(div)
+}
+
+async function improveDesc(rowDiv) {
+  const ta = rowDiv.querySelector('.desc-textarea')
+  const btn = rowDiv.querySelector('.btn-improve')
+  const text = ta.value.trim()
+  if (!text) return
+  const origLabel = btn.textContent
+  btn.disabled = true
+  btn.textContent = '⏳…'
+  try {
+    const lang = document.getElementById('f-source-lang')?.value || 'auto'
+    const res = await fetch('/api/improve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, lang }),
+    })
+    const data = await res.json()
+    if (data.improved) {
+      ta.value = data.improved
+    } else {
+      toast(data.error || 'Error al mejorar', 'error')
+    }
+  } catch {
+    toast('Error de conexión', 'error')
+  } finally {
+    btn.disabled = false
+    btn.textContent = origLabel
+  }
 }
 
 function addDetailRow(d = {}) {
@@ -1301,6 +1334,7 @@ const ADMIN_UI = {
     'feat.interior':'Interior','feat.flooring':'Suelos','feat.kitchen':'Cocina','feat.climate':'Climatización',
     'feat.outdoor':'Exterior','feat.building':'Edificio','feat.views':'Vistas & Entorno',
     'feat.custom':'Características adicionales','feat.custom.hint':'(una por línea)',
+    'btn.improve':'✨ Mejorar con IA',
     'list.photos':'Fotos — arrastra para ordenar','btn.upload':'+ Subir fotos',
     'hint.photos':'La primera foto es la imagen principal. Arrastra para reordenar.','uploading':'Subiendo…',
     'list.desc':'Párrafos de descripción','btn.add_para':'+ Párrafo',
@@ -1339,6 +1373,7 @@ const ADMIN_UI = {
     'feat.interior':'Interior','feat.flooring':'Flooring','feat.kitchen':'Kitchen','feat.climate':'Climate',
     'feat.outdoor':'Outdoor','feat.building':'Building','feat.views':'Views & Surroundings',
     'feat.custom':'Additional features','feat.custom.hint':'(one per line)',
+    'btn.improve':'✨ Improve with AI',
     'list.photos':'Photos — drag to reorder','btn.upload':'+ Upload photos',
     'hint.photos':'First photo is the main image (cover). Drag to reorder.','uploading':'Uploading…',
     'list.desc':'Description paragraphs','btn.add_para':'+ Paragraph',
@@ -1377,6 +1412,7 @@ const ADMIN_UI = {
     'feat.interior':'Interior','feat.flooring':'Sòls','feat.kitchen':'Cuina','feat.climate':'Climatització',
     'feat.outdoor':'Exterior','feat.building':'Edifici','feat.views':'Vistes & Entorn',
     'feat.custom':'Característiques addicionals','feat.custom.hint':'(una per línia)',
+    'btn.improve':'✨ Millorar amb IA',
     'list.photos':'Fotos — arrossega per ordenar','btn.upload':'+ Pujar fotos',
     'hint.photos':'La primera foto és la imatge principal. Arrossega per reordenar.','uploading':'Pujant…',
     'list.desc':'Paràgrafs de descripció','btn.add_para':'+ Paràgraf',
@@ -1415,6 +1451,7 @@ const ADMIN_UI = {
     'feat.interior':'Intérieur','feat.flooring':'Sols','feat.kitchen':'Cuisine','feat.climate':'Climatisation',
     'feat.outdoor':'Extérieur','feat.building':'Bâtiment','feat.views':'Vues & Environnement',
     'feat.custom':'Caractéristiques supplémentaires','feat.custom.hint':'(une par ligne)',
+    'btn.improve':'✨ Améliorer avec IA',
     'list.photos':'Photos — glisser pour trier','btn.upload':'+ Téléverser photos',
     'hint.photos':'La première photo est l\'image principale. Glisser pour réorganiser.','uploading':'Téléversement…',
     'list.desc':'Paragraphes de description','btn.add_para':'+ Paragraphe',
@@ -1453,6 +1490,7 @@ const ADMIN_UI = {
     'feat.interior':'Innenausstattung','feat.flooring':'Bodenbeläge','feat.kitchen':'Küche','feat.climate':'Klimatisierung',
     'feat.outdoor':'Außenbereich','feat.building':'Gebäude','feat.views':'Aussicht & Umgebung',
     'feat.custom':'Weitere Ausstattung','feat.custom.hint':'(eine pro Zeile)',
+    'btn.improve':'✨ Mit KI verbessern',
     'list.photos':'Fotos — ziehen zum Sortieren','btn.upload':'+ Fotos hochladen',
     'hint.photos':'Das erste Foto ist das Hauptbild. Ziehen zum Neuordnen.','uploading':'Hochladen…',
     'list.desc':'Beschreibungsabsätze','btn.add_para':'+ Absatz',
@@ -1491,6 +1529,7 @@ const ADMIN_UI = {
     'feat.interior':'Interni','feat.flooring':'Pavimentazione','feat.kitchen':'Cucina','feat.climate':'Climatizzazione',
     'feat.outdoor':'Esterno','feat.building':'Edificio','feat.views':'Viste & Ambiente',
     'feat.custom':'Caratteristiche aggiuntive','feat.custom.hint':'(una per riga)',
+    'btn.improve':'✨ Migliora con IA',
     'list.photos':'Foto — trascina per ordinare','btn.upload':'+ Carica foto',
     'hint.photos':'La prima foto è l\'immagine principale. Trascina per riordinare.','uploading':'Caricamento…',
     'list.desc':'Paragrafi di descrizione','btn.add_para':'+ Paragrafo',
@@ -1529,6 +1568,7 @@ const ADMIN_UI = {
     'feat.interior':'Интерьер','feat.flooring':'Полы','feat.kitchen':'Кухня','feat.climate':'Климат',
     'feat.outdoor':'Улица','feat.building':'Здание','feat.views':'Виды & Окружение',
     'feat.custom':'Доп. характеристики','feat.custom.hint':'(по одной на строку)',
+    'btn.improve':'✨ Улучшить с ИИ',
     'list.photos':'Фото — перетащите для сортировки','btn.upload':'+ Загрузить фото',
     'hint.photos':'Первое фото — главное изображение. Перетащите для изменения порядка.','uploading':'Загрузка…',
     'list.desc':'Параграфы описания','btn.add_para':'+ Параграф',

@@ -758,6 +758,22 @@ textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
 
 .dyn-row-del:hover { color: #e07070; }
 
+.desc-wrap { flex: 1; display: flex; flex-direction: column; gap: .35rem; }
+.btn-improve {
+  align-self: flex-end;
+  font-size: .72rem;
+  padding: .22rem .65rem;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  letter-spacing: .02em;
+}
+.btn-improve:hover { background: var(--gold); color: #18180f; }
+.btn-improve:disabled { opacity: .5; cursor: default; }
+
 .feat-cat-row {
   background: var(--bg3);
   border: 1px solid var(--border);
