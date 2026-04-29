@@ -1975,6 +1975,30 @@ function buildAgentPDF(v) {
   doc.save(filename)
 }
 
+async function syncRemoteVisits() {
+  try {
+    const r = await fetch('/api/get-visits')
+    const data = await r.json()
+    if (!data.configured || !data.visits?.length) return
+    const local = JSON.parse(localStorage.getItem(VISITS_KEY) || '[]')
+    const localKeys = new Set(local.map(v => v.timestamp + '|' + v.docNum))
+    let added = 0
+    for (const v of data.visits) {
+      const key = v.timestamp + '|' + v.docNum
+      if (!localKeys.has(key)) {
+        v.id = v.id || (Date.now() + '-' + Math.random().toString(36).slice(2, 7))
+        local.unshift(v)
+        localKeys.add(key)
+        added++
+      }
+    }
+    if (added > 0) {
+      localStorage.setItem(VISITS_KEY, JSON.stringify(local))
+      renderVisitLog()
+    }
+  } catch {}
+}
+
 function renderVisitLog() {
   const logBody = document.getElementById('vs-log-body')
   if (!logBody) return
@@ -2066,6 +2090,7 @@ function renderVisitLog() {
 }
 
 function initVisits() {
+  syncRemoteVisits()
   const BASE = window.location.origin
 
   function getVisitDate() {
