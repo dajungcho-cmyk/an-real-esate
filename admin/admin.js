@@ -428,19 +428,6 @@ async function saveProperty() {
     toast('Ya existe una propiedad con ese slug', 'error'); return
   }
 
-  // Auto-translate before saving if there's content
-  const hasContent = document.getElementById('f-title').value.trim() ||
-    [...document.querySelectorAll('#desc-list .desc-textarea')].some(t => t.value.trim())
-  if (hasContent) {
-    const saveBtn = document.getElementById('btn-save')
-    const origText = saveBtn.textContent
-    saveBtn.disabled = true
-    saveBtn.textContent = '⏳ Traduciendo…'
-    try { await translateListing() } catch (e) { console.warn('Auto-translate failed, saving anyway:', e) }
-    saveBtn.disabled = false
-    saveBtn.textContent = origText
-  }
-
   // Build description
   const descRows = document.querySelectorAll('#desc-list .desc-textarea')
   const description = [...descRows].map(t => t.value.trim()).filter(Boolean)
