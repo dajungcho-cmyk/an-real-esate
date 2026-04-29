@@ -124,11 +124,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('confirm-overlay').classList.add('hidden')
   })
 
-  // Admin UI language — switches all labels/buttons/placeholders to selected language
-  document.getElementById('f-source-lang')?.addEventListener('change', e => {
+})
+
+// Admin UI language — event delegation so it fires regardless of when element is ready
+document.addEventListener('change', e => {
+  if (e.target.id === 'f-source-lang') {
     const lang = e.target.value === 'auto' ? 'es' : e.target.value
     applyAdminLang(lang)
-  })
+  }
 })
 
 // ── AUTH ──────────────────────────────────────
@@ -157,6 +160,8 @@ function showApp() {
   loadData()
   loadMediaLibrary()
   handleVisitParam()
+  const initLang = document.getElementById('f-source-lang')?.value || 'es'
+  applyAdminLang(initLang === 'auto' ? 'es' : initLang)
 }
 
 function handleVisitParam() {
