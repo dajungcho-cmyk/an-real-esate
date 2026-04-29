@@ -123,6 +123,12 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('confirm-cancel').addEventListener('click', () => {
     document.getElementById('confirm-overlay').classList.add('hidden')
   })
+
+  // Admin UI language — switches all labels/buttons/placeholders to selected language
+  document.getElementById('f-source-lang')?.addEventListener('change', e => {
+    const lang = e.target.value === 'auto' ? 'es' : e.target.value
+    applyAdminLang(lang)
+  })
 })
 
 // ── AUTH ──────────────────────────────────────
@@ -380,6 +386,10 @@ function _showForm(slug) {
 
   // Existing translations
   document.getElementById('f-translations').value = l.translations ? JSON.stringify(l.translations) : ''
+
+  // Apply admin UI language matching the current source-lang selector
+  const currentLang = document.getElementById('f-source-lang')?.value || 'es'
+  applyAdminLang(currentLang === 'auto' ? 'es' : currentLang)
 
   switchView('form')
 } // end _showForm
@@ -1093,6 +1103,153 @@ function renderMediaGrid() {
       renderMediaGrid()
     }
     grid.appendChild(div)
+  })
+}
+
+// ── ADMIN UI i18n ─────────────────────────────
+const ADMIN_UI = {
+  es: {
+    'tab.basic':'Básico','tab.images':'Imágenes','tab.desc':'Descripción','tab.details':'Detalles','tab.feats':'Características','tab.nearby':'Ubicación',
+    'btn.back':'← Volver','btn.delete':'Eliminar','btn.save':'Guardar','lang.label':'Idioma de entrada:',
+    'label.title':'Título','label.slug':'Slug (URL)','label.ref':'Referencia',
+    'label.status':'Estado','label.status.sale':'En venta','label.status.rent':'En alquiler',
+    'label.type':'Tipo de propiedad','label.price':'Precio','label.neighbourhood':'Barrio',
+    'label.address':'Dirección exacta','label.address.hint':'(solo visible en admin y hoja de visita)',
+    'label.zip':'Código postal','label.size':'Superficie construida (m²)','label.land':'Superficie terreno (m²)',
+    'label.beds':'Habitaciones','label.baths':'Baños','label.garage':'Garaje','label.floor':'Planta',
+    'label.year':'Año de construcción','label.year_ren':'Año de renovación',
+    'label.condition':'Condición','label.energy':'Clase energética',
+    'label.published':'Publicada en la web','label.sold':'Marcada como vendida / alquilada',
+    'ph.title':'Ej: Elegant Penthouse with Sea Views','ph.slug':'ej: gracia-garden','ph.ref':'ej: AN-2026-001',
+    'ph.address':'Busca la dirección…','ph.zip':'ej: 08012','ph.size':'ej: 94','ph.land':'ej: 450',
+    'ph.year':'ej: 1920','ph.year_ren':'ej: 2022',
+    'opt.select':'— Selecciona —','opt.optional':'(opcional)','opt.sale':'— venta —',
+    'opt.month':'/mes','opt.week':'/semana','opt.night':'/noche',
+    'opt.type.apartment':'Apartamento','opt.type.penthouse':'Ático','opt.type.villa':'Villa',
+    'opt.type.house':'Casa','opt.type.townhouse':'Casa adosada','opt.type.studio':'Estudio',
+    'opt.type.office':'Oficina / Comercial','opt.type.land':'Solar / Terreno',
+    'opt.garage.no':'No','opt.garage.1':'1 plaza','opt.garage.2':'2 plazas','opt.garage.3':'3 plazas','opt.garage.4':'4 plazas','opt.garage.7':'7 plazas',
+    'opt.floor.ground':'Planta baja','opt.floor.mezz':'Entresuelo','opt.floor.principal':'Principal',
+    'opt.floor.upper':'Planta alta','opt.floor.penthouse':'Ático','opt.floor.3lev':'3 niveles','opt.floor.4lev':'4 niveles',
+    'opt.cond.new':'Nueva construcción','opt.cond.renov':'En renovación','opt.cond.newly':'Recién renovado',
+    'opt.cond.turnkey':'Reforma llave en mano','opt.cond.good':'Buen estado','opt.cond.torenovate':'A reformar',
+    'opt.energy.na':'— N/A —','opt.beds.studio':'Estudio / 0',
+    'feat.interior':'Interior','feat.flooring':'Suelos','feat.kitchen':'Cocina','feat.climate':'Climatización',
+    'feat.outdoor':'Exterior','feat.building':'Edificio','feat.views':'Vistas & Entorno',
+    'feat.custom':'Características adicionales','feat.custom.hint':'(una por línea)',
+    'saving':'⏳ Traduciendo…',
+  },
+  en: {
+    'tab.basic':'Basic','tab.images':'Images','tab.desc':'Description','tab.details':'Details','tab.feats':'Features','tab.nearby':'Location',
+    'btn.back':'← Back','btn.delete':'Delete','btn.save':'Save','lang.label':'Input language:',
+    'label.title':'Title','label.slug':'Slug (URL)','label.ref':'Reference',
+    'label.status':'Status','label.status.sale':'For Sale','label.status.rent':'For Rent',
+    'label.type':'Property type','label.price':'Price','label.neighbourhood':'Neighbourhood',
+    'label.address':'Exact address','label.address.hint':'(only visible in admin and visit sheet)',
+    'label.zip':'Postal code','label.size':'Built area (m²)','label.land':'Land area (m²)',
+    'label.beds':'Bedrooms','label.baths':'Bathrooms','label.garage':'Garage','label.floor':'Floor',
+    'label.year':'Year built','label.year_ren':'Year renovated',
+    'label.condition':'Condition','label.energy':'Energy class',
+    'label.published':'Published on website','label.sold':'Marked as sold / rented',
+    'ph.title':'E.g.: Elegant Penthouse with Sea Views','ph.slug':'e.g.: gracia-garden','ph.ref':'e.g.: AN-2026-001',
+    'ph.address':'Search address…','ph.zip':'e.g.: 08012','ph.size':'e.g.: 94','ph.land':'e.g.: 450',
+    'ph.year':'e.g.: 1920','ph.year_ren':'e.g.: 2022',
+    'opt.select':'— Select —','opt.optional':'(optional)','opt.sale':'— sale —',
+    'opt.month':'/month','opt.week':'/week','opt.night':'/night',
+    'opt.type.apartment':'Apartment','opt.type.penthouse':'Penthouse','opt.type.villa':'Villa',
+    'opt.type.house':'House','opt.type.townhouse':'Townhouse','opt.type.studio':'Studio',
+    'opt.type.office':'Office / Commercial','opt.type.land':'Land / Plot',
+    'opt.garage.no':'No','opt.garage.1':'1 space','opt.garage.2':'2 spaces','opt.garage.3':'3 spaces','opt.garage.4':'4 spaces','opt.garage.7':'7 spaces',
+    'opt.floor.ground':'Ground floor','opt.floor.mezz':'Mezzanine','opt.floor.principal':'Principal',
+    'opt.floor.upper':'Upper floor','opt.floor.penthouse':'Penthouse','opt.floor.3lev':'3 levels','opt.floor.4lev':'4 levels',
+    'opt.cond.new':'New construction','opt.cond.renov':'Under renovation','opt.cond.newly':'Newly renovated',
+    'opt.cond.turnkey':'Turn-key renovation','opt.cond.good':'Good condition','opt.cond.torenovate':'To renovate',
+    'opt.energy.na':'— N/A —','opt.beds.studio':'Studio / 0',
+    'feat.interior':'Interior','feat.flooring':'Flooring','feat.kitchen':'Kitchen','feat.climate':'Climate',
+    'feat.outdoor':'Outdoor','feat.building':'Building','feat.views':'Views & Surroundings',
+    'feat.custom':'Additional features','feat.custom.hint':'(one per line)',
+    'saving':'⏳ Translating…',
+  },
+  ca: {
+    'tab.basic':'Bàsic','tab.images':'Imatges','tab.desc':'Descripció','tab.details':'Detalls','tab.feats':'Característiques','tab.nearby':'Ubicació',
+    'btn.back':'← Tornar','btn.delete':'Eliminar','btn.save':'Desar','lang.label':'Idioma d\'entrada:',
+    'label.title':'Títol','label.slug':'Slug (URL)','label.ref':'Referència',
+    'label.status':'Estat','label.status.sale':'En venda','label.status.rent':'En lloguer',
+    'label.type':'Tipus de propietat','label.price':'Preu','label.neighbourhood':'Barri',
+    'label.address':'Adreça exacta','label.address.hint':'(només visible a l\'admin i full de visita)',
+    'label.zip':'Codi postal','label.size':'Superfície construïda (m²)','label.land':'Superfície terreny (m²)',
+    'label.beds':'Habitacions','label.baths':'Banys','label.garage':'Garatge','label.floor':'Planta',
+    'label.year':'Any de construcció','label.year_ren':'Any de renovació',
+    'label.condition':'Condició','label.energy':'Classe energètica',
+    'label.published':'Publicada al web','label.sold':'Marcada com a venuda / llogada',
+    'ph.title':'Ex: Elegant Penthouse with Sea Views','ph.slug':'ex: gracia-garden','ph.ref':'ex: AN-2026-001',
+    'ph.address':'Cerca l\'adreça…','ph.zip':'ex: 08012','ph.size':'ex: 94','ph.land':'ex: 450',
+    'ph.year':'ex: 1920','ph.year_ren':'ex: 2022',
+    'opt.select':'— Selecciona —','opt.optional':'(opcional)','opt.sale':'— venda —',
+    'opt.month':'/mes','opt.week':'/setmana','opt.night':'/nit',
+    'opt.type.apartment':'Apartament','opt.type.penthouse':'Àtic','opt.type.villa':'Villa',
+    'opt.type.house':'Casa','opt.type.townhouse':'Casa adossada','opt.type.studio':'Estudi',
+    'opt.type.office':'Oficina / Comercial','opt.type.land':'Solar / Terreny',
+    'opt.garage.no':'No','opt.garage.1':'1 plaça','opt.garage.2':'2 places','opt.garage.3':'3 places','opt.garage.4':'4 places','opt.garage.7':'7 places',
+    'opt.floor.ground':'Planta baixa','opt.floor.mezz':'Entresol','opt.floor.principal':'Principal',
+    'opt.floor.upper':'Planta alta','opt.floor.penthouse':'Àtic','opt.floor.3lev':'3 nivells','opt.floor.4lev':'4 nivells',
+    'opt.cond.new':'Nova construcció','opt.cond.renov':'En renovació','opt.cond.newly':'Recentment renovat',
+    'opt.cond.turnkey':'Reforma llave en mà','opt.cond.good':'Bon estat','opt.cond.torenovate':'A reformar',
+    'opt.energy.na':'— N/A —','opt.beds.studio':'Estudi / 0',
+    'feat.interior':'Interior','feat.flooring':'Sòls','feat.kitchen':'Cuina','feat.climate':'Climatització',
+    'feat.outdoor':'Exterior','feat.building':'Edifici','feat.views':'Vistes & Entorn',
+    'feat.custom':'Característiques addicionals','feat.custom.hint':'(una per línia)',
+    'saving':'⏳ Traduint…',
+  },
+  fr: {
+    'tab.basic':'Basique','tab.images':'Images','tab.desc':'Description','tab.details':'Détails','tab.feats':'Caractéristiques','tab.nearby':'Localisation',
+    'btn.back':'← Retour','btn.delete':'Supprimer','btn.save':'Enregistrer','lang.label':'Langue de saisie :',
+    'label.title':'Titre','label.slug':'Slug (URL)','label.ref':'Référence',
+    'label.status':'Statut','label.status.sale':'À vendre','label.status.rent':'À louer',
+    'label.type':'Type de bien','label.price':'Prix','label.neighbourhood':'Quartier',
+    'label.address':'Adresse exacte','label.address.hint':'(visible uniquement dans l\'admin)',
+    'label.zip':'Code postal','label.size':'Surface construite (m²)','label.land':'Surface terrain (m²)',
+    'label.beds':'Chambres','label.baths':'Salles de bain','label.garage':'Garage','label.floor':'Étage',
+    'label.year':'Année de construction','label.year_ren':'Année de rénovation',
+    'label.condition':'Condition','label.energy':'Classe énergétique',
+    'label.published':'Publié sur le site','label.sold':'Marqué comme vendu / loué',
+    'ph.title':'Ex : Elegant Penthouse with Sea Views','ph.slug':'ex : gracia-garden','ph.ref':'ex : AN-2026-001',
+    'ph.address':'Rechercher l\'adresse…','ph.zip':'ex : 08012','ph.size':'ex : 94','ph.land':'ex : 450',
+    'ph.year':'ex : 1920','ph.year_ren':'ex : 2022',
+    'opt.select':'— Sélectionner —','opt.optional':'(optionnel)','opt.sale':'— vente —',
+    'opt.month':'/mois','opt.week':'/semaine','opt.night':'/nuit',
+    'opt.type.apartment':'Appartement','opt.type.penthouse':'Penthouse','opt.type.villa':'Villa',
+    'opt.type.house':'Maison','opt.type.townhouse':'Maison de ville','opt.type.studio':'Studio',
+    'opt.type.office':'Bureau / Commercial','opt.type.land':'Terrain',
+    'opt.garage.no':'Non','opt.garage.1':'1 place','opt.garage.2':'2 places','opt.garage.3':'3 places','opt.garage.4':'4 places','opt.garage.7':'7 places',
+    'opt.floor.ground':'Rez-de-chaussée','opt.floor.mezz':'Mezzanine','opt.floor.principal':'Principal',
+    'opt.floor.upper':'Étage supérieur','opt.floor.penthouse':'Penthouse','opt.floor.3lev':'3 niveaux','opt.floor.4lev':'4 niveaux',
+    'opt.cond.new':'Construction neuve','opt.cond.renov':'En rénovation','opt.cond.newly':'Récemment rénové',
+    'opt.cond.turnkey':'Rénovation clé en main','opt.cond.good':'Bon état','opt.cond.torenovate':'À rénover',
+    'opt.energy.na':'— N/A —','opt.beds.studio':'Studio / 0',
+    'feat.interior':'Intérieur','feat.flooring':'Sols','feat.kitchen':'Cuisine','feat.climate':'Climatisation',
+    'feat.outdoor':'Extérieur','feat.building':'Bâtiment','feat.views':'Vues & Environnement',
+    'feat.custom':'Caractéristiques supplémentaires','feat.custom.hint':'(une par ligne)',
+    'saving':'⏳ Traduction…',
+  },
+}
+
+function applyAdminLang(lang) {
+  const ui = ADMIN_UI[lang] || ADMIN_UI.es
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n
+    if (!ui[key]) return
+    // For elements that contain child nodes (like <label> with <em>), only update the text node
+    if (el.children.length > 0) {
+      const firstText = [...el.childNodes].find(n => n.nodeType === 3)
+      if (firstText) firstText.textContent = ui[key].replace(/<[^>]+>/g, '').split('(')[0].trim() + ' '
+    } else {
+      el.textContent = ui[key]
+    }
+  })
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.dataset.i18nPh
+    if (ui[key]) el.placeholder = ui[key]
   })
 }
 
