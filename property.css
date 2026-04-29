@@ -134,7 +134,7 @@
 
 .ph-title {
   font-family: var(--serif);
-  font-size: max(26px, 3.2vw);
+  font-size: clamp(26px, 3.2vw, 52px);
   font-weight: 300;
   line-height: 1.05;
   letter-spacing: -.08vw;
@@ -166,7 +166,7 @@
 }
 .ph-price {
   font-family: var(--serif);
-  font-size: max(24px, 2.6vw);
+  font-size: clamp(24px, 2.6vw, 44px);
   font-weight: 300;
   color: var(--gold);
   line-height: 1;
@@ -314,23 +314,19 @@
 .prop-tag-pill:hover { border-color: rgba(240,235,224,.25); color: var(--cream); }
 
 /* Map placeholder */
-.prop-map-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: .5rem;
-  min-height: 160px;
-  border: 1px dashed var(--border);
-  color: var(--cream-dim);
-  font-size: var(--fs-sm);
-  text-align: center;
-  margin-bottom: 1.5rem;
+.prop-map {
+  width: 100%;
+  height: 280px;
+  margin-bottom: .75rem;
+  border: 1px solid var(--border);
+  background: #18180f;
 }
-.prop-map-placeholder span {
-  font-size: var(--fs-xs);
+.prop-map-note {
+  font-size: var(--fs-2xs);
   color: var(--muted);
-  letter-spacing: .06em;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
 }
 
 /* Nearby */
@@ -454,6 +450,75 @@
 }
 .pc-tel:hover { border-color: rgba(240,235,224,.3); color: var(--cream); }
 
+/* ── Visit sheet tool ── */
+.pc-visit {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.pc-visit-label {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: var(--fs-2xs);
+  font-weight: 500;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: .6rem;
+}
+
+.pc-visit-row {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  margin-bottom: .5rem;
+}
+
+.pc-visit-input {
+  flex: 1;
+  background: rgba(240,235,224,.04);
+  border: 1px solid var(--border);
+  color: rgba(240,235,224,.45);
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: .02em;
+  padding: .4rem .6rem;
+  border-radius: 2px;
+  outline: none;
+  min-width: 0;
+  cursor: default;
+}
+
+.pc-visit-copy {
+  flex-shrink: 0;
+  background: rgba(240,235,224,.06);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: .4rem .55rem;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: border-color var(--fast), color var(--fast);
+}
+.pc-visit-copy:hover,
+.pc-visit-copy--ok { border-color: var(--gold); color: var(--gold); }
+
+.pc-visit-wa {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: var(--fs-2xs);
+  font-weight: 400;
+  letter-spacing: .06em;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color var(--fast);
+}
+.pc-visit-wa:hover { color: #4caf72; }
+
 /* ================================
    Similar Properties
    ================================ */
@@ -466,7 +531,7 @@
 
 .prop-similar-h {
   font-family: var(--serif);
-  font-size: max(32px, 4.992vw);
+  font-size: clamp(32px, 4.992vw, 72px);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -.15vw;

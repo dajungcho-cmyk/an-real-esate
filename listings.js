@@ -1,6 +1,8 @@
 /* ================================
    Listings — fetch & render
    ================================ */
+var cachedListings = []
+
 async function initListings() {
   const grid = document.getElementById('props-grid')
   if (!grid) return
@@ -24,28 +26,50 @@ async function initListings() {
     } catch { return }
   }
 
-  const published = listings.filter(l => l.published)
+  cachedListings = listings.filter(l => l.published)
 
-  if (!published.length) {
+  if (!cachedListings.length) {
     grid.innerHTML = '<p style="color:var(--muted);font-size:var(--fs-xs);letter-spacing:.06em;">No listings available at this time.</p>'
     return
   }
 
-  grid.innerHTML = published.map(renderCard).join('')
+  renderGrid()
   initFilters()
 }
 
+function renderGrid() {
+  const grid = document.getElementById('props-grid')
+  if (!grid || !cachedListings.length) return
+  grid.innerHTML = cachedListings.map(renderCard).join('')
+  // Re-apply active filter if one is set
+  const activeTab = document.querySelector('.ftab.active')
+  if (activeTab && activeTab.dataset.filter !== 'all') {
+    const f = activeTab.dataset.filter
+    grid.querySelectorAll('.prop-card').forEach(c => {
+      c.classList.toggle('hidden', !(c.dataset.type ?? '').includes(f))
+    })
+  }
+}
+
 function renderCard(listing) {
-  const isRent    = listing.status === 'rent'
-  const tagClass  = isRent ? 'rent' : 'sale'
-  const tagLabel  = isRent ? 'For Rent' : 'For Sale'
+  const lang     = (typeof getLang === 'function') ? getLang() : (localStorage.getItem('an_lang') || 'en')
+  const L        = (window.I18N && window.I18N[lang]) || (window.I18N && window.I18N.en) || {}
+  const tr       = (listing.translations && listing.translations[lang]) || {}
+  const title    = tr.title || listing.title
+  const isSold   = listing.sold === true
+  const isRent   = listing.status === 'rent'
+  const tagClass = isSold ? 'sold' : (isRent ? 'rent' : 'sale')
+  const tagLabel = isSold
+    ? (L['prop.sold']     || 'Sold')
+    : (isRent ? (L['prop.for_rent'] || 'For Rent') : (L['prop.for_sale'] || 'For Sale'))
   const priceHTML = isRent
     ? `${listing.price}<small>/mo</small>`
     : listing.price
   const dataType  = `${listing.status} ${listing.type}`
+  const href      = `property.html?slug=${listing.slug || ''}`
 
   return `
-    <a href="property.html" class="prop-card" data-type="${dataType}">
+    <a href="${href}" class="prop-card" data-type="${dataType}">
       <div class="prop-img-wrap">
         <img src="${listing.image}" alt="${listing.title}" class="prop-img" loading="lazy" />
         <span class="prop-tag ${tagClass}">${tagLabel}</span>
@@ -55,7 +79,7 @@ function renderCard(listing) {
           <span class="prop-loc">${listing.neighbourhood}</span>
           <span class="prop-price">${priceHTML}</span>
         </div>
-        <h3 class="prop-title">${listing.title}</h3>
+        <h3 class="prop-title">${title}</h3>
         <p class="prop-specs">${listing.beds} bed &nbsp;·&nbsp; ${listing.baths} bath &nbsp;·&nbsp; ${listing.size} m²</p>
       </div>
     </a>`
@@ -77,5 +101,10 @@ function initFilters() {
     })
   })
 }
+
+// Re-render cards when language changes
+window.addEventListener('an:langchange', function() {
+  renderGrid()
+})
 
 initListings()

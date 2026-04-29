@@ -1,0 +1,287 @@
+/* ================================
+   property-loader.js
+   Reads ?slug= from URL and populates
+   property.html dynamically from JSON
+   ================================ */
+;(function () {
+  const slug = new URLSearchParams(location.search).get('slug')
+
+  const el = document.getElementById('listings-data')
+  if (!el) return
+  let listings = []
+  try { listings = JSON.parse(el.textContent).listings || [] } catch { return }
+
+  const baseListing = listings.find(l => l.slug === (slug || 'gracia-garden'))
+  if (!baseListing) return
+
+  function getTranslatedListing(lang) {
+    if (lang && baseListing.translations?.[lang]) {
+      const tr = baseListing.translations[lang]
+      const merged = Object.assign({}, baseListing)
+      if (tr.title)       merged.title       = tr.title
+      if (tr.description) merged.description = tr.description
+      if (tr.features)    merged.features    = tr.features
+      return merged
+    }
+    return baseListing
+  }
+
+  function renderContent(listing) {
+    const lang = (typeof getLang === 'function') ? getLang() : (localStorage.getItem('an_lang') || 'en')
+    const forSale  = window.I18N?.[lang]?.['prop.for_sale']  || (lang === 'es' ? 'En Venta'    : lang === 'fr' ? 'À Vendre'     : lang === 'de' ? 'Zu Verkaufen' : lang === 'it' ? 'In Vendita' : lang === 'ca' ? 'En Venda'  : lang === 'ru' ? 'Продаётся' : 'For Sale')
+    const forRent  = window.I18N?.[lang]?.['prop.for_rent']  || (lang === 'es' ? 'En Alquiler' : lang === 'fr' ? 'À Louer'      : lang === 'de' ? 'Zu Vermieten': lang === 'it' ? 'In Affitto' : lang === 'ca' ? 'En Lloguer': lang === 'ru' ? 'В аренду'  : 'For Rent')
+    const priceLabel = listing.status === 'rent' ? listing.price + '/mo' : listing.price
+
+    /* ── <title> & meta ── */
+    document.title = `${listing.title} — ${priceLabel} — AN Real Estate`
+    const metaDesc = document.querySelector('meta[name="description"]')
+    if (metaDesc) metaDesc.content = (listing.description || [])[0] || ''
+
+    /* ── OG / Twitter image + canonical ── */
+    const rawFirst = (baseListing.images || []).find(i => !(typeof i === 'object' ? i.hidden : false))
+    const ogImg = typeof rawFirst === 'string' ? rawFirst : (rawFirst?.src || listing.image || '')
+    const pageUrl = `https://anrealestate.es/property.html?slug=${listing.slug}`
+    document.querySelector('meta[property="og:image"]')?.setAttribute('content', ogImg)
+    document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', ogImg)
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', `${listing.title} — ${priceLabel} — AN Real Estate`)
+    document.querySelector('meta[property="og:url"]')?.setAttribute('content', pageUrl)
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', pageUrl)
+
+    /* ── JSON-LD structured data ── */
+    const jsonLdEl = document.getElementById('property-jsonld')
+    if (jsonLdEl) {
+      jsonLdEl.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'RealEstateListing',
+        'name': listing.title,
+        'description': (listing.description || [])[0] || '',
+        'url': pageUrl,
+        'image': ogImg,
+        'offers': {
+          '@type': 'Offer',
+          'price': listing.price.replace(/[^0-9]/g, ''),
+          'priceCurrency': 'EUR',
+          'availability': 'https://schema.org/InStock'
+        },
+        'numberOfRooms': listing.beds,
+        'floorSize': { '@type': 'QuantitativeValue', 'value': listing.size, 'unitCode': 'MTK' },
+        'address': {
+          '@type': 'PostalAddress',
+          'addressLocality': 'Barcelona',
+          'addressRegion': 'Catalunya',
+          'addressCountry': 'ES'
+        }
+      })
+    }
+
+    /* ── breadcrumb ── */
+    const bcLast = document.querySelector('.prop-breadcrumb [aria-current]')
+    if (bcLast) bcLast.textContent = listing.title
+
+    /* ── badges ── */
+    const badgeType = document.querySelector('.ph-badge--type')
+    if (badgeType) badgeType.textContent = listing.badge_type || listing.type
+    const badgeSale = document.querySelector('.ph-badge--sale, .ph-badge--rent')
+    if (badgeSale) {
+      badgeSale.textContent = listing.status === 'rent' ? forRent : forSale
+      badgeSale.className   = `ph-badge ph-badge--${listing.status}`
+    }
+
+    /* ── title & location ── */
+    const titleEl = document.getElementById('ph-title')
+    if (titleEl) titleEl.innerHTML = listing.title
+
+    const locEl = document.getElementById('ph-location')
+    if (locEl) {
+      const svg = locEl.querySelector('svg')
+      locEl.innerHTML = (svg ? svg.outerHTML : '') + ' ' + listing.neighbourhood + ', Spain'
+    }
+
+    /* ── price bar ── */
+    const priceEl = document.getElementById('ph-price')
+    if (priceEl) {
+      priceEl.innerHTML = listing.status === 'rent'
+        ? `${listing.price}<small>/mo</small>`
+        : listing.price
+    }
+    const refEl = document.getElementById('ph-ref')
+    if (refEl) refEl.textContent = `Ref. ${listing.ref}`
+
+    /* ── specs ── */
+    const set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val }
+    set('spec-beds',  listing.beds)
+    set('spec-baths', listing.baths)
+    set('spec-size',  `${listing.size} m²`)
+    set('spec-floor', listing.floor || '—')
+
+    /* hide extra Gràcia-specific specs if not needed */
+    document.querySelectorAll('.ph-spec--extra').forEach(s => {
+      s.style.display = listing.slug === 'gracia-garden' ? '' : 'none'
+    })
+
+    /* ── description ── */
+    const descEl = document.getElementById('prop-description')
+    if (descEl && listing.description) {
+      const paras = Array.isArray(listing.description) ? listing.description : [listing.description]
+      descEl.innerHTML = paras.map(p => `<p>${p}</p>`).join('')
+    }
+
+    /* ── property details table ── */
+    const detailsEl = document.getElementById('prop-details')
+    if (detailsEl && listing.details) {
+      detailsEl.innerHTML = listing.details.map(d =>
+        `<div class="pd-row"><span class="pd-key">${d.key}</span><span class="pd-val">${d.val}</span></div>`
+      ).join('')
+    }
+
+    /* ── features ── */
+    const featSec = document.getElementById('prop-features-section')
+    const featEl  = document.getElementById('prop-features')
+    if (featSec && featEl) {
+      if (listing.features) {
+        featEl.innerHTML = Object.entries(listing.features).map(([cat, items]) => `
+          <div class="prop-tags-group">
+            <p class="feat-group">${cat}</p>
+            <div class="prop-tags">${items.map(f => `<span class="prop-tag-pill">${f}</span>`).join('')}</div>
+          </div>`).join('')
+        featSec.style.display = ''
+      } else {
+        featSec.style.display = 'none'
+      }
+    }
+
+    /* ── nearby ── */
+    const nearSec = document.getElementById('prop-nearby-section')
+    const nearEl  = document.getElementById('prop-nearby')
+    if (nearSec && nearEl) {
+      if (listing.nearby) {
+        nearEl.innerHTML = listing.nearby.map(n => `
+          <div class="nearby-item">
+            <span class="nearby-icon"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg></span>
+            <span class="nearby-name">${n.name}</span>
+            <span class="nearby-dist">${n.dist}</span>
+          </div>`).join('')
+        nearSec.style.display = ''
+      } else {
+        nearSec.style.display = 'none'
+      }
+    }
+
+    /* ── form hidden field ── */
+    const propInput = document.querySelector('[name="property"]')
+    if (propInput) propInput.value = `${listing.title} — ${priceLabel} — ${listing.neighbourhood}`
+
+    /* ── mobile sticky CTA ── */
+    const stickyPrice = document.querySelector('.psc-price')
+    if (stickyPrice) stickyPrice.textContent = priceLabel
+
+  }
+
+  /* ── gallery (runs once) ── */
+  const rawImgs = baseListing.images || []
+  const imgs = rawImgs
+    .map(img => typeof img === 'string' ? { src: img, alt: baseListing.title } : img)
+    .filter(img => !img.hidden)
+  if (imgs.length) {
+    const hero    = document.querySelector('.pg-hero')
+    const heroImg = document.getElementById('pg-hero-img')
+    if (hero && heroImg) {
+      hero.dataset.src = imgs[0].src
+      heroImg.src      = imgs[0].src
+      heroImg.alt      = imgs[0].alt || baseListing.title
+    }
+    document.querySelectorAll('.pg-cell').forEach((cell, i) => {
+      const img = imgs[i + 1]
+      if (img) {
+        cell.dataset.src = img.src
+        const ci = cell.querySelector('img')
+        if (ci) { ci.src = img.src; ci.alt = img.alt || baseListing.title }
+        cell.style.display = ''
+      } else {
+        cell.style.display = 'none'
+      }
+    })
+    const moreText = document.querySelector('.pg-more-overlay')
+    if (moreText) {
+      moreText.childNodes.forEach(n => {
+        if (n.nodeType === 3) n.textContent = n.textContent.replace(/\d+ photos/, `${imgs.length} photos`)
+      })
+    }
+    const lbCounter = document.getElementById('lb-counter')
+    if (lbCounter) lbCounter.textContent = `1 / ${imgs.length}`
+  }
+
+  /* ── Map ── */
+  const COORDS = {
+    'gracia-garden':               { lat: 41.4025, lng: 2.1535 },
+    'eixample-golden-square-rent': { lat: 41.3916, lng: 2.1649 },
+    'sant-gervasi-galvany':        { lat: 41.3975, lng: 2.1548 },
+    'el-born-corner':              { lat: 41.3844, lng: 2.1818 },
+    'rambla-catalunya-corner':     { lat: 41.3920, lng: 2.1649 },
+    'eixample-golden-mile':        { lat: 41.3953, lng: 2.1696 },
+    'vallvidrera-villa':           { lat: 41.4208, lng: 2.0865 },
+    'eixample-villarroel':         { lat: 41.3875, lng: 2.1528 },
+  }
+  const MAP_STYLE = [
+    { elementType: 'geometry',            stylers: [{ color: '#18180f' }] },
+    { elementType: 'labels.text.fill',    stylers: [{ color: '#9a8f7a' }] },
+    { elementType: 'labels.text.stroke',  stylers: [{ color: '#18180f' }] },
+    { featureType: 'road',               elementType: 'geometry',       stylers: [{ color: '#252519' }] },
+    { featureType: 'road.arterial',      elementType: 'geometry',       stylers: [{ color: '#2b2b1e' }] },
+    { featureType: 'road.highway',       elementType: 'geometry',       stylers: [{ color: '#323224' }] },
+    { featureType: 'road',               elementType: 'labels.text.fill', stylers: [{ color: '#7a7060' }] },
+    { featureType: 'water',              elementType: 'geometry',       stylers: [{ color: '#0b0e12' }] },
+    { featureType: 'landscape',          elementType: 'geometry',       stylers: [{ color: '#1a1a12' }] },
+    { featureType: 'poi',                stylers: [{ visibility: 'off' }] },
+    { featureType: 'transit',            stylers: [{ visibility: 'off' }] },
+    { featureType: 'administrative',     elementType: 'geometry.stroke', stylers: [{ color: '#2e2e22' }] },
+    { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#c8b99a' }] },
+  ]
+
+  function initPropertyMap() {
+    const coord = COORDS[slug || 'gracia-garden']
+    if (!coord) return
+    const mapEl = document.getElementById('prop-map')
+    if (!mapEl) return
+    const map = new google.maps.Map(mapEl, {
+      center: coord,
+      zoom: 15,
+      styles: MAP_STYLE,
+      disableDefaultUI: true,
+      zoomControl: true,
+      gestureHandling: 'cooperative',
+      backgroundColor: '#18180f',
+    })
+    new google.maps.Marker({
+      position: coord,
+      map,
+      icon: {
+        path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
+        fillColor: '#c8a96e',
+        fillOpacity: 1,
+        strokeColor: '#18180f',
+        strokeWeight: 1,
+        scale: 2,
+        anchor: new google.maps.Point(12, 22),
+      }
+    })
+  }
+
+  function tryInitMap() {
+    if (window.google && window.google.maps) initPropertyMap()
+    else setTimeout(tryInitMap, 400)
+  }
+  tryInitMap()
+
+  /* ── initial render ── */
+  const initLang = localStorage.getItem('an_lang') || 'en'
+  renderContent(getTranslatedListing(initLang))
+
+  /* ── re-render on language change (no reload needed) ── */
+  window.addEventListener('an:langchange', e => {
+    const lang = e.detail.lang
+    renderContent(getTranslatedListing(lang))
+    // Re-apply i18n static labels after render (in case dynamic content overwrote badge text etc.)
+    if (typeof applyI18n === 'function') applyI18n(lang)
+  })
+})()

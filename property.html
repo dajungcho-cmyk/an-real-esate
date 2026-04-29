@@ -3,13 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Exceptional Penthouse with Panoramic Views — Pedralbes, Barcelona. AN Real Estate." />
-  <title>Penthouse in Pedralbes — AN Real Estate</title>
+  <meta name="description" content="Exquisite brand-new garden residence in Gràcia, Barcelona. 2 suites, 45 m² Mediterranean garden, independent pavilion. For sale at €830,000. AN High End Real Estate." />
+  <title>Garden Residence in Gràcia — €830,000 — AN Real Estate</title>
+  <!-- Open Graph -->
+  <link rel="canonical" href="https://anrealestate.es/property.html" />
+  <meta property="og:type"        content="website" />
+  <meta property="og:site_name"   content="AN Real Estate" />
+  <meta property="og:url"         content="https://anrealestate.es/property.html" />
+  <meta property="og:title"       content="Garden Residence in Gràcia — €830,000 — AN Real Estate" />
+  <meta property="og:description" content="Exquisite brand-new garden residence in Gràcia, Barcelona. 2 suites, 45 m² Mediterranean garden, independent pavilion. For sale at €830,000." />
+  <meta property="og:image"       content="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Garden Residence in Gràcia — €830,000 — AN Real Estate" />
+  <meta name="twitter:description" content="Exquisite brand-new garden residence in Gràcia, Barcelona. 2 suites, 45 m² Mediterranean garden, independent pavilion." />
+  <meta name="twitter:image"       content="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#091f38" />
+  <link rel="preconnect" href="https://res.cloudinary.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="property.css" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <script src="i18n.js"></script>
+  <script type="application/ld+json" id="property-jsonld">{}</script>
 </head>
 <body>
 
@@ -22,8 +41,8 @@
             <span></span><span></span>
           </button>
           <nav class="hn-left" aria-label="Primary left">
-            <a href="index.html#properties" class="hn-link">Properties</a>
-            <a href="index.html#services"   class="hn-link">Services</a>
+            <a href="index.html#properties" class="hn-link" data-i18n="nav.properties">Properties</a>
+            <a href="index.html#services"   class="hn-link" data-i18n="nav.services">Services</a>
           </nav>
         </div>
         <a href="index.html" class="header-logo">
@@ -31,9 +50,22 @@
         </a>
         <div class="header-right">
           <nav class="hn-right" aria-label="Primary right">
-            <a href="index.html#about"   class="hn-link">About</a>
-            <a href="index.html#contact" class="hn-link">Contact</a>
+            <a href="about.html"         class="hn-link" data-i18n="nav.about">About</a>
+            <a href="valuation.html"     class="hn-link" data-i18n="nav.valuation">Free Valuation</a>
+            <a href="index.html#contact" class="hn-link" data-i18n="nav.contact">Contact</a>
           </nav>
+          <div class="lang-switcher" id="lang-switcher">
+            <button class="lang-btn" id="lang-current" onclick="toggleLangDropdown(event)">EN</button>
+            <div class="lang-dropdown" id="lang-dropdown">
+              <button class="lang-opt" data-lang="en" onclick="pickLang('en',event)">EN — English</button>
+              <button class="lang-opt" data-lang="es" onclick="pickLang('es',event)">ES — Español</button>
+              <button class="lang-opt" data-lang="ca" onclick="pickLang('ca',event)">CA — Català</button>
+              <button class="lang-opt" data-lang="fr" onclick="pickLang('fr',event)">FR — Français</button>
+              <button class="lang-opt" data-lang="de" onclick="pickLang('de',event)">DE — Deutsch</button>
+              <button class="lang-opt" data-lang="it" onclick="pickLang('it',event)">IT — Italiano</button>
+              <button class="lang-opt" data-lang="ru" onclick="pickLang('ru',event)">RU — Русский</button>
+            </div>
+          </div>
           <a href="#" class="header-phone tel-js" data-a="+34" data-b="628" data-c="02" data-d="04" data-e="34"></a>
         </div>
       </div>
@@ -42,12 +74,25 @@
 
   <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
     <nav class="drawer-nav">
-      <a href="index.html#properties" class="drawer-link">Properties</a>
-      <a href="index.html#services"   class="drawer-link">Services</a>
-      <a href="index.html#about"      class="drawer-link">About</a>
-      <a href="index.html#contact"    class="drawer-link">Contact</a>
+      <a href="index.html#properties" class="drawer-link" data-i18n="nav.properties">Properties</a>
+      <a href="index.html#services"   class="drawer-link" data-i18n="nav.services">Services</a>
+      <a href="about.html"            class="drawer-link" data-i18n="nav.about">About</a>
+      <a href="valuation.html"        class="drawer-link" data-i18n="nav.valuation">Free Valuation</a>
+      <a href="index.html#contact"    class="drawer-link" data-i18n="nav.contact">Contact</a>
     </nav>
     <div class="drawer-foot">
+      <div class="lang-switcher" id="lang-switcher-mob">
+        <button class="lang-btn" onclick="toggleLangDropdown(event)">EN</button>
+        <div class="lang-dropdown" id="lang-dropdown-mob">
+          <button class="lang-opt" data-lang="en" onclick="pickLang('en',event)">EN — English</button>
+          <button class="lang-opt" data-lang="es" onclick="pickLang('es',event)">ES — Español</button>
+          <button class="lang-opt" data-lang="ca" onclick="pickLang('ca',event)">CA — Català</button>
+          <button class="lang-opt" data-lang="fr" onclick="pickLang('fr',event)">FR — Français</button>
+          <button class="lang-opt" data-lang="de" onclick="pickLang('de',event)">DE — Deutsch</button>
+          <button class="lang-opt" data-lang="it" onclick="pickLang('it',event)">IT — Italiano</button>
+          <button class="lang-opt" data-lang="ru" onclick="pickLang('ru',event)">RU — Русский</button>
+        </div>
+      </div>
       <a href="#" class="drawer-phone tel-js" data-a="+34" data-b="628" data-c="02" data-d="04" data-e="34"></a>
     </div>
   </div>
@@ -55,13 +100,13 @@
   <!-- BREADCRUMB -->
   <nav class="prop-breadcrumb" aria-label="Breadcrumb">
     <div class="holder">
-      <a href="index.html">Home</a>
+      <a href="index.html" data-i18n="bread.home">Home</a>
       <span>›</span>
-      <a href="index.html#properties">Properties</a>
+      <a href="index.html#properties" data-i18n="bread.properties">Properties</a>
       <span>›</span>
       <a href="#">Barcelona</a>
       <span>›</span>
-      <span>Garden Residence in Gràcia</span>
+      <span aria-current="page">Garden Residence in Gràcia</span>
     </div>
   </nav>
 
@@ -69,24 +114,24 @@
   <section class="pg-section">
     <div class="pg-mosaic">
 
-      <div class="pg-hero" data-src="https://anrealestate.es/wp-content/uploads/2026/03/Imagen-01-logo-1.jpg" role="button" tabindex="0" aria-label="View photo 1">
+      <div class="pg-hero" data-src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg" role="button" tabindex="0" aria-label="View photo 1">
         <img id="pg-hero-img"
-          src="https://anrealestate.es/wp-content/uploads/2026/03/Imagen-01-logo-1.jpg"
+          src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg"
           alt="Garden residence exterior" loading="eager" />
       </div>
 
       <div class="pg-grid-side">
-        <button class="pg-cell" data-src="https://anrealestate.es/wp-content/uploads/2026/03/imagen-4-logo-1.jpg">
-          <img src="https://anrealestate.es/wp-content/uploads/2026/03/imagen-4-logo-1.jpg" alt="Living area" loading="lazy" />
+        <button class="pg-cell" data-src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/imagen-4-logo-1.jpg">
+          <img src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/imagen-4-logo-1.jpg" alt="Living area" loading="lazy" />
         </button>
-        <button class="pg-cell" data-src="https://anrealestate.es/wp-content/uploads/2026/03/imagen3-logo-2.jpg">
-          <img src="https://anrealestate.es/wp-content/uploads/2026/03/imagen3-logo-2.jpg" alt="Interior detail" loading="lazy" />
+        <button class="pg-cell" data-src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/imagen3-logo-2.jpg">
+          <img src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/imagen3-logo-2.jpg" alt="Interior detail" loading="lazy" />
         </button>
-        <button class="pg-cell" data-src="https://anrealestate.es/wp-content/uploads/2026/03/Imagen-02-logo-1.jpg">
-          <img src="https://anrealestate.es/wp-content/uploads/2026/03/Imagen-02-logo-1.jpg" alt="Garden" loading="lazy" />
+        <button class="pg-cell" data-src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-02-logo-1.jpg">
+          <img src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-02-logo-1.jpg" alt="Garden" loading="lazy" />
         </button>
-        <button class="pg-cell pg-cell--last" data-src="https://anrealestate.es/wp-content/uploads/2026/03/planell.jpg">
-          <img src="https://anrealestate.es/wp-content/uploads/2026/03/planell.jpg" alt="Floor plan" loading="lazy" />
+        <button class="pg-cell pg-cell--last" data-src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/planell.jpg">
+          <img src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/planell.jpg" alt="Floor plan" loading="lazy" />
           <div class="pg-more-overlay">
             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
             View all 5 photos
@@ -106,8 +151,8 @@
           <span class="ph-badge ph-badge--sale">For Sale</span>
           <span class="ph-badge ph-badge--type">Apartment</span>
         </div>
-        <h1 class="ph-title">Exquisite Brand-New<br>Garden Residence in Gràcia</h1>
-        <p class="ph-location">
+        <h1 class="ph-title" id="ph-title">Exquisite Brand-New<br>Garden Residence in Gràcia</h1>
+        <p class="ph-location" id="ph-location">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
           Gràcia, Barcelona, Spain
         </p>
@@ -115,46 +160,46 @@
 
       <div class="ph-specs">
         <div class="ph-price-block">
-          <p class="ph-price">€830,000</p>
-          <p class="ph-ref">Ref. AN-2026-001</p>
+          <p class="ph-price" id="ph-price">€830,000</p>
+          <p class="ph-ref" id="ph-ref">Ref. AN-2026-001</p>
         </div>
         <div class="ph-specs-divider"></div>
         <div class="ph-spec">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M2 20V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12"/><path d="M2 14h20"/><path d="M7 14v6"/><path d="M17 14v6"/><path d="M7 8V5a2 2 0 0 1 4 0v3"/></svg>
           <div class="ph-spec-text">
-            <span class="ph-spec-val">2</span>
-            <span class="ph-spec-key">Bedrooms</span>
+            <span class="ph-spec-val" id="spec-beds">2</span>
+            <span class="ph-spec-key" data-i18n="spec.bedrooms">Bedrooms</span>
           </div>
         </div>
         <div class="ph-spec">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M9 6 Q9 3 12 3 Q15 3 15 6 L15 11 L3 11 L3 14 Q3 17 6 17 L18 17 Q21 17 21 14 L21 11"/><path d="M6 17 L6 21"/><path d="M18 17 L18 21"/></svg>
           <div class="ph-spec-text">
-            <span class="ph-spec-val">2</span>
-            <span class="ph-spec-key">Bathrooms</span>
+            <span class="ph-spec-val" id="spec-baths">2</span>
+            <span class="ph-spec-key" data-i18n="spec.bathrooms">Bathrooms</span>
           </div>
         </div>
         <div class="ph-spec">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 3v18"/></svg>
           <div class="ph-spec-text">
-            <span class="ph-spec-val">94.50 m²</span>
-            <span class="ph-spec-key">Built area</span>
+            <span class="ph-spec-val" id="spec-size">94.50 m²</span>
+            <span class="ph-spec-key" data-i18n="spec.built_area">Built area</span>
           </div>
         </div>
         <div class="ph-spec">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M3 21h18M3 7v14M21 7v14M6 11h4M14 11h4M6 15h4M14 15h4M6 19h4M14 19h4"/><path d="M9 3h6l3 4H6L9 3z"/></svg>
           <div class="ph-spec-text">
-            <span class="ph-spec-val">Ground</span>
-            <span class="ph-spec-key">Floor</span>
+            <span class="ph-spec-val" id="spec-floor">Ground</span>
+            <span class="ph-spec-key" data-i18n="spec.floor">Floor</span>
           </div>
         </div>
-        <div class="ph-spec">
+        <div class="ph-spec ph-spec--extra">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><rect x="2" y="10" width="20" height="9" rx="1"/><path d="M6 10V7a2 2 0 0 1 4 0v3"/><path d="M12 13h1"/></svg>
           <div class="ph-spec-text">
             <span class="ph-spec-val">18.50 m²</span>
             <span class="ph-spec-key">Pavilion</span>
           </div>
         </div>
-        <div class="ph-spec">
+        <div class="ph-spec ph-spec--extra">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
           <div class="ph-spec-text">
             <span class="ph-spec-val">45 m²</span>
@@ -176,8 +221,8 @@
 
           <!-- Description -->
           <section class="prop-section">
-            <h2 class="prop-section-h">Description</h2>
-            <div class="prop-desc">
+            <h2 class="prop-section-h" data-i18n="section.description">Description</h2>
+            <div class="prop-desc" id="prop-description">
               <p>Ground-floor residence currently undergoing a high-spec renovation in the heart of Gràcia, adjacent to Avenida Diagonal and the Jardinets de Gràcia. A rare opportunity to acquire a property of exceptional character in one of Barcelona's most sought-after neighbourhoods.</p>
               <p>The residence features soaring ceilings, beautifully restored Volta Catalana brickwork, and a luminous 23 m² open-plan living, dining and kitchen area. The principal suite includes a generous dressing room and a 7.30 m² bathroom. A second bedroom and a fully independent multipurpose pavilion of 18.50 m² — pre-installed for a potential third bathroom — complete the layout.</p>
               <p>The 45 m² Mediterranean garden provides a private outdoor sanctuary in the city, ideal for entertaining or simply enjoying the Barcelona climate year-round.</p>
@@ -186,8 +231,8 @@
 
           <!-- Property details table -->
           <section class="prop-section">
-            <h2 class="prop-section-h">Property Details</h2>
-            <div class="prop-details">
+            <h2 class="prop-section-h" data-i18n="section.details">Property Details</h2>
+            <div class="prop-details" id="prop-details">
               <div class="pd-row">
                 <span class="pd-key">Property type</span>
                 <span class="pd-val">Ground-floor apartment</span>
@@ -232,40 +277,39 @@
           </section>
 
           <!-- Features as tags -->
-          <section class="prop-section">
-            <h2 class="prop-section-h">Features &amp; Amenities</h2>
-            <div class="prop-tags-group">
-              <p class="feat-group">Interior</p>
-              <div class="prop-tags">
-                <span class="prop-tag-pill">23 m² open-plan living &amp; dining</span>
-                <span class="prop-tag-pill">2 suites with en-suite bathrooms</span>
-                <span class="prop-tag-pill">Principal suite with dressing room</span>
-                <span class="prop-tag-pill">7.30 m² master bathroom</span>
-                <span class="prop-tag-pill">Restored Volta Catalana brickwork</span>
-                <span class="prop-tag-pill">Soaring ceilings</span>
-                <span class="prop-tag-pill">High-spec renovation</span>
+          <section class="prop-section" id="prop-features-section">
+            <h2 class="prop-section-h" data-i18n="section.features">Features &amp; Amenities</h2>
+            <div id="prop-features">
+              <div class="prop-tags-group">
+                <p class="feat-group">Interior</p>
+                <div class="prop-tags">
+                  <span class="prop-tag-pill">23 m² open-plan living &amp; dining</span>
+                  <span class="prop-tag-pill">2 suites with en-suite bathrooms</span>
+                  <span class="prop-tag-pill">Principal suite with dressing room</span>
+                  <span class="prop-tag-pill">7.30 m² master bathroom</span>
+                  <span class="prop-tag-pill">Restored Volta Catalana brickwork</span>
+                  <span class="prop-tag-pill">Soaring ceilings</span>
+                  <span class="prop-tag-pill">High-spec renovation</span>
+                </div>
               </div>
-            </div>
-            <div class="prop-tags-group">
-              <p class="feat-group">Outdoor</p>
-              <div class="prop-tags">
-                <span class="prop-tag-pill">45 m² Mediterranean garden</span>
-                <span class="prop-tag-pill">Independent 18.50 m² pavilion</span>
-                <span class="prop-tag-pill">Pre-installed for 3rd bathroom</span>
-                <span class="prop-tag-pill">Private outdoor space</span>
+              <div class="prop-tags-group">
+                <p class="feat-group">Outdoor</p>
+                <div class="prop-tags">
+                  <span class="prop-tag-pill">45 m² Mediterranean garden</span>
+                  <span class="prop-tag-pill">Independent 18.50 m² pavilion</span>
+                  <span class="prop-tag-pill">Pre-installed for 3rd bathroom</span>
+                  <span class="prop-tag-pill">Private outdoor space</span>
+                </div>
               </div>
             </div>
           </section>
 
           <!-- Location -->
-          <section class="prop-section">
-            <h2 class="prop-section-h">Location</h2>
-            <div class="prop-map-placeholder">
-              <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" opacity=".3"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-              <p>Gràcia, Barcelona, Spain</p>
-              <span>Exact address provided after enquiry</span>
-            </div>
-            <div class="prop-nearby">
+          <section class="prop-section" id="prop-nearby-section">
+            <h2 class="prop-section-h" data-i18n="section.nearby">Location</h2>
+            <div id="prop-map" class="prop-map"></div>
+            <p class="prop-map-note" id="prop-map-note">Exact address provided after enquiry</p>
+            <div class="prop-nearby" id="prop-nearby">
               <div class="nearby-item">
                 <span class="nearby-icon">
                   <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -305,12 +349,12 @@
 
             <!-- Agent -->
             <div class="pc-agent">
-              <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=120&q=80&auto=format"
+              <img src="images/alvaro-navarro.jpg"
                 alt="Álvaro Navarro" class="pc-agent-img" loading="lazy" />
               <div class="pc-agent-info">
                 <p class="pc-agent-name">Álvaro Navarro</p>
-                <p class="pc-agent-role">Founder &amp; Lead Agent</p>
-                <p class="pc-agent-agency">AN High End Real Estate · Barcelona</p>
+                <p class="pc-agent-role" data-i18n="agent.role">Founder &amp; Lead Agent</p>
+                <p class="pc-agent-agency" data-i18n="agent.agency">AN High End Real Estate · Barcelona</p>
               </div>
             </div>
 
@@ -324,33 +368,34 @@
             <form class="pc-form" id="prop-form" novalidate>
               <input type="hidden" name="property" value="Exquisite Brand-New Garden Residence in Gràcia — €830,000 — Gràcia, Barcelona" />
               <div class="fg">
-                <label class="flabel">Name</label>
-                <input type="text" name="name" class="finput" placeholder="Your full name" required />
+                <label class="flabel" data-i18n="form.name">Name</label>
+                <input type="text" name="name" class="finput" placeholder="Your full name" data-i18n="form.name_ph" required />
               </div>
               <div class="fg">
-                <label class="flabel">Email</label>
-                <input type="email" name="email" class="finput" placeholder="your@email.com" required />
+                <label class="flabel" data-i18n="form.email">Email</label>
+                <input type="email" name="email" class="finput" placeholder="your@email.com" data-i18n="form.email_ph" required />
               </div>
               <div class="fg">
-                <label class="flabel">Phone</label>
-                <input type="tel" name="phone" class="finput" placeholder="+34 600 000 000" />
+                <label class="flabel" data-i18n="form.phone">Phone</label>
+                <input type="tel" name="phone" class="finput" placeholder="+34 600 000 000" data-i18n="form.phone_ph" />
               </div>
               <div class="fg">
-                <label class="flabel">Message</label>
-                <textarea name="message" class="finput ftextarea" rows="3" placeholder="I'm interested in this property…"></textarea>
+                <label class="flabel" data-i18n="form.message">Message</label>
+                <textarea name="message" class="finput ftextarea" rows="3" placeholder="I'm interested in this property…" data-i18n="form.msg_ph"></textarea>
               </div>
-              <button type="submit" class="button pc-submit">Request Viewing</button>
+              <button type="submit" class="button pc-submit" data-i18n="form.submit">Request Viewing</button>
             </form>
 
             <a href="https://wa.me/34628020434" class="pc-whatsapp" target="_blank" rel="noopener">
               <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-              Chat on WhatsApp
+              <span data-i18n="sidebar.whatsapp">Chat on WhatsApp</span>
             </a>
 
             <a href="#" class="pc-tel tel-js" data-a="+34" data-b="628" data-c="02" data-d="04" data-e="34">
               <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.73a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               <span class="tel-text"></span>
             </a>
+
 
           </div>
         </aside>
@@ -360,63 +405,16 @@
   </div>
 
   <!-- SIMILAR PROPERTIES -->
-  <section class="prop-similar">
+  <section class="prop-similar" id="similar-section" style="display:none">
     <div class="holder">
       <div class="prop-similar-head reveal">
-        <p class="subheading">You May Also Like</p>
+        <p class="subheading" data-i18n="similar.subtitle">You May Also Like</p>
         <h2 class="prop-similar-h">
-          <span class="text-wrap"><span class="text-inner">Similar</span></span>
-          <span class="text-wrap"><span class="text-inner">Properties</span></span>
+          <span class="text-wrap"><span class="text-inner" data-i18n="similar.title1">Similar</span></span>
+          <span class="text-wrap"><span class="text-inner" data-i18n="similar.title2">Properties</span></span>
         </h2>
       </div>
-      <div class="props-grid">
-
-        <a href="property.html" class="prop-card-grid">
-          <div class="prop-img-wrap">
-            <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=700&q=80&auto=format" alt="Apartment Eixample" class="prop-img" loading="lazy" />
-            <span class="prop-tag">For Sale</span>
-          </div>
-          <div class="prop-card-info">
-            <div class="prop-meta">
-              <span class="prop-loc">Eixample</span>
-              <span class="prop-price">€830,000</span>
-            </div>
-            <h3 class="prop-title">Elegant Modernist Apartment</h3>
-            <p class="prop-specs">3 bed · 2 bath · 145 m²</p>
-          </div>
-        </a>
-
-        <a href="property.html" class="prop-card-grid">
-          <div class="prop-img-wrap">
-            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=700&q=80&auto=format" alt="Villa Sarrià" class="prop-img" loading="lazy" />
-            <span class="prop-tag">For Sale</span>
-          </div>
-          <div class="prop-card-info">
-            <div class="prop-meta">
-              <span class="prop-loc">Sarrià</span>
-              <span class="prop-price">€5,500,000</span>
-            </div>
-            <h3 class="prop-title">Magnificent Villa with Pool</h3>
-            <p class="prop-specs">5 bed · 5 bath · 480 m²</p>
-          </div>
-        </a>
-
-        <a href="property.html" class="prop-card-grid">
-          <div class="prop-img-wrap">
-            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&q=80&auto=format" alt="Townhouse Gràcia" class="prop-img" loading="lazy" />
-            <span class="prop-tag">For Sale</span>
-          </div>
-          <div class="prop-card-info">
-            <div class="prop-meta">
-              <span class="prop-loc">Gràcia</span>
-              <span class="prop-price">€1,450,000</span>
-            </div>
-            <h3 class="prop-title">Charming Townhouse with Rooftop</h3>
-            <p class="prop-specs">4 bed · 3 bath · 220 m²</p>
-          </div>
-        </a>
-
-      </div>
+      <div class="props-grid" id="similar-grid"></div>
     </div>
   </section>
 
@@ -430,7 +428,8 @@
         <nav class="footer-nav">
           <a href="index.html#properties" class="fn-link">Properties</a>
           <a href="index.html#services"   class="fn-link">Services</a>
-          <a href="index.html#about"      class="fn-link">About</a>
+          <a href="about.html"            class="fn-link">About</a>
+          <a href="valuation.html"        class="fn-link" data-i18n="nav.valuation">Free Valuation</a>
           <a href="index.html#contact"    class="fn-link">Contact</a>
         </nav>
       </div>
@@ -440,9 +439,9 @@
       <div class="footer-bottom">
         <div class="footer-copy">
           <span>© 2026 AN High End Real Estate · Barcelona</span>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Legal Notice</a>
-          <a href="#">Cookie Policy</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="legal.html">Legal Notice</a>
+          <a href="cookies.html">Cookie Policy</a>
         </div>
         <div class="footer-studio">anrealestate.es</div>
       </div>
@@ -468,18 +467,52 @@
 
   <!-- Mobile sticky bar -->
   <div class="prop-sticky-cta" id="prop-sticky-cta">
-    <p class="psc-price">€3,200,000</p>
+    <p class="psc-price">€830,000</p>
     <a href="#enquire" class="button">Request Viewing</a>
   </div>
 
-  <a href="https://wa.me/34600000000" class="wa-fab" aria-label="WhatsApp" target="_blank" rel="noopener">
+  <a href="https://wa.me/34628020434" class="wa-fab" aria-label="WhatsApp" target="_blank" rel="noopener">
     <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
   </a>
 
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg7_3UefA_rzfXRAwCMS42A4Z7lx4BUTc" async defer></script>
+  <script src="data-listings.js"></script>
+  <script src="property-loader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="main.js"></script>
   <script src="property.js"></script>
   <script src="animations.js"></script>
+
+  <!-- Cookie Banner -->
+  <div class="cookie-banner is-hidden" id="cookie-banner" role="dialog" aria-label="Cookie consent">
+    <p id="cookie-text"></p>
+    <div class="cookie-btns">
+      <button class="cookie-btn-accept" id="cookie-accept"></button>
+      <button class="cookie-btn-reject" id="cookie-reject"></button>
+    </div>
+  </div>
+  <script>
+  ;(function(){
+    var lang = (typeof getLang === 'function') ? getLang() : 'en'
+    var t = function(k){ return (window.I18N&&window.I18N[lang]&&window.I18N[lang][k]) || (window.I18N&&window.I18N.en&&window.I18N.en[k]) || k }
+    var p = document.getElementById('cookie-text')
+    var ba = document.getElementById('cookie-accept')
+    var br = document.getElementById('cookie-reject')
+    if (p)  p.innerHTML   = t('cookie.text')
+    if (ba) ba.textContent = t('cookie.accept')
+    if (br) br.textContent = t('cookie.essential')
+    if (!localStorage.getItem('an_cookie_consent')) {
+      setTimeout(function(){ var b=document.getElementById('cookie-banner'); if(b) b.classList.remove('is-hidden') }, 800)
+    }
+    function dismiss(val) {
+      localStorage.setItem('an_cookie_consent', val)
+      var b = document.getElementById('cookie-banner')
+      if (b) b.classList.add('is-hidden')
+    }
+    document.getElementById('cookie-accept').addEventListener('click', function(){ dismiss('accepted') })
+    document.getElementById('cookie-reject').addEventListener('click', function(){ dismiss('essential') })
+  })()
+  </script>
 </body>
 </html>

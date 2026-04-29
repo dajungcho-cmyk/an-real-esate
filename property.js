@@ -103,16 +103,18 @@ document.getElementById('prop-form')?.addEventListener('submit', async e => {
   const form = e.target
   const btn  = form.querySelector('button[type="submit"]')
 
-  // Basic validation
   const name  = form.querySelector('[name="name"]').value.trim()
   const email = form.querySelector('[name="email"]').value.trim()
-  if (!name || !email) {
-    form.querySelector('[name="name"]').style.borderColor  = name  ? '' : 'var(--gold)'
-    form.querySelector('[name="email"]').style.borderColor = email ? '' : 'var(--gold)'
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  if (!name || !emailOk) {
+    form.querySelector('[name="name"]').style.borderColor  = name    ? '' : 'var(--gold)'
+    form.querySelector('[name="email"]').style.borderColor = emailOk ? '' : 'var(--gold)'
     return
   }
 
-  btn.textContent   = 'Sending…'
+  const lang = (typeof getLang === 'function') ? getLang() : 'en'
+  const t = k => window.I18N?.[lang]?.[k] || window.I18N?.en?.[k] || k
+  btn.textContent   = t('form.requesting')
   btn.disabled      = true
 
   const property = form.querySelector('[name="property"]')?.value || ''
@@ -133,23 +135,67 @@ document.getElementById('prop-form')?.addEventListener('submit', async e => {
       }),
     })
     if (!res.ok) throw new Error()
-    btn.textContent        = 'Request Sent ✓'
+    btn.textContent        = t('form.requested')
     btn.style.background   = 'var(--gold)'
     btn.style.borderColor  = 'var(--gold)'
     btn.style.color        = 'var(--bg)'
     form.reset()
+    if (typeof showToast === 'function') showToast(t('form.toast_enquiry'))
     setTimeout(() => {
-      btn.textContent        = 'Request Viewing'
+      btn.textContent        = t('form.request_submit')
       btn.style.background   = ''
       btn.style.borderColor  = ''
       btn.style.color        = ''
       btn.disabled           = false
     }, 4000)
   } catch {
-    btn.textContent = 'Error — try again'
+    btn.textContent = t('form.error')
     btn.disabled    = false
   }
 })
+
+/* ================================
+   Similar properties
+   ================================ */
+;(() => {
+  const section = document.getElementById('similar-section')
+  const grid    = document.getElementById('similar-grid')
+  if (!section || !grid) return
+
+  const inline = document.getElementById('listings-data')
+  if (!inline) return
+
+  let all = []
+  try { all = JSON.parse(inline.textContent).listings || [] } catch { return }
+
+  const currentTitle = document.querySelector('[name="property"]')?.value || ''
+  const others = all.filter(l => l.published && !currentTitle.includes(l.title)).slice(0, 3)
+
+  if (!others.length) return
+
+  const simLang = (typeof getLang === 'function') ? getLang() : 'en'
+  const simT = k => window.I18N?.[simLang]?.[k] || window.I18N?.en?.[k] || k
+  grid.innerHTML = others.map(l => {
+    const tag = l.status === 'rent' ? simT('prop.for_rent') : simT('prop.for_sale')
+    return `
+      <a href="property.html?slug=${l.slug || ''}" class="prop-card" data-type="${l.status} ${l.type}">
+        <div class="prop-img-wrap">
+          <img src="${l.image}" alt="${l.title}" class="prop-img" loading="lazy" />
+          <span class="prop-tag ${l.status}">${tag}</span>
+        </div>
+        <div class="prop-info">
+          <div class="prop-meta">
+            <span class="prop-loc">${l.neighbourhood}</span>
+            <span class="prop-price">${l.price}</span>
+          </div>
+          <h3 class="prop-title">${l.title}</h3>
+          <p class="prop-specs">${l.beds} bed &nbsp;·&nbsp; ${l.baths} bath &nbsp;·&nbsp; ${l.size} m²</p>
+        </div>
+      </a>`
+  }).join('')
+
+  section.style.display = ''
+})()
 
 /* ================================
    Mobile sticky CTA

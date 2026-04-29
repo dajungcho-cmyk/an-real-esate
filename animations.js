@@ -280,8 +280,11 @@ function showTesti(index, isFirst = false) {
   }
 }
 
-// Boot with random slide — scroll scrub
-showTesti(testiCurrent, true)
+// Boot with random slide — wait for full load so applyI18n has run
+// and images are loaded (stable layout for ScrollTrigger positions)
+window.addEventListener('load', function() {
+  if (testiItems.length) showTesti(testiCurrent, true)
+})
 
 // Auto-rotation
 let autoTimer   = null
@@ -315,6 +318,24 @@ if (testiSection) {
   }, { threshold: 0.2 }).observe(testiSection)
 }
 
+// Rebuild testimonials when language changes
+window.addEventListener('an:langchange', function(e) {
+  var lang = e.detail.lang
+  testiItems.forEach(function(item) {
+    var quote = item.querySelector('.testi-big-quote')
+    if (!quote) return
+    var key = quote.getAttribute('data-i18n')
+    if (!key) return
+    var val = (window.I18N && window.I18N[lang] && window.I18N[lang][key]) ||
+              (window.I18N && window.I18N.en && window.I18N.en[key]) || ''
+    if (val) {
+      quote.dataset.raw = val
+      quote.textContent = val
+    }
+  })
+  buildAutoReveal(testiItems[testiCurrent])
+})
+
 // Manual controls
 document.getElementById('testi-prev')?.addEventListener('click', () => {
   showTesti((testiCurrent - 1 + testiItems.length) % testiItems.length, false)
@@ -340,3 +361,14 @@ gsap.from('.footer .footer-top', {
   y: 20, opacity: 0, duration: 0.8, ease: 'power2.out',
   scrollTrigger: { trigger: '.footer', start: 'top 95%' },
 })
+
+/* ================================
+   13. About — vertical line
+   ================================ */
+const atLineInner = document.querySelector('.at-line-inner')
+if (atLineInner) {
+  new IntersectionObserver(
+    ([e]) => { if (e.isIntersecting) atLineInner.classList.add('animate') },
+    { threshold: 0.1 }
+  ).observe(atLineInner.parentElement)
+}

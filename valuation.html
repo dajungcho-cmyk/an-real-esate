@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="¿Está pensando en qué hacer con su inmueble? AN Real Estate le ayuda a entender sus opciones en Barcelona. Sin compromiso." />
+  <title>Propietarios — AN Real Estate Barcelona</title>
+  <link rel="canonical" href="https://anrealestate.es/valuation.html" />
+  <meta property="og:type"        content="website" />
+  <meta property="og:site_name"   content="AN Real Estate" />
+  <meta property="og:url"         content="https://anrealestate.es/valuation.html" />
+  <meta property="og:title"       content="Propietarios — AN Real Estate Barcelona" />
+  <meta property="og:description" content="¿Está pensando en qué hacer con su inmueble? Le ayudamos a entender sus opciones. Sin compromiso." />
+  <meta property="og:image"       content="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg" />
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Propietarios — AN Real Estate Barcelona" />
+  <meta name="twitter:description" content="¿Está pensando en qué hacer con su inmueble? Le ayudamos a entender sus opciones. Sin compromiso." />
+  <meta name="twitter:image"       content="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#091f38" />
+  <link rel="preconnect" href="https://res.cloudinary.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="valuation.css" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg7_3UefA_rzfXRAwCMS42A4Z7lx4BUTc&libraries=places" async defer></script>
+  <script src="i18n.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Asesoramiento inmobiliario para propietarios",
+    "provider": { "@type": "RealEstateAgent", "name": "AN High End Real Estate", "url": "https://anrealestate.es" },
+    "areaServed": { "@type": "City", "name": "Barcelona" },
+    "url": "https://anrealestate.es/valuation.html"
+  }
+  </script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="site-header">
+    <div class="holder">
+      <div class="header-block">
+        <div class="header-left">
+          <button class="mob-nav-icon" id="hamburger" aria-label="Menu" aria-expanded="false">
+            <span></span><span></span>
+          </button>
+          <nav class="hn-left" aria-label="Primary left">
+            <a href="index.html#properties" class="hn-link" data-i18n="nav.properties">Properties</a>
+            <a href="index.html#services"   class="hn-link" data-i18n="nav.services">Services</a>
+          </nav>
+        </div>
+        <a href="index.html" class="header-logo">
+          <img src="logo.svg" alt="AN Real Estate" class="header-logo-img" />
+        </a>
+        <div class="header-right">
+          <nav class="hn-right" aria-label="Primary right">
+            <a href="about.html"         class="hn-link" data-i18n="nav.about">About</a>
+            <a href="valuation.html"     class="hn-link" data-i18n="nav.valuation">Owners</a>
+            <a href="index.html#contact" class="hn-link" data-i18n="nav.contact">Contact</a>
+          </nav>
+          <div class="lang-switcher" id="lang-switcher">
+            <button class="lang-btn" id="lang-current" onclick="toggleLangDropdown(event)">EN</button>
+            <div class="lang-dropdown" id="lang-dropdown">
+              <button class="lang-opt" data-lang="en" onclick="pickLang('en',event)">EN — English</button>
+              <button class="lang-opt" data-lang="es" onclick="pickLang('es',event)">ES — Español</button>
+              <button class="lang-opt" data-lang="ca" onclick="pickLang('ca',event)">CA — Català</button>
+              <button class="lang-opt" data-lang="fr" onclick="pickLang('fr',event)">FR — Français</button>
+              <button class="lang-opt" data-lang="de" onclick="pickLang('de',event)">DE — Deutsch</button>
+              <button class="lang-opt" data-lang="it" onclick="pickLang('it',event)">IT — Italiano</button>
+              <button class="lang-opt" data-lang="ru" onclick="pickLang('ru',event)">RU — Русский</button>
+            </div>
+          </div>
+          <a href="#" class="header-phone tel-js" data-a="+34" data-b="628" data-c="02" data-d="04" data-e="34"></a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+    <nav class="drawer-nav">
+      <a href="index.html#properties" class="drawer-link" data-i18n="nav.properties">Properties</a>
+      <a href="index.html#services"   class="drawer-link" data-i18n="nav.services">Services</a>
+      <a href="about.html"            class="drawer-link" data-i18n="nav.about">About</a>
+      <a href="valuation.html"        class="drawer-link" data-i18n="nav.valuation">Owners</a>
+      <a href="index.html#contact"    class="drawer-link" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="drawer-foot">
+      <div class="lang-switcher" id="lang-switcher-mob">
+        <button class="lang-btn" onclick="toggleLangDropdown(event)">EN</button>
+        <div class="lang-dropdown" id="lang-dropdown-mob">
+          <button class="lang-opt" data-lang="en" onclick="pickLang('en',event)">EN — English</button>
+          <button class="lang-opt" data-lang="es" onclick="pickLang('es',event)">ES — Español</button>
+          <button class="lang-opt" data-lang="ca" onclick="pickLang('ca',event)">CA — Català</button>
+          <button class="lang-opt" data-lang="fr" onclick="pickLang('fr',event)">FR — Français</button>
+          <button class="lang-opt" data-lang="de" onclick="pickLang('de',event)">DE — Deutsch</button>
+          <button class="lang-opt" data-lang="it" onclick="pickLang('it',event)">IT — Italiano</button>
+          <button class="lang-opt" data-lang="ru" onclick="pickLang('ru',event)">RU — Русский</button>
+        </div>
+      </div>
+      <a href="#" class="drawer-phone tel-js" data-a="+34" data-b="628" data-c="02" data-d="04" data-e="34"></a>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="val-main">
+
+    <!-- HERO -->
+    <div class="val-top">
+      <div class="holder">
+        <div class="val-top-inner reveal">
+          <p class="banner-eyebrow" data-i18n="val.eyebrow">AN Real Estate <span class="beo-sep">—</span> Barcelona</p>
+          <h1 class="val-h1">
+            <span class="text-wrap"><span class="text-inner" data-i18n="val.h1">Vende con</span></span>
+            <span class="text-wrap"><span class="text-inner"><em data-i18n="val.h2">Álvaro.</em></span></span>
+          </h1>
+          <p class="val-sub" data-i18n="val.sub">Le ayudamos a entender sus opciones. Sin compromiso.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <section class="val-chat-section">
+      <div class="holder">
+        <div class="chat-wrap">
+          <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
+          <div id="chat-input-area"></div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /.val-main -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="holder">
+      <div class="footer-top">
+        <a href="index.html" class="footer-logo">
+          <img src="logo.svg" alt="AN Real Estate" class="header-logo-img" />
+        </a>
+        <nav class="footer-nav">
+          <a href="index.html#properties" class="fn-link" data-i18n="nav.properties">Properties</a>
+          <a href="index.html#services"   class="fn-link" data-i18n="nav.services">Services</a>
+          <a href="about.html"            class="fn-link" data-i18n="nav.about">About</a>
+          <a href="valuation.html"        class="fn-link" data-i18n="nav.valuation">Owners</a>
+          <a href="index.html#contact"    class="fn-link" data-i18n="nav.contact">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-text">
+        <p data-i18n="footer.disclaimer">AN High End Real Estate is a licensed property agency specialising in luxury residential real estate in Barcelona and Catalonia.</p>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          <span>© 2026 AN High End Real Estate · Barcelona</span>
+          <a href="privacy.html"  data-i18n="footer.privacy">Privacy Policy</a>
+          <a href="legal.html"    data-i18n="footer.legal">Legal Notice</a>
+          <a href="cookies.html"  data-i18n="footer.cookies">Cookie Policy</a>
+        </div>
+        <div class="footer-studio">anrealestate.es</div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/34628020434" class="wa-fab" aria-label="WhatsApp" target="_blank" rel="noopener">
+    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+  </a>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="main.js"></script>
+  <script src="animations.js"></script>
+
+  <!-- ================================================
+       ALBERT — Conversational assistant for Álvaro
+       ================================================ -->
+  <script>
+  ;(function () {
+
+    /* opts format: { v: value, l: label, r: optional reaction } */
+    var CONV = {
+
+      en: {
+        greeting: "Good day. I'm Albert, Álvaro's assistant. We keep things simple — a few questions, no obligations, and a rather clear picture of what your property is worth on today's market. Shall we?",
+        steps: [
+          { key: 'intent', type: 'buttons',
+            q: "Let's start at the beginning. What's on your mind?",
+            opts: [
+              { v:'Sell',      l:'Thinking of selling',  r:"A sound decision. The right preparation makes all the difference." },
+              { v:'Rent',      l:'Thinking of renting',  r:"Also wise. Barcelona's rental market rewards good properties handsomely." },
+              { v:'Exploring', l:'Just exploring',        r:"The most underrated move in real estate. Know your position before anything else." },
+            ]},
+          { key: 'address', type: 'text',
+            q: "Splendid. Where exactly is this property of yours?",
+            ph: "Street, number, neighbourhood — Barcelona",
+            skip: "Not sure yet" },
+          { key: 'floor', type: 'text', q: "Which floor?", ph: "e.g. 3rd" },
+          { key: 'door',  type: 'text', q: "Door or apartment number?", ph: "e.g. 1A / B" },
+          { key: 'city',  type: 'text', q: "And the city?", ph: "Barcelona" },
+          { key: 'type', type: 'buttons',
+            q: "What sort of property are we talking about?",
+            opts: [
+              { v:'Apartment',    l:'Apartment' },
+              { v:'House / Villa',l:'House / Villa', r:"A house or villa — always a statement when it's well located." },
+              { v:'Penthouse',    l:'Penthouse',     r:"A penthouse. Álvaro does enjoy those." },
+              { v:'Commercial',   l:'Commercial' },
+              { v:'Other',        l:'Something else' },
+            ]},
+          { key: 'size', type: 'number',
+            q: "Roughly how many square metres? A ballpark figure is perfectly fine.",
+            ph: "e.g. 120",
+            skip: "Not sure" },
+          { key: 'beds', type: 'buttons',
+            q: "Bedrooms?",
+            opts: [
+              { v:'1', l:'1' }, { v:'2', l:'2' }, { v:'3', l:'3' }, { v:'4', l:'4' },
+              { v:'5+', l:'5 or more', r:"Five or more. Álvaro enjoys a good challenge." },
+            ]},
+          { key: 'baths', type: 'buttons',
+            q: "And bathrooms — always a telling detail.",
+            opts: [
+              { v:'1', l:'1' }, { v:'2', l:'2' }, { v:'3', l:'3' },
+              { v:'4+', l:'4 or more', r:"Four bathrooms or more. We'll make a note of that." },
+            ]},
+          { key: 'condition', type: 'buttons',
+            q: "What condition is it in, honestly speaking?",
+            opts: [
+              { v:'Needs work',   l:'Needs work',       r:"Character and potential — the most underrated combination in real estate." },
+              { v:'Good condition',l:'Good condition',   r:"Solid. Álvaro appreciates a well-maintained property." },
+              { v:'Renovated',    l:'Renovated',         r:"Already done well. That tends to show in the numbers." },
+              { v:'New build',    l:'New build',         r:"New build — clean, uncomplicated, always in demand." },
+            ]},
+          { key: 'notes', type: 'text',
+            q: "Anything else Álvaro should know? A terrace, a view, a story worth telling.",
+            ph: "Tell us whatever feels relevant…",
+            skip: "Nothing to add" },
+          { key: 'name',  type: 'text',  q: "Almost there — and you are…?", ph: "Your name", skip: "Prefer not to say" },
+          { key: 'email', type: 'email', q: "Where shall we send Álvaro's assessment?", ph: "your@email.com" },
+          { key: 'phone', type: 'tel',   q: "A number where you can be reached, if you'd prefer a call?", ph: "+34 628 02 04 34", skip: "Email is fine" },
+        ],
+        final:   function(n){ return (n ? 'Thank you, ' + n + '.' : 'Thank you.') + ' Álvaro will review your property personally and be in touch this week. We appreciate your time.' },
+        send:    'Send to Álvaro',
+        sending: 'Sending…',
+        sent:    'Sent ✓',
+        error:   'Something went wrong — please try again',
+        toast:   "Received. Álvaro will be in touch shortly.",
+      },
+
+      es: {
+        greeting: "Buenas. Soy Albert, el asistente de Álvaro. Vamos al grano — unas pocas preguntas, sin ningún compromiso, y una idea bastante clara de lo que vale su inmueble hoy. ¿Empezamos?",
+        steps: [
+          { key: 'intent', type: 'buttons',
+            q: "Empecemos por el principio. ¿Qué tiene en mente?",
+            opts: [
+              { v:'Vender',    l:'Pensando en vender',  r:"Una decisión sólida. La preparación adecuada marca la diferencia." },
+              { v:'Alquilar',  l:'Pensando en alquilar', r:"También inteligente. El mercado del alquiler en Barcelona recompensa bien los buenos inmuebles." },
+              { v:'Explorando',l:'Solo explorando',      r:"El movimiento más infravalorado en el sector. Conozca su posición antes que nada." },
+            ]},
+          { key: 'address', type: 'text',
+            q: "Estupendo. ¿Dónde se encuentra exactamente este inmueble suyo?",
+            ph: "Calle, número, barrio — Barcelona",
+            skip: "Aún no lo sé" },
+          { key: 'floor', type: 'text', q: "¿En qué planta?", ph: "Ej. 3º" },
+          { key: 'door',  type: 'text', q: "¿La puerta o letra?", ph: "Ej. 1ª / B" },
+          { key: 'city',  type: 'text', q: "¿Y la ciudad?", ph: "Barcelona" },
+          { key: 'type', type: 'buttons',
+            q: "¿De qué tipo de inmueble estamos hablando?",
+            opts: [
+              { v:'Piso',       l:'Piso' },
+              { v:'Casa / Villa',l:'Casa / Villa', r:"Casa o villa — siempre una declaración cuando está bien ubicada." },
+              { v:'Ático',      l:'Ático',         r:"Un ático. Álvaro los aprecia especialmente." },
+              { v:'Local',      l:'Local comercial' },
+              { v:'Otro',       l:'Otro' },
+            ]},
+          { key: 'size', type: 'number',
+            q: "¿Cuántos metros cuadrados, aproximadamente? Una cifra orientativa es perfectamente válida.",
+            ph: "Ej. 120",
+            skip: "No lo sé con exactitud" },
+          { key: 'beds', type: 'buttons',
+            q: "¿Habitaciones?",
+            opts: [
+              { v:'1', l:'1' }, { v:'2', l:'2' }, { v:'3', l:'3' }, { v:'4', l:'4' },
+              { v:'5+', l:'5 o más', r:"Cinco o más. Álvaro disfruta de un buen reto." },
+            ]},
+          { key: 'baths', type: 'buttons',
+            q: "¿Y baños? — siempre un detalle revelador.",
+            opts: [
+              { v:'1', l:'1' }, { v:'2', l:'2' }, { v:'3', l:'3' },
+              { v:'4+', l:'4 o más', r:"Cuatro baños o más. Tomamos nota." },
+            ]},
+          { key: 'condition', type: 'buttons',
+            q: "¿En qué estado se encuentra, siendo sinceros?",
+            opts: [
+              { v:'A reformar',  l:'Necesita reforma',  r:"Carácter y potencial — la combinación más infravalorada del mercado." },
+              { v:'Buen estado', l:'Buen estado',        r:"Sólido. Álvaro aprecia un inmueble bien mantenido." },
+              { v:'Reformado',   l:'Reformado',          r:"Ya bien resuelto. Eso suele verse reflejado en los números." },
+              { v:'Obra nueva',  l:'Obra nueva',         r:"Obra nueva — limpio, sin complicaciones, siempre con demanda." },
+            ]},
+          { key: 'notes', type: 'text',
+            q: "¿Algo más que deba saber Álvaro? Una terraza, unas vistas, una historia que merezca contarse.",
+            ph: "Cuéntenos lo que le parezca relevante…",
+            skip: "Nada más que añadir" },
+          { key: 'name',  type: 'text',  q: "Casi terminamos — ¿y usted es…?", ph: "Su nombre", skip: "Prefiero no decirlo" },
+          { key: 'email', type: 'email', q: "¿A dónde le enviamos la valoración de Álvaro?", ph: "su@email.com" },
+          { key: 'phone', type: 'tel',   q: "¿Un número donde localizarle, si prefiere que le llamemos?", ph: "+34 628 02 04 34", skip: "El email es suficiente" },
+        ],
+        final:   function(n){ return (n ? 'Gracias, ' + n + '.' : 'Gracias.') + ' Álvaro revisará su inmueble personalmente y se pondrá en contacto esta semana. Le agradecemos su tiempo.' },
+        send:    'Enviar a Álvaro',
+        sending: 'Enviando…',
+        sent:    'Enviado ✓',
+        error:   'Algo ha fallado — inténtelo de nuevo',
+        toast:   "Recibido. Álvaro se pondrá en contacto en breve.",
+      },
+
+      ca: {
+        greeting: "Bona tarda. Soc l'Albert, l'assistent de l'Álvaro. Anem al gra — unes poques preguntes, sense cap compromís, i una idea força clara del que val el seu immoble avui. Comencem?",
+        steps: [
+          { key: 'intent', type: 'buttons',
+            q: "Comencem pel principi. Què té en ment?",
+            opts: [
+              { v:'Vendre',    l:'Pensant en vendre',   r:"Una decisió sòlida. La preparació adequada marca la diferència." },
+              { v:'Llogar',    l:'Pensant en llogar',    r:"També intel·ligent. El mercat de lloguer a Barcelona recompensa bé els bons immobles." },
+              { v:'Explorant', l:'Només explorant',      r:"El moviment més infravaluat del sector. Conegui la seva posició abans que res." },
+            ]},
+          { key: 'address', type: 'text',
+            q: "Excel·lent. On es troba exactament aquest immoble seu?",
+            ph: "Carrer, número, barri — Barcelona",
+            skip: "Encara no ho sé" },
+          { key: 'floor', type: 'text', q: "A quina planta?", ph: "Ex. 3r" },
+          { key: 'door',  type: 'text', q: "La porta o lletra?", ph: "Ex. 1a / B" },
+          { key: 'city',  type: 'text', q: "I la ciutat?", ph: "Barcelona" },
+          { key: 'type', type: 'buttons',
+            q: "Quin tipus d'immoble és?",
+            opts: [
+              { v:'Pis',        l:'Pis' },
+              { v:'Casa / Vil·la',l:'Casa / Vil·la', r:"Casa o vil·la — sempre una declaració quan està ben ubicada." },
+              { v:'Àtic',       l:'Àtic',             r:"Un àtic. L'Álvaro els aprecia especialment." },
+              { v:'Local',      l:'Local comercial' },
+              { v:'Altre',      l:'Altre' },
+            ]},
+          { key: 'size', type: 'number',
+            q: "Quants metres quadrats, aproximadament? Una xifra orientativa és perfectament vàlida.",
+            ph: "Ex. 120", skip: "No ho sé exactament" },
+          { key: 'beds', type: 'buttons',
+            q: "Habitacions?",
+            opts: [
+              { v:'1',l:'1' },{ v:'2',l:'2' },{ v:'3',l:'3' },{ v:'4',l:'4' },
+              { v:'5+',l:'5 o més', r:"Cinc o més. L'Álvaro gaudeix d'un bon repte." },
+            ]},
+          { key: 'baths', type: 'buttons',
+            q: "I banys? — sempre un detall revelador.",
+            opts: [
+              { v:'1',l:'1' },{ v:'2',l:'2' },{ v:'3',l:'3' },
+              { v:'4+',l:'4 o més', r:"Quatre banys o més. Ho apuntem." },
+            ]},
+          { key: 'condition', type: 'buttons',
+            q: "En quin estat es troba, sent sincers?",
+            opts: [
+              { v:'A reformar',  l:'Necessita reforma',  r:"Caràcter i potencial — la combinació més infravalorada del mercat." },
+              { v:'Bon estat',   l:'Bon estat',           r:"Sòlid. L'Álvaro aprecia un immoble ben mantingut." },
+              { v:'Reformat',    l:'Reformat',            r:"Ja ben resolt. Això sol reflectir-se en els números." },
+              { v:'Obra nova',   l:'Obra nova',           r:"Obra nova — net, sense complicacions, sempre amb demanda." },
+            ]},
+          { key: 'notes', type: 'text',
+            q: "Alguna cosa més que hagi de saber l'Álvaro? Una terrassa, unes vistes, una història que valgui la pena explicar.",
+            ph: "Expliqui'ns el que li sembli rellevant…", skip: "Res més a afegir" },
+          { key: 'name',  type: 'text',  q: "Gairebé hem acabat — i vostè és…?", ph: "El seu nom", skip: "Prefereixo no dir-ho" },
+          { key: 'email', type: 'email', q: "On li enviem la valoració de l'Álvaro?", ph: "el.seu@email.com" },
+          { key: 'phone', type: 'tel',   q: "Un telèfon on localitzar-lo, si prefereix que el truquem?", ph: "+34 628 02 04 34", skip: "L'email és suficient" },
+        ],
+        final:   function(n){ return (n ? 'Gràcies, ' + n + '.' : 'Gràcies.') + " L'Álvaro revisarà el seu immoble personalment i es posarà en contacte aquesta setmana. Li agraïm el seu temps." },
+        send:    "Enviar a l'Álvaro",
+        sending: 'Enviant…',
+        sent:    'Enviat ✓',
+        error:   'Alguna cosa ha fallat — torneu-ho a intentar',
+        toast:   "Rebut. L'Álvaro es posarà en contacte aviat.",
+      },
+
+      fr: {
+        greeting: "Bonjour. Je suis Albert, l'assistant d'Álvaro. Nous aimons aller à l'essentiel — quelques questions, sans engagement, et une idée très précise de ce que vaut votre bien aujourd'hui. On commence ?",
+        steps: [
+          { key: 'intent', type: 'buttons',
+            q: "Commençons par le début. Qu'avez-vous en tête ?",
+            opts: [
+              { v:'Vendre',    l:'Envisager de vendre',  r:"Une décision avisée. Une bonne préparation fait toute la différence." },
+              { v:'Louer',     l:'Envisager de louer',   r:"Également judicieux. Le marché locatif barcelonais récompense bien les bons biens." },
+              { v:'Explorer',  l:'Simple curiosité',     r:"Le mouvement le plus sous-estimé de l'immobilier. Connaître sa position avant tout." },
+            ]},
+          { key: 'address', type: 'text',
+            q: "Parfait. Où se situe exactement ce bien ?",
+            ph: "Rue, numéro, quartier — Barcelone", skip: "Pas encore certain" },
+          { key: 'floor', type: 'text', q: "Quel étage ?", ph: "Ex. 3e" },
+          { key: 'door',  type: 'text', q: "Numéro de porte ou lettre ?", ph: "Ex. 1A / B" },
+          { key: 'city',  type: 'text', q: "Et la ville ?", ph: "Barcelone" },
+          { key: 'type', type: 'buttons',
+            q: "De quel type de bien s'agit-il ?",
+            opts: [
+              { v:'Appartement',   l:'Appartement' },
+              { v:'Maison / Villa',l:'Maison / Villa', r:"Une maison ou villa — toujours une déclaration quand elle est bien située." },
+              { v:'Penthouse',     l:'Penthouse',       r:"Un penthouse. Álvaro les apprécie tout particulièrement." },
+              { v:'Local',         l:'Local commercial' },
+              { v:'Autre',         l:'Autre' },
+            ]},
+          { key: 'size', type: 'number',
+            q: "Combien de mètres carrés, environ ? Une estimation suffit largement.",
+            ph: "Ex. 120", skip: "Je ne sais pas exactement" },
+          { key: 'beds', type: 'buttons',
+            q: "Chambres ?",
+            opts: [
+              { v:'1',l:'1' },{ v:'2',l:'2' },{ v:'3',l:'3' },{ v:'4',l:'4' },
+              { v:'5+',l:'5 ou plus', r:"Cinq ou plus. Álvaro aime un bon défi." },
+            ]},
+          { key: 'baths', type: 'buttons',
+            q: "Et salles de bain ? — toujours un détail révélateur.",
+            opts: [
+              { v:'1',l:'1' },{ v:'2',l:'2' },{ v:'3',l:'3' },
+              { v:'4+',l:'4 ou plus', r:"Quatre salles de bain ou plus. Nous le notons." },
+            ]},
+          { key: 'condition', type: 'buttons',
+            q: "Dans quel état est-il, honnêtement ?",
+            opts: [
+              { v:'À rénover',  l:'À rénover',          r:"Caractère et potentiel — la combinaison la plus sous-estimée du marché." },
+              { v:'Bon état',   l:'Bon état',            r:"Solide. Álvaro apprécie un bien bien entretenu." },
+              { v:'Rénové',     l:'Rénové',              r:"Déjà bien traité. Cela se reflète généralement dans les chiffres." },
+              { v:'Neuf',       l:'Neuf',                r:"Construction neuve — propre, sans surprise, toujours recherchée." },
+            ]},
+          { key: 'notes', type: 'text',
+            q: "Autre chose qu'Álvaro devrait savoir ? Une terrasse, une vue, une histoire qui mérite d'être racontée.",
+            ph: "Dites-nous ce qui vous semble pertinent…", skip: "Rien à ajouter" },
+          { key: 'name',  type: 'text',  q: "Presque terminé — et vous êtes… ?", ph: "Votre nom", skip: "Je préfère ne pas le préciser" },
+          { key: 'email', type: 'email', q: "Où faut-il envoyer l'estimation d'Álvaro ?", ph: "votre@email.com" },
+          { key: 'phone', type: 'tel',   q: "Un numéro où vous joindre, si vous préférez un appel ?", ph: "+34 628 02 04 34", skip: "L'email convient" },
+        ],
+        final:   function(n){ return (n ? 'Merci, ' + n + '.' : 'Merci.') + " Álvaro étudiera votre bien personnellement et vous recontactera cette semaine. Nous apprécions votre temps." },
+        send:    'Envoyer à Álvaro',
+        sending: 'Envoi…',
+        sent:    'Envoyé ✓',
+        error:   'Une erreur est survenue — veuillez réessayer',
+        toast:   "Reçu. Álvaro vous contactera très prochainement.",
+      },
+
+      de: {
+        greeting: "Guten Tag. Ich bin Albert, Álvaros Assistent. Wir halten es einfach — ein paar Fragen, keinerlei Verpflichtungen und ein sehr klares Bild davon, was Ihre Immobilie heute wert ist. Fangen wir an?",
+        steps: [
+          { key: 'intent', type: 'buttons',
+            q: "Fangen wir von vorne an. Was haben Sie im Sinn?",
+            opts: [
+              { v:'Verkaufen', l:'An Verkauf denken',       r:"Eine solide Entscheidung. Die richtige Vorbereitung macht den entscheidenden Unterschied." },
+              { v:'Vermieten', l:'An Vermietung denken',    r:"Ebenfalls klug. Der Barceloner Mietmarkt belohnt gute Immobilien großzügig." },
+              { v:'Erkunden',  l:'Nur informieren',         r:"Der klügste erste Schritt. Die eigene Position kennen, bevor man entscheidet." },
+            ]},
+          { key: 'address', type: 'text',
+            q: "Ausgezeichnet. Wo genau befindet sich diese Immobilie?",
+            ph: "Straße, Nummer, Stadtteil — Barcelona", skip: "Noch nicht sicher" },
+          { key: 'floor', type: 'text', q: "In welchem Stockwerk?", ph: "z.B. 3. OG" },
+          { key: 'door',  type: 'text', q: "Wohnungsnummer oder Buchstabe?", ph: "z.B. 1A / B" },
+          { key: 'city',  type: 'text', q: "Und die Stadt?", ph: "Barcelona" },
+          { key: 'type', type: 'buttons',
+            q: "Um welche Art von Immobilie handelt es sich?",
+            opts: [
+              { v:'Wohnung',    l:'Wohnung' },
+              { v:'Haus / Villa',l:'Haus / Villa', r:"Ein Haus oder eine Villa — immer ein Statement, wenn es gut gelegen ist." },
+              { v:'Penthouse',  l:'Penthouse',     r:"Ein Penthouse. Álvaro hat eine besondere Vorliebe dafür." },
+              { v:'Gewerbe',    l:'Gewerbeimmobilie' },
+              { v:'Sonstiges',  l:'Sonstiges' },
+            ]},
+          { key: 'size', type: 'number',
+            q: "Ungefähr wie viele Quadratmeter? Ein grober Richtwert genügt vollkommen.",
+            ph: "z.B. 120", skip: "Nicht genau bekannt" },
+          { key: 'beds', type: 'buttons',
+            q: "Schlafzimmer?",
+            opts: [
+              { v:'1',l:'1' },{ v:'2',l:'2' },{ v:'3',l:'3' },{ v:'4',l:'4' },
+              { v:'5+',l:'5 oder mehr', r:"Fünf oder mehr. Álvaro mag Herausforderungen." },
+            ]},
+          { key: 'baths', type: 'buttons',
+            q: "Und Badezimmer? — immer ein aufschlussreiches Detail.",
+            opts: [
+              { v:'1',l:'1' },{ v:'2',l:'2' },{ v:'3',l:'3' },
+              { v:'4+',l:'4 oder mehr', r:"Vier Badezimmer oder mehr. Das merken wir uns." },
+            ]},
+          { key: 'condition', type: 'buttons',
+            q: "In welchem Zustand ist sie, ehrlich gesagt?",
+            opts: [
+              { v:'Renovierungsbedürftig', l:'Renovierungsbedürftig', r:"Charakter und Potenzial — die am meisten unterschätzte Kombination auf dem Markt." },
+              { v:'Guter Zustand',         l:'Guter Zustand',         r:"Solide. Álvaro weiß eine gepflegte Immobilie zu schätzen." },
+              { v:'Renoviert',             l:'Renoviert',             r:"Bereits gut gemacht. Das spiegelt sich meist in den Zahlen wider." },
+              { v:'Neubau',                l:'Neubau',                r:"Neubau — klar, unkompliziert, immer gefragt." },
+            ]},
+          { key: 'notes', type: 'text',
+            q: "Gibt es noch etwas, das Álvaro wissen sollte? Eine Terrasse, eine Aussicht, eine Geschichte, die es wert ist.",
+            ph: "Teilen Sie uns mit, was Ihnen relevant erscheint…", skip: "Nichts hinzuzufügen" },
+          { key: 'name',  type: 'text',  q: "Fast geschafft — und Sie sind…?", ph: "Ihr Name", skip: "Möchte ich nicht angeben" },
+          { key: 'email', type: 'email', q: "Wohin soll Álvaros Einschätzung gesendet werden?", ph: "ihre@email.com" },
+          { key: 'phone', type: 'tel',   q: "Eine Nummer, unter der Sie erreichbar sind, falls Sie einen Anruf bevorzugen?", ph: "+34 628 02 04 34", skip: "E-Mail genügt" },
+        ],
+        final:   function(n){ return (n ? 'Vielen Dank, ' + n + '.' : 'Vielen Dank.') + ' Álvaro wird Ihre Immobilie persönlich prüfen und sich diese Woche bei Ihnen melden. Wir schätzen Ihre Zeit.' },
+        send:    'An Álvaro senden',
+        sending: 'Wird gesendet…',
+        sent:    'Gesendet ✓',
+        error:   'Etwas ist schiefgelaufen — bitte erneut versuchen',
+        toast:   "Erhalten. Álvaro wird sich in Kürze melden.",
+      },
+
+      it: {
+        greeting: "Buongiorno. Sono Albert, l'assistente di Álvaro. Andiamo dritti al punto — poche domande, nessun impegno e un'idea molto chiara di quanto vale il suo immobile oggi. Iniziamo?",
+        steps: [
+          { key: 'intent', type: 'buttons',
+            q: "Cominciamo dall'inizio. Cosa ha in mente?",
+            opts: [
+              { v:'Vendere',   l:'Sto pensando di vendere',   r:"Una decisione solida. La giusta preparazione fa tutta la differenza." },
+              { v:'Affittare', l:'Sto pensando di affittare', r:"Anche saggio. Il mercato degli affitti a Barcellona premia bene gli immobili di qualità." },
+              { v:'Esplorare', l:'Solo informarsi',           r:"La mossa più sottovalutata nel settore. Conoscere la propria posizione prima di tutto." },
+            ]},
+          { key: 'address', type: 'text',
+            q: "Splendido. Dove si trova esattamente questo suo immobile?",
+            ph: "Via, numero, quartiere — Barcellona", skip: "Non ancora sicuro" },
+          { key: 'floor', type: 'text', q: "A quale piano?", ph: "Es. 3°" },
+          { key: 'door',  type: 'text', q: "Numero o lettera dell'appartamento?", ph: "Es. 1A / B" },
+          { key: 'city',  type: 'text', q: "E la città?", ph: "Barcellona" },
+          { key: 'type', type: 'buttons',
+            q: "Di che tipo di immobile stiamo parlando?",
+            opts: [
+              { v:'Appartamento',  l:'Appartamento' },
+              { v:'Casa / Villa',  l:'Casa / Villa',  r:"Una casa o villa — sempre un punto di forza quando è ben posizionata." },
+              { v:'Attico',        l:'Attico',         r:"Un attico. Álvaro li apprezza particolarmente." },
+              { v:'Locale',        l:'Locale commerciale' },
+              { v:'Altro',         l:'Altro' },
+            ]},
+          { key: 'size', type: 'number',
+            q: "Quanti metri quadrati, circa? Una stima approssimativa va benissimo.",
+            ph: "Es. 120", skip: "Non lo so con precisione" },
+          { key: 'beds', type: 'buttons',
+            q: "Camere da letto?",
+            opts: [
+              { v:'1',l:'1' },{ v:'2',l:'2' },{ v:'3',l:'3' },{ v:'4',l:'4' },
+              { v:'5+',l:'5 o più', r:"Cinque o più. Álvaro ama le sfide." },
+            ]},
+          { key: 'baths', type: 'buttons',
+            q: "E bagni? — sempre un dettaglio rivelatore.",
+            opts: [
+              { v:'1',l:'1' },{ v:'2',l:'2' },{ v:'3',l:'3' },
+              { v:'4+',l:'4 o più', r:"Quattro bagni o più. Lo annotiamo." },
+            ]},
+          { key: 'condition', type: 'buttons',
+            q: "In che condizioni si trova, a essere onesti?",
+            opts: [
+              { v:'Da ristrutturare',   l:'Da ristrutturare',   r:"Carattere e potenziale — la combinazione più sottovalutata del mercato." },
+              { v:'Buone condizioni',   l:'Buone condizioni',   r:"Solido. Álvaro apprezza un immobile ben tenuto." },
+              { v:'Ristrutturato',      l:'Ristrutturato',      r:"Già ben curato. Tende a riflettersi nei numeri." },
+              { v:'Nuova costruzione',  l:'Nuova costruzione',  r:"Nuova costruzione — pulita, senza sorprese, sempre richiesta." },
+            ]},
+          { key: 'notes', type: 'text',
+            q: "Altro che Álvaro dovrebbe sapere? Una terrazza, una vista, una storia che vale la pena raccontare.",
+            ph: "Ci dica ciò che le sembra rilevante…", skip: "Niente da aggiungere" },
+          { key: 'name',  type: 'text',  q: "Ci siamo quasi — e lei è…?", ph: "Il suo nome", skip: "Preferisco non dirlo" },
+          { key: 'email', type: 'email', q: "Dove inviamo la valutazione di Álvaro?", ph: "la.sua@email.com" },
+          { key: 'phone', type: 'tel',   q: "Un numero dove raggiungerla, se preferisce una chiamata?", ph: "+34 628 02 04 34", skip: "L'email va bene" },
+        ],
+        final:   function(n){ return (n ? 'Grazie, ' + n + '.' : 'Grazie.') + ' Álvaro esaminerà il suo immobile personalmente e la contatterà questa settimana. Apprezziamo il suo tempo.' },
+        send:    'Invia ad Álvaro',
+        sending: 'Invio…',
+        sent:    'Inviato ✓',
+        error:   'Qualcosa è andato storto — riprova',
+        toast:   "Ricevuto. Álvaro la contatterà a breve.",
+      },
+
+      ru: {
+        greeting: "Добрый день. Я Альберт, ассистент Альваро. Мы ценим простоту — несколько вопросов, никаких обязательств, и очень чёткое понимание того, сколько стоит ваша недвижимость сегодня. Начнём?",
+        steps: [
+          { key: 'intent', type: 'buttons',
+            q: "Начнём с главного. Что у вас на уме?",
+            opts: [
+              { v:'Продать',          l:'Думаю о продаже',       r:"Взвешенное решение. Правильная подготовка меняет всё." },
+              { v:'Сдать в аренду',   l:'Думаю о сдаче в аренду',r:"Также разумно. Рынок аренды Барселоны щедро вознаграждает хорошую недвижимость." },
+              { v:'Изучаю варианты',  l:'Просто изучаю',         r:"Самый недооценённый шаг в недвижимости. Знать свою позицию прежде всего." },
+            ]},
+          { key: 'address', type: 'text',
+            q: "Отлично. Где именно находится этот объект?",
+            ph: "Улица, номер, район — Барселона", skip: "Пока не уверен" },
+          { key: 'floor', type: 'text', q: "Какой этаж?", ph: "Напр. 3" },
+          { key: 'door',  type: 'text', q: "Номер или буква квартиры?", ph: "Напр. 1А / Б" },
+          { key: 'city',  type: 'text', q: "И город?", ph: "Барселона" },
+          { key: 'type', type: 'buttons',
+            q: "О каком типе недвижимости идёт речь?",
+            opts: [
+              { v:'Квартира',    l:'Квартира' },
+              { v:'Дом / Вилла', l:'Дом / Вилла',  r:"Дом или вилла — всегда декларация при хорошем расположении." },
+              { v:'Пентхаус',    l:'Пентхаус',      r:"Пентхаус. Альваро их особенно ценит." },
+              { v:'Коммерческая',l:'Коммерческая' },
+              { v:'Другое',      l:'Другое' },
+            ]},
+          { key: 'size', type: 'number',
+            q: "Примерно сколько квадратных метров? Приблизительная цифра вполне подойдёт.",
+            ph: "Напр. 120", skip: "Точно не знаю" },
+          { key: 'beds', type: 'buttons',
+            q: "Спальни?",
+            opts: [
+              { v:'1',l:'1' },{ v:'2',l:'2' },{ v:'3',l:'3' },{ v:'4',l:'4' },
+              { v:'5+',l:'5 и более', r:"Пять и более. Альваро любит настоящие вызовы." },
+            ]},
+          { key: 'baths', type: 'buttons',
+            q: "А ванных комнат? — всегда красноречивая деталь.",
+            opts: [
+              { v:'1',l:'1' },{ v:'2',l:'2' },{ v:'3',l:'3' },
+              { v:'4+',l:'4 и более', r:"Четыре и более. Принимаем к сведению." },
+            ]},
+          { key: 'condition', type: 'buttons',
+            q: "В каком состоянии объект, честно говоря?",
+            opts: [
+              { v:'Требует ремонта',  l:'Требует ремонта',   r:"Характер и потенциал — самое недооценённое сочетание на рынке." },
+              { v:'Хорошее состояние',l:'Хорошее состояние', r:"Надёжно. Альваро ценит ухоженную недвижимость." },
+              { v:'После ремонта',    l:'После ремонта',      r:"Уже сделано хорошо. Это обычно отражается в цифрах." },
+              { v:'Новостройка',      l:'Новостройка',        r:"Новостройка — чисто, без сюрпризов, всегда востребована." },
+            ]},
+          { key: 'notes', type: 'text',
+            q: "Есть ли что-то ещё, что должен знать Альваро? Терраса, вид, история, заслуживающая внимания.",
+            ph: "Расскажите то, что считаете важным…", skip: "Добавить нечего" },
+          { key: 'name',  type: 'text',  q: "Почти всё — а вы…?", ph: "Ваше имя", skip: "Предпочитаю не указывать" },
+          { key: 'email', type: 'email', q: "Куда отправить оценку Альваро?", ph: "ваш@email.com" },
+          { key: 'phone', type: 'tel',   q: "Номер телефона, если предпочитаете звонок?", ph: "+34 628 02 04 34", skip: "Email подойдёт" },
+        ],
+        final:   function(n){ return (n ? 'Спасибо, ' + n + '.' : 'Спасибо.') + ' Альваро лично рассмотрит ваш объект и свяжется с вами на этой неделе. Мы ценим ваше время.' },
+        send:    'Отправить Альваро',
+        sending: 'Отправка…',
+        sent:    'Отправлено ✓',
+        error:   'Что-то пошло не так — попробуйте ещё раз',
+        toast:   "Получено. Альваро свяжется с вами в ближайшее время.",
+      },
+
+    } /* end CONV */
+
+    /* ── Engine ── */
+    var c         = {}
+    var stepIndex = 0
+    var answers   = {}
+
+    var msgsEl  = document.getElementById('chat-messages')
+    var inputEl = document.getElementById('chat-input-area')
+
+    function scrollBottom() {
+      var bottom = msgsEl.getBoundingClientRect().bottom + window.scrollY
+      window.scrollTo({ top: bottom - window.innerHeight + 60, behavior: 'smooth' })
+    }
+
+    function addMsg(text, who) {
+      var row = document.createElement('div')
+      row.className = 'chat-msg chat-msg--' + who
+      row.innerHTML = '<div class="chat-bubble">' + text + '</div>'
+      msgsEl.appendChild(row)
+      scrollBottom()
+    }
+
+    function showTyping(ms) {
+      return new Promise(function(resolve) {
+        var row = document.createElement('div')
+        row.className = 'chat-typing-row'
+        row.innerHTML = '<div class="chat-typing"><span></span><span></span><span></span></div>'
+        msgsEl.appendChild(row)
+        scrollBottom()
+        setTimeout(function() { row.remove(); resolve() }, ms || 750)
+      })
+    }
+
+    function clearInput() { inputEl.innerHTML = '' }
+
+    function renderInput(step) {
+      clearInput()
+      if (step.type === 'buttons') {
+        var wrap = document.createElement('div')
+        wrap.className = 'chat-options'
+        step.opts.forEach(function(opt) {
+          var btn = document.createElement('button')
+          btn.className = 'chat-opt'
+          btn.textContent = opt.l
+          btn.addEventListener('click', function() { onBtnAnswer(step, opt, wrap) })
+          wrap.appendChild(btn)
+        })
+        inputEl.appendChild(wrap)
+      } else {
+        var row = document.createElement('div')
+        row.className = 'chat-input-row'
+
+        var input = document.createElement('input')
+        input.type = step.type || 'text'
+        input.className = 'chat-input'
+        input.placeholder = step.ph || ''
+        if (step.type === 'number') { input.min = '1'; input.inputMode = 'numeric' }
+
+        var arrow = document.createElement('button')
+        arrow.className = 'chat-send-btn'
+        arrow.type = 'button'
+        arrow.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
+
+        function submit() {
+          var val = input.value.trim()
+          if (!val && !step.optional && !step.skip) {
+            input.classList.add('is-required')
+            setTimeout(function() { input.classList.remove('is-required') }, 600)
+            input.focus()
+            return
+          }
+          if (step.key === 'email' && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) { input.focus(); return }
+          onTextAnswer(step, val)
+        }
+
+        arrow.addEventListener('click', submit)
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            var pac = document.querySelector('.pac-container')
+            if (pac && pac.getBoundingClientRect().height > 0) return
+            submit()
+          }
+        })
+        row.appendChild(input)
+        row.appendChild(arrow)
+        inputEl.appendChild(row)
+
+        /* Google Places autocomplete for address field */
+        if (step.key === 'address') {
+          function tryAutocomplete() {
+            if (window.google && window.google.maps && window.google.maps.places) {
+              var ac = new google.maps.places.Autocomplete(input, {
+                types: ['geocode'],
+                componentRestrictions: { country: 'es' },
+                fields: ['formatted_address']
+              })
+              ac.addListener('place_changed', function() {
+                var place = ac.getPlace()
+                if (place && place.formatted_address) {
+                  input.value = place.formatted_address
+                  input.focus()
+                }
+              })
+            } else {
+              setTimeout(tryAutocomplete, 400)
+            }
+          }
+          tryAutocomplete()
+        }
+
+        if (step.skip) {
+          var skipBtn = document.createElement('button')
+          skipBtn.className = 'chat-skip'
+          skipBtn.textContent = step.skip
+          skipBtn.addEventListener('click', function() { onTextAnswer(step, '') })
+          inputEl.appendChild(skipBtn)
+        }
+
+        setTimeout(function() { input.focus() }, 80)
+      }
+    }
+
+    function onBtnAnswer(step, opt, wrap) {
+      /* highlight selected, disable all */
+      wrap.querySelectorAll('.chat-opt').forEach(function(b) {
+        b.disabled = true
+        if (b.textContent === opt.l) b.classList.add('is-selected')
+      })
+      setTimeout(function() {
+        if (opt.v) answers[step.key] = opt.v
+        addMsg(opt.l, 'user')
+        clearInput()
+        stepIndex++
+        if (opt.r) {
+          showTyping(650).then(function() {
+            addMsg(opt.r, 'agent')
+            setTimeout(function() { advance() }, 400)
+          })
+        } else {
+          setTimeout(function() { advance() }, 350)
+        }
+      }, 180)
+    }
+
+    function onTextAnswer(step, value) {
+      if (value) answers[step.key] = value
+      if (value) addMsg(value, 'user')
+      clearInput()
+      stepIndex++
+      setTimeout(function() { advance() }, 300)
+    }
+
+    function advance() {
+      if (stepIndex < c.steps.length) {
+        var step = c.steps[stepIndex]
+        showTyping().then(function() {
+          addMsg(step.q, 'agent')
+          renderInput(step)
+        })
+      } else {
+        finalize()
+      }
+    }
+
+    function finalize() {
+      var name = answers.name || ''
+      showTyping(900).then(function() {
+        addMsg(c.final(name), 'agent')
+        setTimeout(function() {
+          var wrap = document.createElement('div')
+          wrap.className = 'chat-options'
+          var btn = document.createElement('button')
+          btn.className = 'chat-opt chat-opt--send'
+          btn.textContent = c.send
+          btn.addEventListener('click', function() { submitAnswers(btn) })
+          wrap.appendChild(btn)
+          inputEl.appendChild(wrap)
+          scrollBottom()
+        }, 500)
+      })
+    }
+
+    function submitAnswers(btn) {
+      btn.textContent = c.sending
+      btn.disabled = true
+      var fd = new FormData()
+      fd.append('_subject', 'Consulta de propietario — anrealestate.es')
+      fd.append('_captcha', 'false')
+      fd.append('_template', 'table')
+      Object.keys(answers).forEach(function(k) { fd.append(k, answers[k]) })
+      fetch('https://formsubmit.co/ajax/alvaro@anrealestate.es', {
+        method: 'POST', body: fd, headers: { Accept: 'application/json' }
+      }).then(function(res) {
+        if (!res.ok) throw new Error()
+        btn.textContent = c.sent
+        if (typeof showToast === 'function') showToast(c.toast)
+      }).catch(function() {
+        btn.textContent = c.error
+        btn.disabled = false
+        setTimeout(function() { btn.textContent = c.send }, 3000)
+      })
+    }
+
+    /* ── Start / restart ── */
+    function startChat(lang) {
+      c         = CONV[lang] || CONV.en
+      stepIndex = 0
+      answers   = {}
+      msgsEl.innerHTML  = ''
+      inputEl.innerHTML = ''
+      showTyping(600).then(function() {
+        addMsg(c.greeting, 'agent')
+        setTimeout(function() { advance() }, 600)
+      })
+    }
+
+    var initLang = (typeof getLang === 'function') ? getLang() : (localStorage.getItem('an_lang') || 'en')
+    startChat(initLang)
+
+    window.addEventListener('an:langchange', function(e) {
+      startChat(e.detail.lang)
+    })
+
+  })()
+  </script>
+
+  <!-- Cookie Banner -->
+  <div class="cookie-banner is-hidden" id="cookie-banner" role="dialog" aria-label="Cookie consent">
+    <p id="cookie-text"></p>
+    <div class="cookie-btns">
+      <button class="cookie-btn-accept" id="cookie-accept"></button>
+      <button class="cookie-btn-reject" id="cookie-reject"></button>
+    </div>
+  </div>
+  <script>
+  ;(function(){
+    var lang = (typeof getLang === 'function') ? getLang() : 'en'
+    var t = function(k){ return (window.I18N&&window.I18N[lang]&&window.I18N[lang][k]) || (window.I18N&&window.I18N.en&&window.I18N.en[k]) || k }
+    var p = document.getElementById('cookie-text'), ba = document.getElementById('cookie-accept'), br = document.getElementById('cookie-reject')
+    if (p) p.innerHTML = t('cookie.text')
+    if (ba) ba.textContent = t('cookie.accept')
+    if (br) br.textContent = t('cookie.essential')
+    if (!localStorage.getItem('an_cookie_consent')) {
+      setTimeout(function(){ var b=document.getElementById('cookie-banner'); if(b) b.classList.remove('is-hidden') }, 800)
+    }
+    function dismiss(v){ localStorage.setItem('an_cookie_consent',v); var b=document.getElementById('cookie-banner'); if(b) b.classList.add('is-hidden') }
+    document.getElementById('cookie-accept').addEventListener('click', function(){ dismiss('accepted') })
+    document.getElementById('cookie-reject').addEventListener('click', function(){ dismiss('essential') })
+  })()
+  </script>
+</body>
+</html>

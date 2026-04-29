@@ -1,12 +1,1798 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AN Real Estate — Admin</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="ls-box">
+    <div class="ls-logo">AN</div>
+    <p class="ls-sub">Real Estate · Panel de gestión</p>
+    <form id="login-form" autocomplete="off">
+      <input type="password" id="pwd-input" placeholder="Contraseña" autocomplete="current-password" />
+      <button type="submit">Acceder</button>
+      <p class="ls-error hidden" id="login-error">Contraseña incorrecta</p>
+    </form>
+    <a href="../index.html" class="ls-back">← Volver a la web</a>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <span class="sb-logo">AN</span>
+      <span class="sb-name">Real Estate</span>
+    </div>
+    <nav class="sb-nav">
+      <a class="sb-link active" data-view="props" href="#">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Propiedades
+      </a>
+      <a class="sb-link" data-view="new" href="#">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nueva propiedad
+      </a>
+      <a class="sb-link" data-view="media" href="#">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Repositorio
+      </a>
+      <a class="sb-link" data-view="watermark" href="#">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        Watermark fotos
+      </a>
+      <a class="sb-link" data-view="visits" href="#">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+        Hojas de visita
+      </a>
+    </nav>
+    <div class="sb-foot">
+      <button class="sb-btn" id="export-btn">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar JSON
+      </button>
+      <a href="../index.html" class="sb-btn sb-btn--ghost sb-back-home">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Web principal
+      </a>
+      <button class="sb-btn sb-btn--ghost" id="logout-btn">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- VIEW: properties list -->
+    <section class="view active" id="view-props">
+      <header class="view-hd">
+        <div>
+          <h1>Propiedades</h1>
+          <p class="view-sub" id="props-summary"></p>
+        </div>
+        <button class="btn-gold" id="btn-new-prop">+ Nueva propiedad</button>
+      </header>
+
+      <div class="filter-bar">
+        <button class="fchip active" data-f="all">Todas</button>
+        <button class="fchip" data-f="sale">En venta</button>
+        <button class="fchip" data-f="rent">En alquiler</button>
+        <button class="fchip" data-f="sold">Vendidas</button>
+        <button class="fchip" data-f="draft">Ocultas</button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="prop-table">
+          <thead>
+            <tr>
+              <th style="width:36px"></th>
+              <th>Propiedad</th>
+              <th>Precio</th>
+              <th>Tipo</th>
+              <th>Publicada</th>
+              <th>Vendida</th>
+              <th style="width:80px"></th>
+            </tr>
+          </thead>
+          <tbody id="prop-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VIEW: property form -->
+    <section class="view" id="view-form">
+      <header class="view-hd">
+        <button class="btn-back" id="btn-back">← Volver</button>
+        <h1 id="form-title">Nueva propiedad</h1>
+        <div class="hd-actions">
+          <button class="btn-outline" id="btn-delete" style="display:none">Eliminar</button>
+          <button class="btn-outline" id="btn-translate" title="Traducir título y descripción a todos los idiomas">🌐 Traducir</button>
+          <button class="btn-gold" id="btn-save">Guardar</button>
+        </div>
+      </header>
+
+      <div class="form-tabs-bar">
+        <button class="ftab active" data-tab="basic">Básico</button>
+        <button class="ftab" data-tab="images">Imágenes</button>
+        <button class="ftab" data-tab="desc">Descripción</button>
+        <button class="ftab" data-tab="details">Detalles</button>
+        <button class="ftab" data-tab="feats">Características</button>
+        <button class="ftab" data-tab="nearby">Ubicación</button>
+      </div>
+
+      <form id="prop-form" autocomplete="off">
+        <input type="hidden" id="f-original-slug" />
+        <input type="hidden" id="f-translations" />
+
+        <!-- TAB: básico -->
+        <div class="tab-panel active" id="tab-basic">
+          <div class="form-grid">
+            <div class="fg fg-2">
+              <label>Título</label>
+              <input type="text" id="f-title" placeholder="Ej: Elegant Penthouse with Sea Views" />
+            </div>
+            <div class="fg">
+              <label>Slug <em>(URL)</em></label>
+              <input type="text" id="f-slug" placeholder="ej: gracia-garden" />
+            </div>
+            <div class="fg">
+              <label>Referencia</label>
+              <input type="text" id="f-ref" placeholder="ej: AN-2026-001" />
+            </div>
+            <div class="fg">
+              <label>Precio</label>
+              <input type="text" id="f-price" placeholder="€830,000 o €7,700" />
+            </div>
+            <div class="fg">
+              <label>Barrio</label>
+              <input type="text" id="f-neighbourhood" placeholder="ej: Gràcia, Barcelona" />
+            </div>
+            <div class="fg fg-2">
+              <label>Dirección exacta <em>(solo visible en admin y hoja de visita)</em></label>
+              <input type="text" id="f-address" placeholder="ej: Carrer de Verdi, 45, 3º 2ª, 08012 Barcelona" />
+            </div>
+            <div class="fg">
+              <label>Tipo</label>
+              <select id="f-type">
+                <option value="apartment">Apartamento</option>
+                <option value="penthouse">Ático</option>
+                <option value="villa">Villa</option>
+                <option value="house">Casa</option>
+                <option value="townhouse">Casa adosada</option>
+                <option value="office">Oficina</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Estado</label>
+              <select id="f-status">
+                <option value="sale">En venta</option>
+                <option value="rent">En alquiler</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Badge tipo</label>
+              <input type="text" id="f-badge-type" placeholder="ej: Apartment" />
+            </div>
+            <div class="fg">
+              <label>Habitaciones</label>
+              <input type="number" id="f-beds" min="0" value="1" />
+            </div>
+            <div class="fg">
+              <label>Baños</label>
+              <input type="number" id="f-baths" min="0" value="1" />
+            </div>
+            <div class="fg">
+              <label>Superficie (m²)</label>
+              <input type="text" id="f-size" placeholder="ej: 94" />
+            </div>
+            <div class="fg">
+              <label>Planta</label>
+              <input type="text" id="f-floor" placeholder="ej: Ground, 2nd, Principal" />
+            </div>
+          </div>
+          <div class="toggles-row">
+            <label class="toggle-wrap">
+              <span>Publicada en la web</span>
+              <div class="toggle"><input type="checkbox" id="f-published" checked /><span class="slider"></span></div>
+            </label>
+            <label class="toggle-wrap">
+              <span>Marcada como vendida / alquilada</span>
+              <div class="toggle"><input type="checkbox" id="f-sold" /><span class="slider"></span></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- TAB: imágenes -->
+        <div class="tab-panel" id="tab-images">
+          <input type="hidden" id="f-image" />
+          <div class="list-block">
+            <div class="list-hd">
+              <span class="list-title">Fotos — arrastra para ordenar</span>
+              <div style="display:flex;gap:.5rem;align-items:center">
+                <label class="btn-add btn-upload-lbl">
+                  <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                  + Subir fotos
+                  <input type="file" id="upload-gallery-files" accept="image/*" multiple style="display:none" />
+                </label>
+                <button type="button" class="btn-add" id="add-gallery-url">+ URL</button>
+              </div>
+            </div>
+            <p class="gal-hint">La primera foto es la imagen principal (portada). Arrastra para reordenar.</p>
+            <div class="upload-progress hidden" id="upload-gallery-progress">
+              <div class="progress-bar"><div class="progress-fill" id="upload-gallery-fill"></div></div>
+              <span id="upload-gallery-status">Subiendo…</span>
+            </div>
+            <div id="gallery-list"></div>
+          </div>
+        </div>
+
+        <!-- TAB: descripción -->
+        <div class="tab-panel" id="tab-desc">
+          <div class="list-block">
+            <div class="list-hd">
+              <span class="list-title">Párrafos de descripción</span>
+              <button type="button" class="btn-add" id="add-para">+ Párrafo</button>
+            </div>
+            <div id="desc-list" class="dyn-list"></div>
+          </div>
+        </div>
+
+        <!-- TAB: detalles -->
+        <div class="tab-panel" id="tab-details">
+          <div class="list-block">
+            <div class="list-hd">
+              <span class="list-title">Tabla de detalles de la ficha</span>
+              <button type="button" class="btn-add" id="add-detail">+ Fila</button>
+            </div>
+            <div id="details-list" class="dyn-list"></div>
+          </div>
+        </div>
+
+        <!-- TAB: características -->
+        <div class="tab-panel" id="tab-feats">
+          <p class="tab-hint">Agrupa características por categoría (Interior, Exterior, Climatización…)</p>
+          <div class="list-block">
+            <div class="list-hd">
+              <span class="list-title">Categorías</span>
+              <button type="button" class="btn-add" id="add-feat-cat">+ Categoría</button>
+            </div>
+            <div id="feats-list" class="dyn-list"></div>
+          </div>
+        </div>
+
+        <!-- TAB: nearby -->
+        <div class="tab-panel" id="tab-nearby">
+          <div class="list-block">
+            <div class="list-hd">
+              <span class="list-title">Lugares cercanos</span>
+              <button type="button" class="btn-add" id="add-nearby">+ Lugar</button>
+            </div>
+            <div id="nearby-list" class="dyn-list"></div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- VIEW: media repository -->
+    <section class="view" id="view-media">
+      <header class="view-hd">
+        <div>
+          <h1>Repositorio de imágenes</h1>
+          <p class="view-sub" id="media-summary">0 imágenes subidas</p>
+        </div>
+        <label class="btn-gold" style="cursor:pointer">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right:.4rem"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+          Subir imágenes
+          <input type="file" id="media-upload-input" accept="image/*" multiple style="display:none" />
+        </label>
+      </header>
+      <div class="upload-progress hidden" id="media-progress">
+        <div class="progress-bar"><div class="progress-fill" id="media-progress-fill"></div></div>
+        <span id="media-progress-status">Subiendo…</span>
+      </div>
+      <div id="media-grid" class="media-grid">
+        <div class="media-empty" id="media-empty">
+          <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24" opacity=".3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <p>Sube fotos para verlas aquí</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: watermark -->
+    <section class="view" id="view-watermark">
+      <header class="view-hd">
+        <div>
+          <h1>Watermark de fotos</h1>
+          <p class="view-sub">Añade el logo AN automáticamente a tus imágenes</p>
+        </div>
+      </header>
+
+      <div class="wm-layout">
+        <div class="wm-controls">
+          <div class="wm-group">
+            <label>Selecciona imágenes</label>
+            <label class="file-drop" id="wm-drop">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              <span>Arrastra fotos aquí o haz clic</span>
+              <input type="file" id="wm-file" accept="image/*" multiple />
+            </label>
+          </div>
+          <div class="wm-group">
+            <label>Posición del logo</label>
+            <div class="pos-grid" id="pos-grid">
+              <button type="button" class="pos-btn" data-pos="top-left">↖</button>
+              <button type="button" class="pos-btn" data-pos="top-center">↑</button>
+              <button type="button" class="pos-btn" data-pos="top-right">↗</button>
+              <button type="button" class="pos-btn" data-pos="mid-left">←</button>
+              <button type="button" class="pos-btn" data-pos="center">+</button>
+              <button type="button" class="pos-btn" data-pos="mid-right">→</button>
+              <button type="button" class="pos-btn active" data-pos="bottom-left">↙</button>
+              <button type="button" class="pos-btn" data-pos="bottom-center">↓</button>
+              <button type="button" class="pos-btn" data-pos="bottom-right">↘</button>
+            </div>
+          </div>
+          <div class="wm-group">
+            <label>Tamaño del logo <span id="wm-size-val">18%</span></label>
+            <input type="range" id="wm-size" min="8" max="40" value="18" />
+          </div>
+          <div class="wm-group">
+            <label>Opacidad <span id="wm-opacity-val">85%</span></label>
+            <input type="range" id="wm-opacity" min="20" max="100" value="85" />
+          </div>
+          <button type="button" class="btn-gold btn-full" id="wm-download-all" style="display:none">
+            Descargar todas
+          </button>
+        </div>
+        <div class="wm-preview-area">
+          <div id="wm-placeholder" class="wm-placeholder">
+            <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24" opacity=".3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <p>Las imágenes procesadas aparecerán aquí</p>
+          </div>
+          <div id="wm-results" class="wm-results hidden"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: hojas de visita -->
+    <section class="view" id="view-visits">
+      <header class="view-hd">
+        <div>
+          <h1>Hojas de visita</h1>
+          <p class="view-sub">Selecciona el inmueble y envía el enlace de firma al cliente.</p>
+        </div>
+      </header>
+
+      <div class="visit-picker">
+
+        <!-- Selector -->
+        <div class="visit-select-wrap">
+          <label class="visit-select-label">Selecciona el inmueble</label>
+          <select class="visit-select" id="vs-prop-select">
+            <option value="">— Elige una propiedad —</option>
+            <!-- populated by JS -->
+            <option value="__custom">✎ Inmueble personalizado…</option>
+          </select>
+        </div>
+
+        <!-- Custom fields (hidden by default) -->
+        <div class="visit-custom-fields" id="vs-custom-fields" style="display:none">
+          <div class="visit-custom-row">
+            <div class="fg">
+              <label class="flabel">Referencia</label>
+              <input class="finput" type="text" id="vs-c-ref" placeholder="AN-2026-010">
+            </div>
+            <div class="fg" style="flex:2">
+              <label class="flabel">Nombre del inmueble</label>
+              <input class="finput" type="text" id="vs-c-title" placeholder="Denominación del inmueble">
+            </div>
+            <div class="fg">
+              <label class="flabel">Zona</label>
+              <input class="finput" type="text" id="vs-c-zone" placeholder="Barcelona, España">
+            </div>
+          </div>
+        </div>
+
+        <!-- Visit date picker -->
+        <div class="visit-date-row" id="vs-date-row" style="display:none">
+          <label class="visit-select-label" for="vs-visit-date">Fecha y hora de la visita</label>
+          <input class="finput vs-date-input" type="datetime-local" id="vs-visit-date">
+          <p class="vs-date-hint">Se incluirá en el enlace para pre-rellenar la fecha en la hoja. Déjalo vacío si aún no está confirmada.</p>
+        </div>
+
+        <!-- Result card -->
+        <div class="visit-result-card" id="vs-result-card" style="display:none">
+          <div class="visit-result-info" id="vs-result-info"></div>
+          <div class="visit-result-actions">
+            <input class="visit-url-input" type="text" id="vs-url-input" readonly>
+            <button class="btn-copy-url" id="vs-btn-copy">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copiar enlace
+            </button>
+            <a class="btn-wa-url" id="vs-btn-wa" href="#" target="_blank" rel="noopener">
+              <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+              Enviar por WhatsApp
+            </a>
+            <a class="btn-view-prop" id="vs-btn-view" href="#" target="_blank" rel="noopener" style="display:none">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Ver ficha
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Visit log -->
+      <div class="visit-log">
+        <div class="vl-hd">
+          <h2 class="vl-title">Visitas registradas</h2>
+          <div class="vl-sort">
+            <span class="vl-sort-label">Ordenar:</span>
+            <button class="vls-btn active" data-sort="date">Fecha</button>
+            <button class="vls-btn" data-sort="name">Nombre</button>
+            <button class="vls-btn" data-sort="phone">Teléfono</button>
+            <button class="vls-btn" data-sort="email">Email</button>
+          </div>
+        </div>
+        <div id="vs-log-body"></div>
+
+        <!-- Import from email link -->
+        <details class="vl-import">
+          <summary class="vl-import-toggle">¿No aparece una visita? Importar manualmente desde el enlace del email</summary>
+          <div class="vl-import-body">
+            <p class="vl-import-hint">Pega aquí el enlace completo «Guardar en admin» que recibiste en el email de la visita firmada:</p>
+            <div class="vl-import-row">
+              <input class="finput vl-import-input" type="text" id="vl-import-url" placeholder="http://localhost:8080/admin/index.html?visit=...">
+              <button class="btn-gold vl-import-btn" id="vl-import-btn">Importar</button>
+            </div>
+            <p class="vl-import-msg" id="vl-import-msg"></p>
+          </div>
+        </details>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast hidden"></div>
+
+<!-- CONFIRM DIALOG -->
+<div id="confirm-overlay" class="confirm-overlay hidden">
+  <div class="confirm-box">
+    <p id="confirm-msg"></p>
+    <div class="confirm-actions">
+      <button class="btn-outline" id="confirm-cancel">Cancelar</button>
+      <button class="btn-danger" id="confirm-ok">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" id="listings-data">
+{
+  "listings": [
+    {
+      "slug": "gracia-garden",
+      "title": "Exquisite Brand-New Garden Residence in Gràcia",
+      "price": "€830,000",
+      "ref": "AN-2026-001",
+      "neighbourhood": "Gràcia, Barcelona",
+      "type": "apartment",
+      "status": "sale",
+      "badge_type": "Apartment",
+      "beds": 2,
+      "baths": 2,
+      "size": "94",
+      "floor": "Ground",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg",
+      "images": [
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg",
+          "alt": "Exquisite Brand-New Garden Residence in Gràcia"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/imagen-4-logo-1.jpg",
+          "alt": "Exquisite Brand-New Garden Residence in Gràcia"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/imagen3-logo-2.jpg",
+          "alt": "Exquisite Brand-New Garden Residence in Gràcia"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-02-logo-1.jpg",
+          "alt": "Exquisite Brand-New Garden Residence in Gràcia"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/planell.jpg",
+          "alt": "Exquisite Brand-New Garden Residence in Gràcia"
+        }
+      ],
+      "description": [
+        "Ground-floor residence currently undergoing a high-spec renovation in the heart of Gràcia, adjacent to Avenida Diagonal and the Jardinets de Gràcia. A rare opportunity to acquire a property of exceptional character in one of Barcelona's most sought-after neighbourhoods.",
+        "The residence features soaring ceilings, beautifully restored Volta Catalana brickwork, and a luminous 23 m² open-plan living, dining and kitchen area. The principal suite includes a generous dressing room and a 7.30 m² bathroom. A second bedroom and a fully independent multipurpose pavilion of 18.50 m² — pre-installed for a potential third bathroom — complete the layout.",
+        "The 45 m² Mediterranean garden provides a private outdoor sanctuary in the city, ideal for entertaining or simply enjoying the Barcelona climate year-round."
+      ],
+      "details": [
+        {
+          "key": "Property type",
+          "val": "Ground-floor apartment"
+        },
+        {
+          "key": "Built area",
+          "val": "94.50 m²"
+        },
+        {
+          "key": "Private garden",
+          "val": "45 m²"
+        },
+        {
+          "key": "Independent pavilion",
+          "val": "18.50 m²"
+        },
+        {
+          "key": "Bedrooms",
+          "val": "2 suites"
+        },
+        {
+          "key": "Bathrooms",
+          "val": "2"
+        },
+        {
+          "key": "Floor",
+          "val": "Ground floor"
+        },
+        {
+          "key": "Living / dining",
+          "val": "23 m² open-plan"
+        },
+        {
+          "key": "Condition",
+          "val": "New — under renovation"
+        },
+        {
+          "key": "Reference",
+          "val": "AN-2026-001"
+        }
+      ],
+      "features": {
+        "Interior": [
+          "23 m² open-plan living & dining",
+          "2 suites with en-suite bathrooms",
+          "Principal suite with dressing room",
+          "7.30 m² master bathroom",
+          "Restored Volta Catalana brickwork",
+          "Soaring ceilings",
+          "High-spec renovation"
+        ],
+        "Outdoor": [
+          "45 m² Mediterranean garden",
+          "Independent 18.50 m² pavilion",
+          "Pre-installed for 3rd bathroom",
+          "Private outdoor space"
+        ]
+      },
+      "nearby": [
+        {
+          "name": "Jardinets de Gràcia",
+          "dist": "2 min walk"
+        },
+        {
+          "name": "Avenida Diagonal",
+          "dist": "1 min walk"
+        },
+        {
+          "name": "Gràcia Metro Station (L3)",
+          "dist": "5 min walk"
+        },
+        {
+          "name": "El Prat International Airport",
+          "dist": "25 min drive"
+        }
+      ],
+      "published": true
+    },
+    {
+      "slug": "eixample-golden-square-rent",
+      "title": "Refined Luxury in Barcelona's Golden Square",
+      "price": "€7,700",
+      "ref": "AN-46749",
+      "neighbourhood": "Eixample, Barcelona",
+      "type": "apartment",
+      "status": "rent",
+      "badge_type": "Apartment",
+      "beds": 3,
+      "baths": 3,
+      "size": "145",
+      "floor": "Principal",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_08-3.jpg",
+      "images": [
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_08-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_09-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_10-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404778/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_11-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404778/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_12-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404778/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_13-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404778/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_14-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404778/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_15-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404778/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_16-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404778/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_17-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404778/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_18-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404779/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_19-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404779/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_20-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404779/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_21-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404779/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_22-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404779/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_23-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404779/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_24-3.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404779/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_28-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404780/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_29-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404780/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_30-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404781/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_31-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404781/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_32-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404781/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_33-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404781/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_36-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404781/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_37-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404781/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_38-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404781/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_45-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404782/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_46-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404782/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_47-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404782/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_48-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404782/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_49-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404782/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_50-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404783/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_51-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404783/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_54-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404783/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_55-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404783/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_56-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404783/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_57-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404784/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_58-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404784/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_59-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404784/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_60-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404784/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_61-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404784/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_62-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404784/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_63-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404785/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_64-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404785/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_65-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404785/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_66-2.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404785/an-realestate/eixample-golden-square-rent/IMG_9580-2-1.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404785/an-realestate/eixample-golden-square-rent/PHOTO-2025-01-20-15-19-23-1.jpg",
+          "alt": "Refined Luxury in Barcelona's Golden Square"
+        }
+      ],
+      "description": [
+        "Newly renovated principal-floor apartment on the prestigious Rambla de Catalunya, in the heart of Barcelona's Golden Square. A curated masterpiece blending period elegance with contemporary design.",
+        "Spacious living and dining room with characteristic Eixample balconies overlooking the boulevard, an independent fully equipped kitchen, three double bedrooms with bespoke built-in wardrobes, and three contemporary bathrooms.",
+        "Ducted air conditioning, central heating, high ceilings, solid wooden floors, and double glazing throughout. Available for temporary stays of 32 days to 11 months."
+      ],
+      "details": [
+        {
+          "key": "Property type",
+          "val": "Principal-floor apartment"
+        },
+        {
+          "key": "Built area",
+          "val": "145 m²"
+        },
+        {
+          "key": "Bedrooms",
+          "val": "3 double (2 en suite)"
+        },
+        {
+          "key": "Bathrooms",
+          "val": "3"
+        },
+        {
+          "key": "Floor",
+          "val": "Principal floor"
+        },
+        {
+          "key": "Condition",
+          "val": "Newly renovated"
+        },
+        {
+          "key": "Rental period",
+          "val": "32 days – 11 months"
+        },
+        {
+          "key": "Reference",
+          "val": "AN-46749"
+        }
+      ],
+      "features": {
+        "Interior": [
+          "Spacious living & dining room",
+          "Eixample balconies",
+          "Fully equipped kitchen",
+          "3 double bedrooms",
+          "Bespoke built-in wardrobes",
+          "Solid wooden floors",
+          "High ceilings",
+          "Double glazing"
+        ],
+        "Climate": [
+          "Ducted air conditioning",
+          "Central heating"
+        ]
+      },
+      "nearby": [
+        {
+          "name": "Passeig de Gràcia",
+          "dist": "5 min walk"
+        },
+        {
+          "name": "Casa Batlló",
+          "dist": "7 min walk"
+        },
+        {
+          "name": "Diagonal Metro (L3/L5)",
+          "dist": "3 min walk"
+        },
+        {
+          "name": "El Prat International Airport",
+          "dist": "20 min drive"
+        }
+      ],
+      "published": true
+    },
+    {
+      "slug": "sant-gervasi-galvany",
+      "title": "Renovated Residence with Historic Charm in Sant Gervasi",
+      "price": "€520,000",
+      "ref": "AN-1012",
+      "neighbourhood": "Sant Gervasi, Barcelona",
+      "type": "apartment",
+      "status": "sale",
+      "badge_type": "Apartment",
+      "beds": 2,
+      "baths": 1,
+      "size": "86",
+      "floor": "Upper",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404786/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-42-2.jpg",
+      "images": [
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404786/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-42-2.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404785/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-42-3.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404786/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-42-4.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404786/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-42-8.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404786/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-42-9.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404786/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-42-10.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404787/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-42-11.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404787/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-42-12.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404787/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-43.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404787/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-43-2.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404787/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-43-3.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404787/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-43-4.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404788/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-43-5.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404788/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-43-6.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404788/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-43-7.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404788/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-43-8.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404789/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-43-9.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404789/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-44.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404789/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-41.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404789/an-realestate/sant-gervasi-galvany/IMG_9580-2-1.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404789/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-20-15-19-23-1.jpg",
+          "alt": "Renovated Residence with Historic Charm in Sant Gervasi"
+        }
+      ],
+      "description": [
+        "Beautifully renovated apartment with historic charm in the coveted Sarrià-Sant Gervasi neighbourhood. Built in 1936, this spacious home combines period architectural elements with modern comforts.",
+        "The property features a 35 m² living-dining area with natural light through large windows, an integrated open-plan kitchen, two double bedrooms, a modern bathroom, and a private balcony. High ceilings with exposed Catalan vaulting add exceptional character.",
+        "Equipped with air conditioning, heating, security door, and wooden flooring throughout. One apartment per floor, providing exceptional privacy in a quiet residential street."
+      ],
+      "details": [
+        {
+          "key": "Property type",
+          "val": "Apartment"
+        },
+        {
+          "key": "Built area",
+          "val": "86 m²"
+        },
+        {
+          "key": "Year built",
+          "val": "1936"
+        },
+        {
+          "key": "Bedrooms",
+          "val": "2"
+        },
+        {
+          "key": "Bathrooms",
+          "val": "1"
+        },
+        {
+          "key": "Living / dining",
+          "val": "35 m²"
+        },
+        {
+          "key": "Balcony",
+          "val": "Private"
+        },
+        {
+          "key": "Reference",
+          "val": "AN-1012"
+        }
+      ],
+      "features": {
+        "Interior": [
+          "35 m² living-dining area",
+          "Open-plan kitchen",
+          "2 double bedrooms",
+          "Exposed Catalan vaulting",
+          "High ceilings",
+          "Wooden flooring",
+          "Private balcony"
+        ],
+        "Equipment": [
+          "Air conditioning",
+          "Heating",
+          "Security door",
+          "One apartment per floor"
+        ]
+      },
+      "nearby": [
+        {
+          "name": "Sarrià FGC Station",
+          "dist": "5 min walk"
+        },
+        {
+          "name": "Mercat de Galvany",
+          "dist": "3 min walk"
+        },
+        {
+          "name": "Diagonal Avenue",
+          "dist": "5 min walk"
+        },
+        {
+          "name": "El Prat International Airport",
+          "dist": "25 min drive"
+        }
+      ],
+      "published": true,
+      "sold": true
+    },
+    {
+      "slug": "el-born-corner",
+      "title": "Sunny 4-Bedroom Corner Apartment in Historic El Born",
+      "price": "€1,095,000",
+      "ref": "AN-46330",
+      "neighbourhood": "El Born, Barcelona",
+      "type": "apartment",
+      "status": "sale",
+      "badge_type": "Apartment",
+      "beds": 4,
+      "baths": 3,
+      "size": "144",
+      "floor": "Upper",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404790/an-realestate/el-born-corner/PHOTO-2025-01-20-15-19-11-1.jpg",
+      "images": [
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404790/an-realestate/el-born-corner/PHOTO-2025-01-20-15-19-11-1.jpg",
+          "alt": "Sunny 4-Bedroom Corner Apartment in Historic El Born"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404789/an-realestate/el-born-corner/PHOTO-2025-01-20-15-18-45-1.jpg",
+          "alt": "Sunny 4-Bedroom Corner Apartment in Historic El Born"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404790/an-realestate/el-born-corner/PHOTO-2025-01-20-15-19-23-1.jpg",
+          "alt": "Sunny 4-Bedroom Corner Apartment in Historic El Born"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404790/an-realestate/el-born-corner/PHOTO-2025-01-20-15-18-59-1.jpg",
+          "alt": "Sunny 4-Bedroom Corner Apartment in Historic El Born"
+        }
+      ],
+      "description": [
+        "Corner apartment in a beautifully restored historic building in El Born, one of Barcelona's most vibrant and culturally rich neighbourhoods. Fully renovated turn-key project.",
+        "Three spacious double bedrooms with views over the plaza and street, a single bedroom with walk-in closet and patio access, three designer bathrooms with brushed gold fixtures, and a chef's kitchen with lacquered cabinetry and Bosch appliances.",
+        "Original coffered ceilings and herringbone wood flooring throughout. Samsung air conditioning and radiant floor heating ensure year-round comfort."
+      ],
+      "details": [
+        {
+          "key": "Property type",
+          "val": "Corner apartment"
+        },
+        {
+          "key": "Built area",
+          "val": "144 m²"
+        },
+        {
+          "key": "Year built",
+          "val": "1881"
+        },
+        {
+          "key": "Bedrooms",
+          "val": "4"
+        },
+        {
+          "key": "Bathrooms",
+          "val": "3"
+        },
+        {
+          "key": "Condition",
+          "val": "Turn-key renovation"
+        },
+        {
+          "key": "Reference",
+          "val": "AN-46330"
+        }
+      ],
+      "features": {
+        "Interior": [
+          "Original coffered ceilings",
+          "Herringbone wood flooring",
+          "3 double bedrooms",
+          "Walk-in closet",
+          "Chef's kitchen with Bosch appliances",
+          "3 designer bathrooms",
+          "Brushed gold fixtures"
+        ],
+        "Climate": [
+          "Samsung air conditioning",
+          "Radiant floor heating"
+        ]
+      },
+      "nearby": [
+        {
+          "name": "Basílica de Santa Maria del Mar",
+          "dist": "3 min walk"
+        },
+        {
+          "name": "Passeig del Born",
+          "dist": "2 min walk"
+        },
+        {
+          "name": "Arc de Triomf",
+          "dist": "8 min walk"
+        },
+        {
+          "name": "El Prat International Airport",
+          "dist": "20 min drive"
+        }
+      ],
+      "published": true,
+      "sold": true
+    },
+    {
+      "slug": "rambla-catalunya-corner",
+      "title": "Stunning Refurbished Corner Apartment on Rambla de Catalunya",
+      "price": "€1,395,000",
+      "ref": "AN-10007",
+      "neighbourhood": "Eixample, Barcelona",
+      "type": "apartment",
+      "status": "sale",
+      "badge_type": "Apartment",
+      "beds": 3,
+      "baths": 3,
+      "size": "150",
+      "floor": "Upper",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404790/an-realestate/rambla-catalunya-corner/RAMBLA_CATALUNYA-2_Pagina_01_Imagen_0001-scaled.jpg",
+      "images": [
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404790/an-realestate/rambla-catalunya-corner/RAMBLA_CATALUNYA-2_Pagina_01_Imagen_0001-scaled.jpg",
+          "alt": "Stunning Refurbished Corner Apartment on Rambla de Catalunya"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404790/an-realestate/rambla-catalunya-corner/RAMBLA_CATALUNYA-2_Pagina_24_Imagen_0001-scaled.jpg",
+          "alt": "Stunning Refurbished Corner Apartment on Rambla de Catalunya"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404790/an-realestate/rambla-catalunya-corner/RAMBLA_CATALUNYA-2_Pagina_18_Imagen_0001-scaled.jpg",
+          "alt": "Stunning Refurbished Corner Apartment on Rambla de Catalunya"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404791/an-realestate/rambla-catalunya-corner/RAMBLA_CATALUNYA-2_Pagina_17_Imagen_0001-scaled.jpg",
+          "alt": "Stunning Refurbished Corner Apartment on Rambla de Catalunya"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404791/an-realestate/rambla-catalunya-corner/RAMBLA_CATALUNYA-2_Pagina_07_Imagen_0001-scaled.jpg",
+          "alt": "Stunning Refurbished Corner Apartment on Rambla de Catalunya"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404791/an-realestate/rambla-catalunya-corner/RAMBLA_CATALUNYA-2_Pagina_05_Imagen_0001-1.jpg",
+          "alt": "Stunning Refurbished Corner Apartment on Rambla de Catalunya"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404791/an-realestate/rambla-catalunya-corner/Captura-de-pantalla-2024-10-13-a-las-14.00.30.png",
+          "alt": "Stunning Refurbished Corner Apartment on Rambla de Catalunya"
+        }
+      ],
+      "description": [
+        "Stunning refurbished corner apartment on the iconic Rambla de Catalunya, in the heart of Barcelona's prestigious Golden Square. A rare combination of modernist architecture and contemporary luxury.",
+        "The apartment features high ceilings with original mouldings, marble and wooden flooring, a private balcony, alarm system, and three generous bedrooms each with en-suite bathrooms. Located in an elegant period building with elevator and concierge service.",
+        "Energy class C. All of Barcelona's finest destinations within walking distance: Passeig de Gràcia, La Pedrera, Casa Batlló, and the city's best restaurants and boutiques."
+      ],
+      "details": [
+        {
+          "key": "Property type",
+          "val": "Corner apartment"
+        },
+        {
+          "key": "Built area",
+          "val": "150 m²"
+        },
+        {
+          "key": "Bedrooms",
+          "val": "3"
+        },
+        {
+          "key": "Bathrooms",
+          "val": "3"
+        },
+        {
+          "key": "Energy class",
+          "val": "C"
+        },
+        {
+          "key": "Building services",
+          "val": "Elevator, concierge"
+        },
+        {
+          "key": "Reference",
+          "val": "AN-10007"
+        }
+      ],
+      "features": {
+        "Interior": [
+          "High ceilings with original mouldings",
+          "Marble flooring",
+          "Wooden flooring",
+          "Private balcony",
+          "Alarm system",
+          "Air conditioning"
+        ],
+        "Building": [
+          "Elevator",
+          "Concierge service",
+          "Modernist building"
+        ]
+      },
+      "nearby": [
+        {
+          "name": "Passeig de Gràcia",
+          "dist": "3 min walk"
+        },
+        {
+          "name": "Casa Batlló",
+          "dist": "5 min walk"
+        },
+        {
+          "name": "La Pedrera",
+          "dist": "5 min walk"
+        },
+        {
+          "name": "El Prat International Airport",
+          "dist": "20 min drive"
+        }
+      ],
+      "published": true,
+      "sold": true
+    },
+    {
+      "slug": "eixample-golden-mile",
+      "title": "Elegant Renovated Apartment in Eixample's Golden Mile",
+      "price": "€1,200,000",
+      "ref": "AN-10006",
+      "neighbourhood": "Dreta de l'Eixample, Barcelona",
+      "type": "apartment",
+      "status": "sale",
+      "badge_type": "Apartment",
+      "beds": 3,
+      "baths": 3,
+      "size": "140",
+      "floor": "2nd",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404792/an-realestate/eixample-golden-mile/P_2456_Julia-Angli_Habitatge_02_Salon-EFA.jpg",
+      "images": [
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404792/an-realestate/eixample-golden-mile/P_2456_Julia-Angli_Habitatge_02_Salon-EFA.jpg",
+          "alt": "Elegant Renovated Apartment in Eixample's Golden Mile"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404792/an-realestate/eixample-golden-mile/P_2456_Julia-Angli_Habitatge_04_Salon-EFA.jpg",
+          "alt": "Elegant Renovated Apartment in Eixample's Golden Mile"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404792/an-realestate/eixample-golden-mile/P_2456_Julia-Angli_Habitatge_05_Hall-EFA.jpg",
+          "alt": "Elegant Renovated Apartment in Eixample's Golden Mile"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404792/an-realestate/eixample-golden-mile/P_2456_Julia-Angli_Habitatge_06_Hab_sec-EFA.jpg",
+          "alt": "Elegant Renovated Apartment in Eixample's Golden Mile"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404792/an-realestate/eixample-golden-mile/P_2456_Julia-Angli_Habitatge_07_Suite-Vestidor-EFA.jpg",
+          "alt": "Elegant Renovated Apartment in Eixample's Golden Mile"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404792/an-realestate/eixample-golden-mile/P_2456_Julia-Angli_Habitatge_08_Suite-EFA.jpg",
+          "alt": "Elegant Renovated Apartment in Eixample's Golden Mile"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404792/an-realestate/eixample-golden-mile/P_2456_Julia-Angli_Habitatge_09_Bath-Suite-EFA.jpg",
+          "alt": "Elegant Renovated Apartment in Eixample's Golden Mile"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404793/an-realestate/eixample-golden-mile/P_2456_Julia-Angli_Habitatge_10_Bath-EFA.jpg",
+          "alt": "Elegant Renovated Apartment in Eixample's Golden Mile"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404793/an-realestate/eixample-golden-mile/Planta.png",
+          "alt": "Elegant Renovated Apartment in Eixample's Golden Mile"
+        }
+      ],
+      "description": [
+        "Second-floor apartment in an early 20th-century modernist building on the Golden Mile, steps from Passeig de Gràcia, Casa Batlló, and La Pedrera. A masterful blend of historic architecture and contemporary refinement.",
+        "The open-plan living and dining area of 45.8 m² opens to a private interior plaza. The master suite features an 18.8 m² bedroom, a 4.7 m² bathroom, and a walk-in closet. A second double bedroom and a third room complete the layout, alongside three elegant balconies.",
+        "High ceilings with intricate mouldings and authentic Catalan vaulted ceilings throughout. Fully renovated to the highest standard."
+      ],
+      "details": [
+        {
+          "key": "Property type",
+          "val": "Apartment"
+        },
+        {
+          "key": "Built area",
+          "val": "140 m² (135 m² living)"
+        },
+        {
+          "key": "Floor",
+          "val": "2nd floor"
+        },
+        {
+          "key": "Bedrooms",
+          "val": "3"
+        },
+        {
+          "key": "Bathrooms",
+          "val": "3"
+        },
+        {
+          "key": "Living / dining",
+          "val": "45.8 m²"
+        },
+        {
+          "key": "Master suite",
+          "val": "18.8 m² + walk-in closet"
+        },
+        {
+          "key": "Balconies",
+          "val": "3 × 1.7 m²"
+        },
+        {
+          "key": "Energy class",
+          "val": "C"
+        },
+        {
+          "key": "Reference",
+          "val": "AN-10006"
+        }
+      ],
+      "features": {
+        "Interior": [
+          "45.8 m² open-plan living & dining",
+          "Master suite with walk-in closet",
+          "High ceilings with intricate mouldings",
+          "Catalan vaulted ceilings",
+          "3 balconies",
+          "Access to private interior plaza"
+        ],
+        "Building": [
+          "Early 20th-century modernist building",
+          "Elevator"
+        ]
+      },
+      "nearby": [
+        {
+          "name": "Passeig de Gràcia",
+          "dist": "2 min walk"
+        },
+        {
+          "name": "Casa Batlló",
+          "dist": "3 min walk"
+        },
+        {
+          "name": "La Pedrera",
+          "dist": "4 min walk"
+        },
+        {
+          "name": "El Prat International Airport",
+          "dist": "20 min drive"
+        }
+      ],
+      "published": true,
+      "sold": true
+    },
+    {
+      "slug": "vallvidrera-villa",
+      "title": "Exquisite Modern Villa with 360° Views Over Barcelona",
+      "price": "€5,500,000",
+      "ref": "AN-AN1005",
+      "neighbourhood": "Vallvidrera, Barcelona",
+      "type": "villa",
+      "status": "sale",
+      "badge_type": "Villa",
+      "beds": 6,
+      "baths": 6,
+      "size": "634",
+      "floor": "3 levels",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404793/an-realestate/vallvidrera-villa/Mont-dorsa-68_17.jpg",
+      "images": [
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404793/an-realestate/vallvidrera-villa/Mont-dorsa-68_17.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404793/an-realestate/vallvidrera-villa/Mont-dorsa-68_18.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404794/an-realestate/vallvidrera-villa/Mont-dorsa-68_19.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404794/an-realestate/vallvidrera-villa/Mont-dorsa-68_22.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404794/an-realestate/vallvidrera-villa/Mont-dorsa-68_23.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404794/an-realestate/vallvidrera-villa/Mont-dorsa-68_25.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404794/an-realestate/vallvidrera-villa/Mont-dorsa-68_26.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404795/an-realestate/vallvidrera-villa/Mont-dorsa-68_27.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404795/an-realestate/vallvidrera-villa/Mont-dorsa-68_28.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404795/an-realestate/vallvidrera-villa/Mont-dorsa-68_29.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404795/an-realestate/vallvidrera-villa/Mont-dorsa-68_30.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404796/an-realestate/vallvidrera-villa/Mont-dorsa-68_31.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404796/an-realestate/vallvidrera-villa/Mont-dorsa-68_32.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404796/an-realestate/vallvidrera-villa/Mont-dorsa-68_33.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404796/an-realestate/vallvidrera-villa/Mont-dorsa-68_34.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404796/an-realestate/vallvidrera-villa/Mont-dorsa-68_35.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404796/an-realestate/vallvidrera-villa/Mont-dorsa-68_36.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404797/an-realestate/vallvidrera-villa/Mont-dorsa-68_38-1.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404797/an-realestate/vallvidrera-villa/Mont-dorsa-68_42.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404797/an-realestate/vallvidrera-villa/Mont-dorsa-68_48.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404797/an-realestate/vallvidrera-villa/Mont-dorsa-68_49.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404797/an-realestate/vallvidrera-villa/Mont-dorsa-68_50.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404798/an-realestate/vallvidrera-villa/Mont-dorsa-68_51.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404798/an-realestate/vallvidrera-villa/Mont-dorsa-68_52.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404798/an-realestate/vallvidrera-villa/Mont-dorsa-68_53-1.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404798/an-realestate/vallvidrera-villa/Mont-dorsa-68_54.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404799/an-realestate/vallvidrera-villa/Mont-dorsa-68_55.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404799/an-realestate/vallvidrera-villa/Mont-dorsa-68_56.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404799/an-realestate/vallvidrera-villa/Mont-dorsa-68_57.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404799/an-realestate/vallvidrera-villa/Mont-dorsa-68_58.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404800/an-realestate/vallvidrera-villa/Mont-dorsa-68_59-1.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404802/an-realestate/vallvidrera-villa/Mont-dorsa-68_60.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404801/an-realestate/vallvidrera-villa/Mont-dorsa-68_61.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404800/an-realestate/vallvidrera-villa/Mont-dorsa-68_62.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404801/an-realestate/vallvidrera-villa/Mont-dorsa-68_63.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404801/an-realestate/vallvidrera-villa/Mont-dorsa-68_64.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404800/an-realestate/vallvidrera-villa/Mont-dorsa-68_65-1.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404801/an-realestate/vallvidrera-villa/Mont-dorsa-68_66-1.jpg",
+          "alt": "Exquisite Modern Villa with 360° Views Over Barcelona"
+        }
+      ],
+      "description": [
+        "A once-in-a-generation opportunity to acquire one of Barcelona's most extraordinary private residences. Completed in 2022, this three-level contemporary villa sits on a prime corner plot in Vallvidrera with unobstructed 360° panoramic views over the city and the Mediterranean.",
+        "The villa spans 634 m² across three levels: ground level with seven-car garage, wine cellar, and service areas; lower floor with open-plan living, dining, and premium kitchen opening to the garden; first floor with four luxury en-suite bedrooms including a 70 m² master suite; top level with multi-purpose rooms and a 117 m² terrace.",
+        "State-of-the-art amenities: smart home automation, climate-controlled pool, Finnish sauna. Exceptional sustainability: energy class A, solar panels, aerothermal underfloor heating."
+      ],
+      "details": [
+        {
+          "key": "Property type",
+          "val": "Detached villa"
+        },
+        {
+          "key": "Total area",
+          "val": "634 m²"
+        },
+        {
+          "key": "Levels",
+          "val": "3"
+        },
+        {
+          "key": "Bedrooms",
+          "val": "6 en-suite"
+        },
+        {
+          "key": "Bathrooms",
+          "val": "6"
+        },
+        {
+          "key": "Master suite",
+          "val": "70 m²"
+        },
+        {
+          "key": "Top terrace",
+          "val": "117 m²"
+        },
+        {
+          "key": "Garage",
+          "val": "7 cars"
+        },
+        {
+          "key": "Year built",
+          "val": "2022"
+        },
+        {
+          "key": "Energy class",
+          "val": "A"
+        },
+        {
+          "key": "Reference",
+          "val": "AN-AN1005"
+        }
+      ],
+      "features": {
+        "Interior": [
+          "70 m² master suite",
+          "6 en-suite bedrooms",
+          "Open-plan living & dining",
+          "Premium kitchen",
+          "Wine cellar",
+          "Smart home automation"
+        ],
+        "Outdoor": [
+          "Climate-controlled pool",
+          "117 m² roof terrace",
+          "Private garden",
+          "Finnish sauna",
+          "7-car garage",
+          "360° panoramic views"
+        ],
+        "Sustainability": [
+          "Energy class A",
+          "Solar panels",
+          "Aerothermal underfloor heating",
+          "Superior insulation"
+        ]
+      },
+      "nearby": [
+        {
+          "name": "Vallvidrera FGC Station",
+          "dist": "5 min drive"
+        },
+        {
+          "name": "Parc Natural de Collserola",
+          "dist": "Walking distance"
+        },
+        {
+          "name": "Barcelona city centre",
+          "dist": "15 min drive"
+        },
+        {
+          "name": "El Prat International Airport",
+          "dist": "30 min drive"
+        }
+      ],
+      "published": true
+    },
+    {
+      "slug": "eixample-villarroel",
+      "title": "Newly Renovated 3-Bedroom Apartment with Timeless Elegance in Eixample",
+      "price": "€820,000",
+      "ref": "AN-AN1004",
+      "neighbourhood": "Eixample, Barcelona",
+      "type": "apartment",
+      "status": "sale",
+      "badge_type": "Apartment",
+      "beds": 3,
+      "baths": 2,
+      "size": "104",
+      "floor": "Upper",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404801/an-realestate/eixample-villarroel/villarroel.jpg",
+      "images": [
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404801/an-realestate/eixample-villarroel/villarroel.jpg",
+          "alt": "Newly Renovated 3-Bedroom Apartment with Timeless Elegance in Eixample"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404802/an-realestate/eixample-villarroel/final_cropped_image_6.jpg",
+          "alt": "Newly Renovated 3-Bedroom Apartment with Timeless Elegance in Eixample"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404802/an-realestate/eixample-villarroel/final_cropped_image_7.jpg",
+          "alt": "Newly Renovated 3-Bedroom Apartment with Timeless Elegance in Eixample"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404802/an-realestate/eixample-villarroel/final_cropped_image_8.jpg",
+          "alt": "Newly Renovated 3-Bedroom Apartment with Timeless Elegance in Eixample"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404802/an-realestate/eixample-villarroel/final_cropped_image_4.jpg",
+          "alt": "Newly Renovated 3-Bedroom Apartment with Timeless Elegance in Eixample"
+        },
+        {
+          "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404802/an-realestate/eixample-villarroel/framed_plan_image_high_res.jpg",
+          "alt": "Newly Renovated 3-Bedroom Apartment with Timeless Elegance in Eixample"
+        }
+      ],
+      "description": [
+        "Beautifully renovated apartment in the prestigious Eixample district, combining timeless period elegance with state-of-the-art contemporary finishes. Renovated in 2022 to the highest standard.",
+        "The property features an expansive living room flowing into an open-concept kitchen, a master suite with walk-in closet and en-suite bathroom, a south-facing private terrace, and parquet flooring throughout.",
+        "Located in a meticulously restored period building with original modernist architectural elements. One of Eixample's most desirable residential addresses."
+      ],
+      "details": [
+        {
+          "key": "Property type",
+          "val": "Apartment"
+        },
+        {
+          "key": "Built area",
+          "val": "104.38 m²"
+        },
+        {
+          "key": "Bedrooms",
+          "val": "3"
+        },
+        {
+          "key": "Bathrooms",
+          "val": "2"
+        },
+        {
+          "key": "Year renovated",
+          "val": "2022"
+        },
+        {
+          "key": "Energy class",
+          "val": "A"
+        },
+        {
+          "key": "Terrace",
+          "val": "South-facing private"
+        },
+        {
+          "key": "Reference",
+          "val": "AN-AN1004"
+        }
+      ],
+      "features": {
+        "Interior": [
+          "Expansive open-plan living",
+          "Master suite with walk-in closet",
+          "State-of-the-art kitchen",
+          "Parquet flooring",
+          "South-facing terrace"
+        ],
+        "Building": [
+          "Modernist building",
+          "Elevator",
+          "Fully restored period building"
+        ]
+      },
+      "nearby": [
+        {
+          "name": "Urgell Metro (L1)",
+          "dist": "3 min walk"
+        },
+        {
+          "name": "Mercat de Sant Antoni",
+          "dist": "5 min walk"
+        },
+        {
+          "name": "Passeig de Gràcia",
+          "dist": "10 min walk"
+        },
+        {
+          "name": "El Prat International Airport",
+          "dist": "20 min drive"
+        }
+      ],
+      "published": true,
+      "sold": true
+    }
+  ]
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="admin.js"></script>
 </body>
 </html>

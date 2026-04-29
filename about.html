@@ -5,11 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Meet Álvaro Navarro — Founder & Lead Agent at AN Real Estate. Over a decade specialising in Barcelona's luxury property market." />
   <title>About Álvaro Navarro — AN Real Estate</title>
+  <!-- Open Graph -->
+  <link rel="canonical" href="https://anrealestate.es/about.html" />
+  <meta property="og:type"        content="website" />
+  <meta property="og:site_name"   content="AN Real Estate" />
+  <meta property="og:url"         content="https://anrealestate.es/about.html" />
+  <meta property="og:title"       content="About Álvaro Navarro — AN Real Estate" />
+  <meta property="og:description" content="Meet Álvaro Navarro — Founder & Lead Agent at AN Real Estate. Over a decade specialising in Barcelona's luxury property market." />
+  <meta property="og:image"       content="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="About Álvaro Navarro — AN Real Estate" />
+  <meta name="twitter:description" content="Founder & Lead Agent at AN Real Estate. Over a decade specialising in Barcelona's luxury property market." />
+  <meta name="twitter:image"       content="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#091f38" />
+  <link rel="preload" as="image" href="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/imagen-4-logo-1.jpg" />
+  <link rel="preconnect" href="https://res.cloudinary.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="about.css" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <script src="i18n.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Álvaro Navarro",
+    "jobTitle": "Founder & Lead Agent",
+    "worksFor": {
+      "@type": "RealEstateAgent",
+      "name": "AN High End Real Estate",
+      "url": "https://anrealestate.es"
+    },
+    "url": "https://anrealestate.es/about.html",
+    "sameAs": [
+      "https://instagram.com/alvaro.navarro.real.estate",
+      "https://linkedin.com/in/alvaro--"
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Barcelona",
+      "addressRegion": "Catalunya",
+      "addressCountry": "ES"
+    }
+  }
+  </script>
 </head>
 <body>
 
@@ -22,8 +65,8 @@
             <span></span><span></span>
           </button>
           <nav class="hn-left" aria-label="Primary left">
-            <a href="index.html#properties" class="hn-link">Properties</a>
-            <a href="index.html#services"   class="hn-link">Services</a>
+            <a href="index.html#properties" class="hn-link" data-i18n="nav.properties">Properties</a>
+            <a href="index.html#services"   class="hn-link" data-i18n="nav.services">Services</a>
           </nav>
         </div>
         <a href="index.html" class="header-logo">
@@ -31,9 +74,22 @@
         </a>
         <div class="header-right">
           <nav class="hn-right" aria-label="Primary right">
-            <a href="about.html"         class="hn-link">About</a>
-            <a href="index.html#contact" class="hn-link">Contact</a>
+            <a href="about.html"         class="hn-link" data-i18n="nav.about">About</a>
+            <a href="valuation.html"     class="hn-link" data-i18n="nav.valuation">Free Valuation</a>
+            <a href="index.html#contact" class="hn-link" data-i18n="nav.contact">Contact</a>
           </nav>
+          <div class="lang-switcher" id="lang-switcher">
+            <button class="lang-btn" id="lang-current" onclick="toggleLangDropdown(event)">EN</button>
+            <div class="lang-dropdown" id="lang-dropdown">
+              <button class="lang-opt" data-lang="en" onclick="pickLang('en',event)">EN — English</button>
+              <button class="lang-opt" data-lang="es" onclick="pickLang('es',event)">ES — Español</button>
+              <button class="lang-opt" data-lang="ca" onclick="pickLang('ca',event)">CA — Català</button>
+              <button class="lang-opt" data-lang="fr" onclick="pickLang('fr',event)">FR — Français</button>
+              <button class="lang-opt" data-lang="de" onclick="pickLang('de',event)">DE — Deutsch</button>
+              <button class="lang-opt" data-lang="it" onclick="pickLang('it',event)">IT — Italiano</button>
+              <button class="lang-opt" data-lang="ru" onclick="pickLang('ru',event)">RU — Русский</button>
+            </div>
+          </div>
           <a href="#" class="header-phone tel-js" data-a="+34" data-b="628" data-c="02" data-d="04" data-e="34"></a>
         </div>
       </div>
@@ -42,12 +98,25 @@
 
   <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
     <nav class="drawer-nav">
-      <a href="index.html#properties" class="drawer-link">Properties</a>
-      <a href="index.html#services"   class="drawer-link">Services</a>
-      <a href="about.html"            class="drawer-link">About</a>
-      <a href="index.html#contact"    class="drawer-link">Contact</a>
+      <a href="index.html#properties" class="drawer-link" data-i18n="nav.properties">Properties</a>
+      <a href="index.html#services"   class="drawer-link" data-i18n="nav.services">Services</a>
+      <a href="about.html"            class="drawer-link" data-i18n="nav.about">About</a>
+      <a href="valuation.html"        class="drawer-link" data-i18n="nav.valuation">Free Valuation</a>
+      <a href="index.html#contact"    class="drawer-link" data-i18n="nav.contact">Contact</a>
     </nav>
     <div class="drawer-foot">
+      <div class="lang-switcher" id="lang-switcher-mob">
+        <button class="lang-btn" onclick="toggleLangDropdown(event)">EN</button>
+        <div class="lang-dropdown" id="lang-dropdown-mob">
+          <button class="lang-opt" data-lang="en" onclick="pickLang('en',event)">EN — English</button>
+          <button class="lang-opt" data-lang="es" onclick="pickLang('es',event)">ES — Español</button>
+          <button class="lang-opt" data-lang="ca" onclick="pickLang('ca',event)">CA — Català</button>
+          <button class="lang-opt" data-lang="fr" onclick="pickLang('fr',event)">FR — Français</button>
+          <button class="lang-opt" data-lang="de" onclick="pickLang('de',event)">DE — Deutsch</button>
+          <button class="lang-opt" data-lang="it" onclick="pickLang('it',event)">IT — Italiano</button>
+          <button class="lang-opt" data-lang="ru" onclick="pickLang('ru',event)">RU — Русский</button>
+        </div>
+      </div>
       <a href="#" class="drawer-phone tel-js" data-a="+34" data-b="628" data-c="02" data-d="04" data-e="34"></a>
     </div>
   </div>
@@ -74,8 +143,8 @@
 
     <!-- TOP IMAGE -->
     <div class="ab-top-img img-float">
-      <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=85&auto=format"
-        alt="Barcelona luxury interior" loading="eager" fetchpriority="high" />
+      <img src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/imagen-4-logo-1.jpg"
+        alt="Garden Residence in Gràcia" loading="eager" fetchpriority="high" />
     </div>
 
     <!-- ABOUT INTRO -->
@@ -91,35 +160,37 @@
       </div>
     </div>
 
-    <!-- TEAM — 3-col TREF overlay layout -->
+    <!-- TEAM — 2-col layout -->
     <div class="ab-team-wrap">
       <div class="holder">
         <div class="about-team">
 
-          <!-- Col 1: heading + sub + body (200% overflow) -->
+          <!-- Vertical dividing line -->
+          <div class="at-line" aria-hidden="true"><div class="at-line-inner"></div></div>
+
+          <!-- Col 1: heading + sub + bio -->
           <div class="about-team-col reveal">
             <div class="key-wrap"><div class="key"></div></div>
             <h2 class="at-heading">
-              <span class="text-wrap"><span class="text-inner">Álvaro</span></span>
-              <span class="text-wrap"><span class="text-inner">Navarro</span></span>
-              <span class="text-wrap"><span class="text-inner">— founder.</span></span>
+              <span class="text-wrap"><span class="text-inner">Álvaro Navarro</span></span>
             </h2>
-            <p class="at-sub">AN Real Estate · Since 2012</p>
-            <p class="at-text mob-hidden">With over 10 years of experience in Barcelona's luxury real estate market, I specialise in exclusive high-end properties — whether meticulously renovated or ready to be transformed. Dedicated to providing a personalised and seamless experience, ensuring every transaction maximises value and potential.</p>
+            <div class="at-role">
+              <span class="at-role-dash" aria-hidden="true"></span>
+              <span class="at-role-label" data-i18n="agent.role">Founder &amp; Lead Agent</span>
+            </div>
+            <p class="at-sub" data-i18n="about.since">AN Real Estate · Since 2012</p>
+            <p class="at-text" data-i18n="about.bio1">With over 10 years of experience in Barcelona's luxury real estate market, I specialise in exclusive high-end properties — whether meticulously renovated or ready to be transformed. Dedicated to providing a personalised and seamless experience, ensuring every transaction maximises value and potential.</p>
+            <p class="at-text at-text--second" data-i18n="about.bio2">I collaborate with a strong network of architects, interior designers, and renovation specialists to exceed expectations. Fully accredited under AICAT 13069, I operate with the highest level of professional integrity across every transaction.</p>
+            <a href="#credentials" class="link-flash"><span data-i18n="about.credentials">My credentials</span> <span aria-hidden="true">→</span></a>
           </div>
 
-          <!-- Col 2: portrait image -->
+          <!-- Col 2: portrait + caption -->
           <div class="about-team-col at-img-col">
-            <div class="at-img img-float">
-              <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=700&q=80&auto=format"
+            <div class="at-img">
+              <img src="images/alvaro-navarro.jpg"
                 alt="Álvaro Navarro" loading="lazy" />
             </div>
-          </div>
-
-          <!-- Col 3: additional text + link (155% overflow) -->
-          <div class="about-team-col reveal">
-            <p class="at-text">I collaborate with a strong network of architects, interior designers, and renovation specialists to exceed expectations. Fully accredited under AICAT 13069, I operate with the highest level of professional integrity across every transaction.</p>
-            <a href="#credentials" class="link-flash">My credentials <span aria-hidden="true">→</span></a>
+            <p class="at-caption">Álvaro Navarro · Barcelona</p>
           </div>
 
         </div>
@@ -171,14 +242,14 @@
       <div class="holder">
         <div class="line-wrap line-reveal"><div class="line-dash"></div></div>
         <div class="ab-cta-inner reveal">
-          <p class="banner-eyebrow">Get in touch <span class="beo-sep">—</span> Barcelona</p>
+          <p class="banner-eyebrow" data-i18n="about.cta.eyebrow">Get in touch <span class="beo-sep">—</span> Barcelona</p>
           <h2 class="ab-cta-h2">
-            <span class="text-wrap"><span class="text-inner">Elevate your</span></span>
-            <span class="text-wrap"><span class="text-inner"><em>expectations.</em></span></span>
+            <span class="text-wrap"><span class="text-inner" data-i18n="about.cta.h1">Elevate your</span></span>
+            <span class="text-wrap"><span class="text-inner"><em data-i18n="about.cta.h2">expectations.</em></span></span>
           </h2>
-          <p class="ab-cta-sub">Elevate your expectations — discover Barcelona and Catalonia's finest properties with a trusted real estate expert.</p>
+          <p class="ab-cta-sub" data-i18n="about.cta.sub">Elevate your expectations — discover Barcelona and Catalonia's finest properties with a trusted real estate expert.</p>
           <div class="ab-cta-actions">
-            <a href="index.html#properties" class="button">Explore Properties</a>
+            <a href="index.html#properties" class="button" data-i18n="hero.cta">Explore Properties</a>
             <a href="https://wa.me/34628020434" class="ab-wa" target="_blank" rel="noopener">
               <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
               WhatsApp
@@ -187,22 +258,22 @@
 
           <div class="ab-contact-grid">
             <div class="ab-contact-item">
-              <span class="ab-contact-label">Phone &amp; WhatsApp</span>
+              <span class="ab-contact-label" data-i18n="about.contact.phone">Phone &amp; WhatsApp</span>
               <a href="#" class="ab-contact-val link-flash tel-js" data-a="+34" data-b="628" data-c="02" data-d="04" data-e="34"><span class="tel-arrow" aria-hidden="true">→</span></a>
             </div>
             <div class="ab-contact-item">
-              <span class="ab-contact-label">Hours</span>
-              <span class="ab-contact-val">Monday – Friday, 10:00 – 18:00</span>
+              <span class="ab-contact-label" data-i18n="about.contact.hours">Hours</span>
+              <span class="ab-contact-val" data-i18n="about.contact.hours_val">Monday – Friday, 10:00 – 18:00</span>
             </div>
             <div class="ab-contact-item">
-              <span class="ab-contact-label">Accreditation</span>
+              <span class="ab-contact-label" data-i18n="about.contact.accred">Accreditation</span>
               <span class="ab-contact-val">AICAT 13069 · Barcelona API</span>
             </div>
             <div class="ab-contact-item">
-              <span class="ab-contact-label">Follow</span>
+              <span class="ab-contact-label" data-i18n="about.contact.follow">Follow</span>
               <div class="ab-social">
-                <a href="https://instagram.com" class="link-flash" target="_blank" rel="noopener">Instagram <span>→</span></a>
-                <a href="https://linkedin.com"  class="link-flash" target="_blank" rel="noopener">LinkedIn <span>→</span></a>
+                <a href="https://instagram.com/alvaro.navarro.real.estate" class="link-flash" target="_blank" rel="noopener">Instagram <span>→</span></a>
+                <a href="https://linkedin.com/in/alvaro--" class="link-flash" target="_blank" rel="noopener">LinkedIn <span>→</span></a>
               </div>
             </div>
           </div>
@@ -221,21 +292,22 @@
           <img src="logo.svg" alt="AN Real Estate" class="header-logo-img" />
         </a>
         <nav class="footer-nav">
-          <a href="index.html#properties" class="fn-link">Properties</a>
-          <a href="index.html#services"   class="fn-link">Services</a>
-          <a href="about.html"            class="fn-link">About</a>
-          <a href="index.html#contact"    class="fn-link">Contact</a>
+          <a href="index.html#properties" class="fn-link" data-i18n="nav.properties">Properties</a>
+          <a href="index.html#services"   class="fn-link" data-i18n="nav.services">Services</a>
+          <a href="about.html"            class="fn-link" data-i18n="nav.about">About</a>
+          <a href="valuation.html"        class="fn-link" data-i18n="nav.valuation">Free Valuation</a>
+          <a href="index.html#contact"    class="fn-link" data-i18n="nav.contact">Contact</a>
         </nav>
       </div>
       <div class="footer-text">
-        <p>AN High End Real Estate is a licensed property agency specialising in luxury residential real estate in Barcelona and Catalonia. Registered with the Registro de Agentes Inmobiliarios de Cataluña: AICAT 13069. All properties are subject to availability. Prices shown are indicative and subject to change without notice. We operate in full compliance with Spanish property law.</p>
+        <p data-i18n="footer.disclaimer">AN High End Real Estate is a licensed property agency specialising in luxury residential real estate in Barcelona and Catalonia. Registered with the Registro de Agentes Inmobiliarios de Cataluña: AICAT 13069. All properties are subject to availability. Prices shown are indicative and subject to change without notice. We operate in full compliance with Spanish property law.</p>
       </div>
       <div class="footer-bottom">
         <div class="footer-copy">
           <span>© 2026 AN High End Real Estate · Barcelona</span>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Legal Notice</a>
-          <a href="#">Cookie Policy</a>
+          <a href="privacy.html" data-i18n="footer.privacy">Privacy Policy</a>
+          <a href="legal.html"   data-i18n="footer.legal">Legal Notice</a>
+          <a href="cookies.html" data-i18n="footer.cookies">Cookie Policy</a>
         </div>
         <div class="footer-studio">anrealestate.es</div>
       </div>
@@ -250,5 +322,36 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="main.js"></script>
   <script src="animations.js"></script>
+
+  <!-- Cookie Banner -->
+  <div class="cookie-banner is-hidden" id="cookie-banner" role="dialog" aria-label="Cookie consent">
+    <p id="cookie-text"></p>
+    <div class="cookie-btns">
+      <button class="cookie-btn-accept" id="cookie-accept"></button>
+      <button class="cookie-btn-reject" id="cookie-reject"></button>
+    </div>
+  </div>
+  <script>
+  ;(function(){
+    var lang = (typeof getLang === 'function') ? getLang() : 'en'
+    var t = function(k){ return (window.I18N&&window.I18N[lang]&&window.I18N[lang][k]) || (window.I18N&&window.I18N.en&&window.I18N.en[k]) || k }
+    var p = document.getElementById('cookie-text')
+    var ba = document.getElementById('cookie-accept')
+    var br = document.getElementById('cookie-reject')
+    if (p)  p.innerHTML   = t('cookie.text')
+    if (ba) ba.textContent = t('cookie.accept')
+    if (br) br.textContent = t('cookie.essential')
+    if (!localStorage.getItem('an_cookie_consent')) {
+      setTimeout(function(){ var b=document.getElementById('cookie-banner'); if(b) b.classList.remove('is-hidden') }, 800)
+    }
+    function dismiss(val) {
+      localStorage.setItem('an_cookie_consent', val)
+      var b = document.getElementById('cookie-banner')
+      if (b) b.classList.add('is-hidden')
+    }
+    document.getElementById('cookie-accept').addEventListener('click', function(){ dismiss('accepted') })
+    document.getElementById('cookie-reject').addEventListener('click', function(){ dismiss('essential') })
+  })()
+  </script>
 </body>
 </html>

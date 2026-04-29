@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hoja de Visita — AN High End Real Estate</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="visit.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="vs-header">
+    <a href="index.html" class="vs-logo">
+      <span class="vs-logo-an">AN</span>
+      <span class="vs-logo-name">High End Real Estate</span>
+    </a>
+    <div class="vs-header-badge">Hoja de Visita Oficial</div>
+  </header>
+
+  <!-- Property Banner -->
+  <div class="vs-prop-banner">
+    <div class="vs-prop-inner">
+      <span class="vs-prop-ref" id="vs-prop-ref">—</span>
+      <span class="vs-prop-sep">·</span>
+      <span class="vs-prop-title" id="vs-prop-title">Propiedad</span>
+      <span class="vs-prop-sep">·</span>
+      <span class="vs-prop-zone" id="vs-prop-zone">Barcelona</span>
+    </div>
+  </div>
+
+  <!-- Main Form -->
+  <main class="vs-main" id="vs-main">
+
+    <!-- 01 — Client data -->
+    <div class="vs-card">
+      <div class="vs-card-head">
+        <span class="vs-step">01</span>
+        <div>
+          <h2 class="vs-card-title">Sus datos personales</h2>
+          <p class="vs-card-sub">Necesarios para registrar la visita oficialmente.</p>
+        </div>
+      </div>
+
+      <div class="vs-fields">
+        <div class="vs-field">
+          <label class="vs-label" for="vs-name">Nombre completo <span class="vs-req">*</span></label>
+          <input class="vs-input" type="text" id="vs-name" autocomplete="name" placeholder="Nombre y apellidos completos">
+        </div>
+
+        <div class="vs-field-row">
+          <div class="vs-field vs-field--narrow">
+            <label class="vs-label" for="vs-doctype">Tipo de documento <span class="vs-req">*</span></label>
+            <select class="vs-input vs-select" id="vs-doctype">
+              <option value="DNI">DNI</option>
+              <option value="NIE">NIE</option>
+              <option value="Pasaporte">Pasaporte</option>
+            </select>
+          </div>
+          <div class="vs-field vs-field--grow">
+            <label class="vs-label" for="vs-docnum">Número de documento <span class="vs-req">*</span></label>
+            <div class="vs-input-wrap">
+              <input class="vs-input" type="text" id="vs-docnum" autocomplete="off" placeholder="12345678A" spellcheck="false">
+              <span class="vs-doc-icon" id="vs-doc-icon"></span>
+            </div>
+            <p class="vs-doc-hint" id="vs-doc-hint"></p>
+          </div>
+        </div>
+
+        <div class="vs-field">
+          <label class="vs-label">Foto del documento de identidad <span class="vs-req">*</span></label>
+          <label class="vs-photo-wrap" id="vs-photo-wrap" for="vs-photo-input">
+            <span class="vs-photo-placeholder" id="vs-photo-placeholder">
+              <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              Pulse para fotografiar su DNI / NIE / Pasaporte
+            </span>
+            <img id="vs-photo-preview" class="vs-photo-preview" alt="Documento" hidden>
+            <span class="vs-photo-change" id="vs-photo-change" hidden>Tocar para cambiar</span>
+          </label>
+          <input type="file" id="vs-photo-input" accept="image/*" capture="environment" class="vs-photo-input-hidden">
+          <p class="vs-field-hint">Fotografíe el anverso del documento. Es confidencial — solo la verá el agente para verificar su identidad.</p>
+        </div>
+
+        <div class="vs-field-row">
+          <div class="vs-field vs-field--grow">
+            <label class="vs-label" for="vs-phone">Teléfono móvil <span class="vs-req">*</span></label>
+            <input class="vs-input" type="tel" id="vs-phone" autocomplete="tel" placeholder="+34 600 000 000">
+          </div>
+          <div class="vs-field vs-field--grow">
+            <label class="vs-label" for="vs-email">Email <span class="vs-req">*</span></label>
+            <input class="vs-input" type="email" id="vs-email" autocomplete="email" placeholder="su@email.com">
+          </div>
+        </div>
+
+        <div class="vs-field">
+          <label class="vs-label" for="vs-visitdate">Fecha y hora de la visita <span class="vs-req">*</span></label>
+          <input class="vs-input vs-input--date" type="datetime-local" id="vs-visitdate">
+          <p class="vs-field-hint">Confirme el día y la hora en que tuvo lugar la visita al inmueble.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 — Legal -->
+    <div class="vs-card">
+      <div class="vs-card-head">
+        <span class="vs-step">02</span>
+        <div>
+          <h2 class="vs-card-title">Condiciones de visita</h2>
+          <p class="vs-card-sub">Lea atentamente antes de firmar.</p>
+        </div>
+      </div>
+
+      <div class="vs-legal">
+        <p>El/la firmante declara haber visitado el inmueble referenciado en la presente hoja en presencia del agente inmobiliario autónomo <strong>D. Álvaro Navarro Mosca</strong> (AICAT nº 13069, DNI 46242509C), actuando en nombre propio bajo la marca comercial AN High End Real Estate.</p>
+
+        <p>El/la firmante se compromete expresamente a no realizar ninguna operación sobre el inmueble descrito —ya sea compraventa, arrendamiento u otra modalidad— sin la intervención del agente <strong>D. Álvaro Navarro Mosca</strong> (AICAT 13069), durante un período de <strong>24 meses</strong> desde la fecha de la presente visita. Cualquier operación realizada al margen del agente en dicho período dará lugar al pago de los honorarios de intermediación correspondientes conforme a los usos del sector.</p>
+
+        <p>El/la firmante declara que los datos aportados en este documento son verídicos y corresponden a su identidad real, siendo responsable de cualquier falsedad en los mismos.</p>
+
+        <p class="vs-rgpd"><strong>Protección de datos:</strong> De conformidad con el RGPD (UE) 2016/679 y la LOPDGDD 3/2018, los datos personales facilitados serán tratados por D. Álvaro Navarro Mosca (DNI 46242509C), agente inmobiliario autónomo, con la finalidad de gestionar la relación inmobiliaria y dejar constancia oficial de la visita. Puede ejercer sus derechos de acceso, rectificación, supresión y oposición en <a href="mailto:alvaro@anrealestate.es">alvaro@anrealestate.es</a>.</p>
+      </div>
+
+      <div class="vs-checks">
+        <label class="vs-check-label">
+          <input type="checkbox" class="vs-checkbox" id="chk-nocirc">
+          <span class="vs-checkmark"></span>
+          <span>He leído y acepto las condiciones de visita, incluido el compromiso de no elusión de intermediación durante 24 meses.</span>
+        </label>
+        <label class="vs-check-label">
+          <input type="checkbox" class="vs-checkbox" id="chk-rgpd">
+          <span class="vs-checkmark"></span>
+          <span>Consiento el tratamiento de mis datos personales por D. Álvaro Navarro Mosca, agente inmobiliario autónomo, conforme a lo indicado anteriormente.</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 03 — Signature -->
+    <div class="vs-card">
+      <div class="vs-card-head">
+        <span class="vs-step">03</span>
+        <div>
+          <h2 class="vs-card-title">Firma electrónica</h2>
+          <p class="vs-card-sub">Firme en el recuadro con el dedo o el ratón.</p>
+        </div>
+      </div>
+
+      <div class="vs-canvas-wrap" id="vs-canvas-wrap">
+        <canvas id="sig-canvas"></canvas>
+        <p class="vs-canvas-hint" id="sig-hint">Firme aquí</p>
+      </div>
+      <button class="vs-clear-btn" id="vs-clear-sig" type="button">Borrar y repetir firma</button>
+
+      <div class="vs-submit-area">
+        <button class="vs-submit-btn" id="vs-submit" type="button">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+          Firmar y registrar visita
+        </button>
+        <p class="vs-submit-note">Al firmar, el documento quedará registrado con su nombre, número de documento, fecha, hora e IP de firma, conforme a la Ley 6/2020 de firma electrónica y el Reglamento eIDAS (UE) nº 910/2014.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Success screen -->
+  <div class="vs-success" id="vs-success" hidden>
+    <div class="vs-success-inner">
+      <div class="vs-success-icon">
+        <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+      </div>
+      <h2 class="vs-success-title">Visita registrada</h2>
+      <p class="vs-success-msg">Su hoja de visita ha sido firmada y registrada correctamente. Descargue el documento firmado para su archivo personal.</p>
+
+      <button class="vs-download-btn" id="vs-download-btn" type="button">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar PDF firmado
+      </button>
+
+      <button id="vs-share-btn" class="vs-share-btn" type="button" hidden>
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Enviarme una copia
+      </button>
+
+      <div id="vs-hash-block" class="vs-hash-block" hidden>
+        <p class="vs-hash-label">Huella digital SHA-256 del documento</p>
+        <code class="vs-hash-value" id="vs-hash-value"></code>
+      </div>
+
+      <div id="vs-email-sent" class="vs-email-sent" hidden>
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.35 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.61a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/></svg>
+        Copia de confirmación enviada a <strong id="vs-email-addr"></strong>
+      </div>
+
+      <p class="vs-success-note">D. Álvaro Navarro Mosca ha recibido una copia de este registro.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="vs-footer">
+    <p>Álvaro Navarro Mosca · Agente inmobiliario autónomo · AICAT 13069 · Barcelona · anrealestate.es</p>
+    <p>Firma electrónica simple conforme a la Ley 6/2020 y el Reglamento eIDAS (UE) nº 910/2014</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+  (function () {
+    /* ── URL params ── */
+    var params    = new URLSearchParams(location.search)
+    var propRef     = params.get('ref')     || '—'
+    var propTitle   = params.get('title')   || 'Propiedad'
+    var propZone    = params.get('zone')    || 'Barcelona, España'
+    var propAddress = params.get('address') || ''
+    var propSlug    = params.get('slug')    || ''
+
+    document.getElementById('vs-prop-ref').textContent   = propRef
+    document.getElementById('vs-prop-title').textContent = propTitle
+    document.getElementById('vs-prop-zone').textContent  = propZone
+
+    /* ── Pre-fill visit date ── */
+    ;(function () {
+      var pad = function (n) { return n < 10 ? '0' + n : '' + n }
+      var dateParam = params.get('date')
+      var dateInput = document.getElementById('vs-visitdate')
+      if (dateParam) {
+        dateInput.value = dateParam
+      } else {
+        var now = new Date()
+        dateInput.value = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) +
+                          'T' + pad(now.getHours()) + ':' + pad(now.getMinutes())
+      }
+    })()
+
+    /* ── Client IP (best-effort) ── */
+    var clientIP = 'No disponible'
+    fetch('https://api.ipify.org?format=json')
+      .then(function (r) { return r.json() })
+      .then(function (d) { clientIP = d.ip })
+      .catch(function () {})
+
+    /* ── Canvas signature pad ── */
+    var canvas = document.getElementById('sig-canvas')
+    var ctx    = canvas.getContext('2d')
+    var drawing = false
+    var hasSig  = false
+
+    function setupCanvas() {
+      var dpr  = window.devicePixelRatio || 1
+      var wrap = document.getElementById('vs-canvas-wrap')
+      var w    = wrap.clientWidth
+      var h    = 180
+      canvas.width  = Math.round(w * dpr)
+      canvas.height = Math.round(h * dpr)
+      canvas.style.width  = w + 'px'
+      canvas.style.height = h + 'px'
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      ctx.scale(dpr, dpr)
+      ctx.strokeStyle = '#1a1a14'
+      ctx.lineWidth   = 2.5
+      ctx.lineCap     = 'round'
+      ctx.lineJoin    = 'round'
+    }
+    setupCanvas()
+    window.addEventListener('resize', function () { setupCanvas() })
+
+    function getPos(e) {
+      var r   = canvas.getBoundingClientRect()
+      var src = e.touches ? e.touches[0] : e
+      return { x: src.clientX - r.left, y: src.clientY - r.top }
+    }
+
+    canvas.addEventListener('mousedown', function (e) {
+      drawing = true
+      var p = getPos(e)
+      ctx.beginPath(); ctx.moveTo(p.x, p.y)
+    })
+    canvas.addEventListener('mousemove', function (e) {
+      if (!drawing) return
+      hasSig = true
+      var p = getPos(e)
+      ctx.lineTo(p.x, p.y); ctx.stroke()
+      document.getElementById('sig-hint').style.opacity = '0'
+    })
+    canvas.addEventListener('mouseup',    function () { drawing = false })
+    canvas.addEventListener('mouseleave', function () { drawing = false })
+
+    canvas.addEventListener('touchstart', function (e) {
+      e.preventDefault(); drawing = true
+      var p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y)
+    }, { passive: false })
+    canvas.addEventListener('touchmove', function (e) {
+      e.preventDefault()
+      if (!drawing) return
+      hasSig = true
+      var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke()
+      document.getElementById('sig-hint').style.opacity = '0'
+    }, { passive: false })
+    canvas.addEventListener('touchend', function () { drawing = false })
+
+    document.getElementById('vs-clear-sig').addEventListener('click', function () {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      hasSig = false
+      document.getElementById('sig-hint').style.opacity = '1'
+    })
+
+    /* ── DNI / NIE validation ── */
+    var LETTERS = 'TRWAGMYFPDXBNJZSQVHLCKE'
+
+    function validateDoc() {
+      var type   = document.getElementById('vs-doctype').value
+      var raw    = document.getElementById('vs-docnum').value.trim()
+      var s      = raw.toUpperCase()
+      var iconEl = document.getElementById('vs-doc-icon')
+      var hintEl = document.getElementById('vs-doc-hint')
+
+      if (!s) {
+        iconEl.className = 'vs-doc-icon'; iconEl.textContent = ''
+        hintEl.textContent = ''; hintEl.className = 'vs-doc-hint'
+        return null
+      }
+
+      var result
+      if (type === 'DNI') {
+        if (!/^\d{8}[A-Z]$/i.test(s)) {
+          result = { ok: false, msg: 'Formato incorrecto. Ejemplo: 12345678A' }
+        } else {
+          var expected = LETTERS[parseInt(s.slice(0, 8)) % 23]
+          result = s[8].toUpperCase() === expected
+            ? { ok: true,  msg: 'DNI válido' }
+            : { ok: false, msg: 'Letra verificadora incorrecta — la correcta para este número es: ' + expected }
+        }
+      } else if (type === 'NIE') {
+        if (!/^[XYZ]\d{7}[A-Z]$/i.test(s)) {
+          result = { ok: false, msg: 'Formato incorrecto. Ejemplo: X1234567A' }
+        } else {
+          var pref   = { X: '0', Y: '1', Z: '2' }
+          var num    = parseInt(pref[s[0].toUpperCase()] + s.slice(1, 8))
+          var exp2   = LETTERS[num % 23]
+          result = s[8].toUpperCase() === exp2
+            ? { ok: true,  msg: 'NIE válido' }
+            : { ok: false, msg: 'Letra verificadora incorrecta — la correcta es: ' + exp2 }
+        }
+      } else {
+        result = (s.length >= 6 && s.length <= 20 && /^[A-Z0-9]+$/i.test(s))
+          ? { ok: true,  msg: 'Formato correcto' }
+          : { ok: false, msg: 'Formato inválido (6-20 caracteres alfanuméricos)' }
+      }
+
+      iconEl.textContent = result.ok ? '✓' : '✗'
+      iconEl.className   = 'vs-doc-icon ' + (result.ok ? 'vs-doc-ok' : 'vs-doc-err')
+      hintEl.textContent = result.msg
+      hintEl.className   = 'vs-doc-hint ' + (result.ok ? 'vs-hint-ok' : 'vs-hint-err')
+      return result.ok
+    }
+
+    document.getElementById('vs-docnum').addEventListener('input', validateDoc)
+    document.getElementById('vs-doctype').addEventListener('change', function () {
+      document.getElementById('vs-docnum').value = ''
+      document.getElementById('vs-doc-icon').textContent = ''
+      document.getElementById('vs-doc-icon').className = 'vs-doc-icon'
+      document.getElementById('vs-doc-hint').textContent = ''
+      var ph = { DNI: '12345678A', NIE: 'X1234567A', Pasaporte: 'ABC123456' }
+      document.getElementById('vs-docnum').placeholder = ph[this.value] || ''
+    })
+
+    /* ── DNI photo capture ── */
+    var dniPhotoDataUrl = ''
+
+    document.getElementById('vs-photo-input').addEventListener('change', function (e) {
+      var file = e.target.files[0]
+      if (!file) return
+      var reader = new FileReader()
+      reader.onload = function (ev) {
+        var img = new Image()
+        img.onload = function () {
+          var maxW = 800
+          var scale = img.width > maxW ? maxW / img.width : 1
+          var w = Math.round(img.width * scale)
+          var h = Math.round(img.height * scale)
+          var tmp = document.createElement('canvas')
+          tmp.width = w; tmp.height = h
+          tmp.getContext('2d').drawImage(img, 0, 0, w, h)
+          dniPhotoDataUrl = tmp.toDataURL('image/jpeg', 0.68)
+          var preview = document.getElementById('vs-photo-preview')
+          preview.src = dniPhotoDataUrl
+          preview.hidden = false
+          document.getElementById('vs-photo-placeholder').hidden = true
+          document.getElementById('vs-photo-change').hidden = false
+          document.getElementById('vs-photo-wrap').classList.remove('vs-photo--err')
+        }
+        img.src = ev.target.result
+      }
+      reader.readAsDataURL(file)
+    })
+
+    /* ── SHA-256 ── */
+    function sha256(str) {
+      var enc = new TextEncoder()
+      return crypto.subtle.digest('SHA-256', enc.encode(str)).then(function (buf) {
+        return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, '0') }).join('')
+      })
+    }
+
+    /* ── Submit ── */
+    var pdfDoc = null
+
+    document.getElementById('vs-submit').addEventListener('click', function () {
+      var name         = document.getElementById('vs-name').value.trim()
+      var docType      = document.getElementById('vs-doctype').value
+      var docNum       = document.getElementById('vs-docnum').value.trim().toUpperCase()
+      var phone        = document.getElementById('vs-phone').value.trim()
+      var email        = document.getElementById('vs-email').value.trim()
+      var visitDateRaw = document.getElementById('vs-visitdate').value
+      var chkN         = document.getElementById('chk-nocirc').checked
+      var chkR         = document.getElementById('chk-rgpd').checked
+
+      if (!name)        { showError('vs-name',      'Por favor, introduzca su nombre completo.'); return }
+      if (!docNum)      { showError('vs-docnum',    'Por favor, introduzca su número de documento.'); return }
+      var docOk = validateDoc()
+      if (docOk === false) { showError('vs-docnum', 'El número de documento no es válido.'); return }
+      if (!dniPhotoDataUrl) {
+        var wrap = document.getElementById('vs-photo-wrap')
+        wrap.classList.add('vs-photo--err')
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        alert('Por favor, fotografíe su documento de identidad.')
+        return
+      }
+      if (!phone)       { showError('vs-phone',     'Por favor, introduzca su teléfono móvil.'); return }
+      if (!email)       { showError('vs-email',     'Por favor, introduzca su email.'); return }
+      if (!visitDateRaw){ showError('vs-visitdate', 'Por favor, indique la fecha y hora de la visita.'); return }
+      if (!chkN) { alert('Debe aceptar las condiciones de visita para continuar.'); return }
+      if (!chkR) { alert('Debe aceptar el tratamiento de datos para continuar.'); return }
+      if (!hasSig) { flashCanvas(); return }
+
+      /* Format visit date */
+      var pad = function (n) { return n < 10 ? '0' + n : '' + n }
+      var vd  = new Date(visitDateRaw)
+      var visitDateStr = pad(vd.getDate()) + '/' + pad(vd.getMonth() + 1) + '/' + vd.getFullYear() +
+                         ' ' + pad(vd.getHours()) + ':' + pad(vd.getMinutes())
+
+      /* Freeze signing timestamp (ISO + human-readable) */
+      var now    = new Date()
+      var isoTs  = now.toISOString()
+      var tz     = now.getTimezoneOffset()
+      var tss    = pad(now.getDate()) + '/' + pad(now.getMonth() + 1) + '/' + now.getFullYear() +
+                   ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds()) +
+                   ' (UTC' + (tz <= 0 ? '+' : '-') + Math.abs(tz / 60) + ')'
+
+      /* Canonical string to hash — all identifying fields pipe-separated */
+      var canonical = [propRef, propTitle, name, docType, docNum, phone, email || '', visitDateStr, tss, clientIP, isoTs].join('|')
+
+      var btn = document.getElementById('vs-submit')
+      btn.disabled = true
+
+      sha256(canonical).then(function (docHash) {
+        pdfDoc = buildPDF(name, docType, docNum, phone, email, visitDateStr, tss, clientIP, docHash)
+        sendEmail(name, docType, docNum, phone, email, visitDateStr, tss, clientIP, docHash)
+        saveVisitLocally(name, docType, docNum, phone, email, visitDateStr, tss, clientIP, docHash)
+
+        document.getElementById('vs-main').style.display = 'none'
+        document.getElementById('vs-success').hidden = false
+
+        /* Show hash on success screen */
+        document.getElementById('vs-hash-value').textContent = docHash
+        document.getElementById('vs-hash-block').hidden = false
+        if (email) {
+          document.getElementById('vs-email-sent').hidden = false
+          document.getElementById('vs-email-addr').textContent = email
+
+          /* Share / send-to-self button */
+          var shareBtn = document.getElementById('vs-share-btn')
+          shareBtn.hidden = false
+          shareBtn.onclick = function () {
+            var blob = pdfDoc.output('blob')
+            var file = new File([blob], 'HojaVisita_' + propRef.replace(/[^A-Z0-9]/gi, '') + '.pdf', { type: 'application/pdf' })
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              navigator.share({ files: [file], title: 'Hoja de visita — ' + propRef })
+            } else {
+              /* mailto: fallback — opens email client with visit summary in body */
+              var body = [
+                'Estimado/a ' + name + ',',
+                '',
+                'A continuación los datos de su hoja de visita firmada con AN High End Real Estate:',
+                '',
+                'Propiedad: ' + propRef + ' — ' + propTitle,
+                'Zona: ' + propZone,
+                'Fecha de visita: ' + visitDateStr,
+                'Firmado electrónicamente el: ' + tss,
+                'IP de firma: ' + clientIP,
+                'Hash SHA-256: ' + docHash,
+                '',
+                'Guarde el PDF descargado como comprobante oficial.',
+                '',
+                'D. Álvaro Navarro Mosca',
+                'Agente inmobiliario autónomo · AICAT 13069',
+                'alvaro@anrealestate.es'
+              ].join('\n')
+              window.location.href = 'mailto:' + email +
+                '?subject=' + encodeURIComponent('Hoja de visita firmada — ' + propRef) +
+                '&body=' + encodeURIComponent(body)
+            }
+          }
+        }
+
+        pdfDoc.save('HojaVisita_' + propRef.replace(/[^A-Z0-9]/gi, '') + '_' + name.replace(/\s+/g, '_') + '.pdf')
+        btn.disabled = false
+      })
+    })
+
+    document.getElementById('vs-download-btn').addEventListener('click', function () {
+      if (pdfDoc) pdfDoc.save('HojaVisita_' + propRef.replace(/[^A-Z0-9]/gi, '') + '.pdf')
+    })
+
+    function showError(id, msg) {
+      var el = document.getElementById(id)
+      el.classList.add('vs-input--err')
+      el.addEventListener('input', function () { el.classList.remove('vs-input--err') }, { once: true })
+      el.focus()
+      alert(msg)
+    }
+
+    function flashCanvas() {
+      var wrap = document.getElementById('vs-canvas-wrap')
+      wrap.classList.add('vs-canvas--err')
+      setTimeout(function () { wrap.classList.remove('vs-canvas--err') }, 600)
+      alert('Por favor, firme en el recuadro antes de continuar.')
+    }
+
+    /* ── PDF generation ── */
+    function buildPDF(name, docType, docNum, phone, email, visitDate, timestamp, ip, docHash) {
+      var jsPDF = window.jspdf.jsPDF
+      var doc   = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+
+      var W  = 210
+      var M  = 18
+      var TW = W - 2 * M
+      var y  = 0
+
+      /* Header band */
+      doc.setFillColor(22, 22, 14)
+      doc.rect(0, 0, W, 38, 'F')
+
+      doc.setFontSize(7)
+      doc.setFont('helvetica', 'normal')
+      doc.setTextColor(200, 169, 110)
+      doc.text('AN HIGH END REAL ESTATE', M, 11)
+      doc.setTextColor(155, 145, 125)
+      doc.text('Agente autónomo · AICAT 13069 · DNI 46242509C · anrealestate.es', M, 16)
+
+      doc.setFontSize(15)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(240, 235, 224)
+      doc.text('HOJA DE VISITA', W / 2, 26, { align: 'center' })
+
+      doc.setFontSize(6.5)
+      doc.setFont('helvetica', 'normal')
+      doc.setTextColor(155, 145, 125)
+      doc.text('Documento de registro oficial de intermediación inmobiliaria', W / 2, 32, { align: 'center' })
+
+      y = 46
+
+      function section(title) {
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(7)
+        doc.setTextColor(200, 169, 110)
+        doc.text(title, M, y)
+        doc.setDrawColor(200, 169, 110)
+        doc.setLineWidth(0.25)
+        doc.line(M, y + 1.5, W - M, y + 1.5)
+        y += 7
+      }
+
+      function kv(key, val) {
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(130, 120, 100)
+        doc.text(key, M, y)
+        doc.setFont('helvetica', 'normal')
+        doc.setTextColor(28, 26, 18)
+        var lines = doc.splitTextToSize(String(val), TW - 44)
+        doc.text(lines, M + 44, y)
+        y += lines.length * 4.8
+      }
+
+      /* Inmueble */
+      section('INMUEBLE')
+      kv('Referencia:', propRef)
+      kv('Denominación:', propTitle)
+      kv('Zona:', propZone)
+      kv('Fecha de visita:', visitDate)
+      y += 4
+
+      /* Agente */
+      section('AGENTE INMOBILIARIO')
+      kv('Nombre:', 'D. Álvaro Navarro Mosca')
+      kv('AICAT núm.:', '13069')
+      kv('DNI:', '46242509C')
+      kv('Actividad:', 'Agente inmobiliario autónomo · AN High End Real Estate')
+      kv('Email:', 'alvaro@anrealestate.es')
+      y += 4
+
+      /* Visitante */
+      section('VISITANTE')
+      kv('Nombre completo:', name)
+      kv('Documento:', docType + ' ' + docNum)
+      kv('Teléfono:', phone)
+      kv('Email:', email)
+      kv('Fecha / hora firma:', timestamp + ' (firma electrónica)')
+      kv('IP de firma:', ip)
+      y += 4
+
+      /* Declaraciones */
+      section('DECLARACIONES DEL VISITANTE')
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(7.5)
+      doc.setTextColor(28, 26, 18)
+
+      var clauses = [
+        '1.  El/la firmante declara haber visitado el inmueble referenciado en la presente hoja en presencia del agente inmobiliario autónomo D. Álvaro Navarro Mosca (AICAT 13069, DNI 46242509C), actuando en nombre propio bajo la marca comercial AN High End Real Estate.',
+        '2.  El/la firmante se compromete expresamente a no realizar ninguna operación sobre el inmueble descrito —compraventa, arrendamiento u otra modalidad— sin la intervención del agente D. Álvaro Navarro Mosca (AICAT 13069) durante 24 meses desde la fecha de visita. Cualquier operación realizada al margen del agente en dicho período dará lugar al pago de los honorarios de intermediación correspondientes.',
+        '3.  El/la firmante declara que los datos aportados son verídicos y corresponden a su identidad real, siendo responsable de cualquier falsedad en los mismos.',
+        '4.  Consiente el tratamiento de sus datos personales por D. Álvaro Navarro Mosca (DNI 46242509C), agente inmobiliario autónomo, conforme al RGPD (UE) 2016/679 y la LOPDGDD 3/2018, con finalidad de gestionar la relación inmobiliaria. Derechos en: alvaro@anrealestate.es.'
+      ]
+
+      clauses.forEach(function (clause) {
+        var lines = doc.splitTextToSize(clause, TW)
+        doc.text(lines, M, y)
+        y += lines.length * 4.2 + 2.5
+      })
+      y += 3
+
+      /* Firma */
+      section('FIRMA DEL VISITANTE')
+
+      doc.setDrawColor(210, 205, 195)
+      doc.setLineWidth(0.25)
+      doc.rect(M, y, 85, 30)
+      doc.addImage(canvas.toDataURL('image/png'), 'PNG', M + 1, y + 1, 83, 28)
+
+      var tx = M + 92
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(9)
+      doc.setTextColor(28, 26, 18)
+      doc.text(name, tx, y + 9)
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(7.5)
+      doc.setTextColor(130, 120, 100)
+      doc.text(docType + ': ' + docNum, tx, y + 15)
+      doc.text('Tel: ' + phone, tx, y + 21)
+      doc.text(timestamp, tx, y + 27)
+      doc.text('IP: ' + ip, tx, y + 33)
+
+      y += 36
+
+      /* Footer */
+      doc.setDrawColor(210, 205, 195)
+      doc.setLineWidth(0.2)
+      doc.line(M, y + 2, W - M, y + 2)
+      y += 8
+
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(6.5)
+      doc.setTextColor(155, 145, 125)
+      doc.text(
+        'Firma electrónica simple con plena validez legal conforme a la Ley 6/2020 reguladora de determinados aspectos de los servicios electrónicos de confianza',
+        W / 2, y, { align: 'center' }
+      )
+      y += 4
+      doc.text(
+        'y el Reglamento eIDAS (UE) nº 910/2014. Álvaro Navarro Mosca · Agente inmobiliario autónomo · AICAT 13069 · Barcelona · anrealestate.es',
+        W / 2, y, { align: 'center' }
+      )
+
+      if (docHash) {
+        y += 7
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(6)
+        doc.setTextColor(130, 120, 100)
+        doc.text('INTEGRIDAD DEL DOCUMENTO — SHA-256:', M, y)
+        y += 4
+        doc.setFont('courier', 'normal')
+        doc.setFontSize(5.5)
+        doc.setTextColor(70, 65, 55)
+        doc.text(docHash, M, y)
+      }
+
+      return doc
+    }
+
+    /* ── Save to shared localStorage (same device as admin) ── */
+    function saveVisitLocally(name, docType, docNum, phone, email, visitDate, timestamp, ip, docHash) {
+      try {
+        /* Capture signature at reduced size to keep localStorage lean */
+        var sigDataUrl = ''
+        try {
+          var tmp = document.createElement('canvas')
+          tmp.width  = 320
+          tmp.height = 96
+          tmp.getContext('2d').drawImage(canvas, 0, 0, 320, 96)
+          sigDataUrl = tmp.toDataURL('image/png', 0.8)
+        } catch {}
+
+        var record = {
+          id: Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+          propSlug: propSlug, propRef: propRef, propTitle: propTitle, propZone: propZone, propAddress: propAddress,
+          name: name, docType: docType, docNum: docNum, phone: phone, email: email,
+          visitDate: visitDate, timestamp: timestamp, ip: ip, savedAt: new Date().toISOString(),
+          signature: sigDataUrl, docHash: docHash || '', dniPhoto: dniPhotoDataUrl || ''
+        }
+        var existing = []
+        try { existing = JSON.parse(localStorage.getItem('an_visits') || '[]') } catch {}
+        var isDup = existing.some(function (v) { return v.timestamp === record.timestamp && v.docNum === record.docNum })
+        if (!isDup) {
+          existing.unshift(record)
+          localStorage.setItem('an_visits', JSON.stringify(existing))
+        }
+      } catch {}
+    }
+
+    /* ── Email notification ── */
+    function sendEmail(name, docType, docNum, phone, email, visitDate, timestamp, ip, docHash) {
+      var record = {
+        propSlug: propSlug, propRef: propRef, propTitle: propTitle, propZone: propZone, propAddress: propAddress,
+        name: name, docType: docType, docNum: docNum, phone: phone, email: email,
+        visitDate: visitDate, timestamp: timestamp, ip: ip, savedAt: new Date().toISOString(),
+        docHash: docHash || ''
+      }
+      var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(record))))
+      var adminUrl = window.location.origin + '/admin/index.html?visit=' + encodeURIComponent(encoded)
+
+      var fd = new FormData()
+      fd.append('_subject',  'Hoja de visita firmada — ' + propRef + ' — ' + name)
+      fd.append('_template', 'table')
+      fd.append('_captcha',  'false')
+      if (email) fd.append('_cc', email)
+      fd.append('Propiedad', propRef + ' · ' + propTitle)
+      fd.append('Zona',      propZone)
+      fd.append('Visitante', name)
+      fd.append('Documento', docType + ' ' + docNum)
+      fd.append('Teléfono',  phone)
+      fd.append('Email visitante', email)
+      fd.append('Fecha de visita', visitDate)
+      fd.append('Fecha / hora firma', timestamp)
+      fd.append('IP de firma',     ip)
+      fd.append('Hash SHA-256',   docHash || '—')
+      fd.append('Agente', 'D. Álvaro Navarro Mosca · Agente autónomo · AICAT 13069 · DNI 46242509C')
+      fd.append('Guardar en admin', adminUrl)
+      fd.append('Nota', 'El visitante ha firmado y descargado el PDF. Haz clic en «Guardar en admin» para registrar la visita en el panel.')
+
+      fetch('https://formsubmit.co/ajax/alvaro@anrealestate.es', { method: 'POST', body: fd })
+        .catch(function () {})
+    }
+  })()
+  </script>
+
+</body>
+</html>

@@ -5,19 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="AN Real Estate — Exclusive luxury properties for sale and rent in Barcelona." />
   <title>AN Real Estate — Luxury Properties in Barcelona</title>
+  <!-- Open Graph -->
+  <link rel="canonical" href="https://anrealestate.es/" />
+  <meta property="og:type"        content="website" />
+  <meta property="og:site_name"   content="AN Real Estate" />
+  <meta property="og:url"         content="https://anrealestate.es/" />
+  <meta property="og:title"       content="AN Real Estate — Luxury Properties in Barcelona" />
+  <meta property="og:description" content="Exclusive luxury properties for sale and rent in Barcelona and the Costa Brava. AN High End Real Estate — AICAT 13069." />
+  <meta property="og:image"       content="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="AN Real Estate — Luxury Properties in Barcelona" />
+  <meta name="twitter:description" content="Exclusive luxury properties for sale and rent in Barcelona and the Costa Brava." />
+  <meta name="twitter:image"       content="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#091f38" />
+  <link rel="preload" as="image" href="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg" />
+  <link rel="preconnect" href="https://res.cloudinary.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <script src="i18n.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    "name": "AN High End Real Estate",
+    "url": "https://anrealestate.es",
+    "logo": "https://anrealestate.es/logo.svg",
+    "description": "Exclusive luxury properties for sale and rent in Barcelona and the Costa Brava.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Barcelona",
+      "addressRegion": "Catalunya",
+      "addressCountry": "ES"
+    },
+    "telephone": "+34628020434",
+    "sameAs": [
+      "https://instagram.com/alvaro.navarro.real.estate",
+      "https://linkedin.com/in/alvaro--"
+    ]
+  }
+  </script>
 </head>
 <body class="is-loader">
 
 <!-- LOADER -->
 <div class="loader" id="loader">
   <div class="loader-inner">
-    <span class="loader-mark">AN</span>
-    <span class="loader-sep">—</span>
-    <span class="loader-sub">Real Estate</span>
+    <img src="logo.svg" alt="AN Real Estate" class="loader-logo" />
   </div>
 </div>
 
@@ -33,8 +71,8 @@
             <span></span><span></span>
           </button>
           <nav class="hn-left" aria-label="Primary left">
-            <a href="#properties" class="hn-link">Properties</a>
-            <a href="#services"   class="hn-link">Services</a>
+            <a href="#properties" class="hn-link" data-i18n="nav.properties">Properties</a>
+            <a href="#services"   class="hn-link" data-i18n="nav.services">Services</a>
           </nav>
         </div>
 
@@ -44,9 +82,22 @@
 
         <div class="header-right">
           <nav class="hn-right" aria-label="Primary right">
-            <a href="about.html"   class="hn-link">About</a>
-            <a href="#contact" class="hn-link">Contact</a>
+            <a href="about.html"     class="hn-link" data-i18n="nav.about">About</a>
+            <a href="valuation.html" class="hn-link" data-i18n="nav.valuation">Free Valuation</a>
+            <a href="#contact"       class="hn-link" data-i18n="nav.contact">Contact</a>
           </nav>
+          <div class="lang-switcher" id="lang-switcher">
+            <button class="lang-btn" id="lang-current" onclick="toggleLangDropdown(event)">EN</button>
+            <div class="lang-dropdown" id="lang-dropdown">
+              <button class="lang-opt" data-lang="en" onclick="pickLang('en',event)">EN — English</button>
+              <button class="lang-opt" data-lang="es" onclick="pickLang('es',event)">ES — Español</button>
+              <button class="lang-opt" data-lang="ca" onclick="pickLang('ca',event)">CA — Català</button>
+              <button class="lang-opt" data-lang="fr" onclick="pickLang('fr',event)">FR — Français</button>
+              <button class="lang-opt" data-lang="de" onclick="pickLang('de',event)">DE — Deutsch</button>
+              <button class="lang-opt" data-lang="it" onclick="pickLang('it',event)">IT — Italiano</button>
+              <button class="lang-opt" data-lang="ru" onclick="pickLang('ru',event)">RU — Русский</button>
+            </div>
+          </div>
           <a href="#" class="header-phone tel-js" data-a="+34" data-b="628" data-c="02" data-d="04" data-e="34"></a>
         </div>
 
@@ -57,10 +108,11 @@
   <!-- MOBILE DRAWER -->
   <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
     <nav class="drawer-nav">
-      <a href="#properties" class="drawer-link">Properties</a>
-      <a href="#services"   class="drawer-link">Services</a>
-      <a href="about.html"      class="drawer-link">About</a>
-      <a href="#contact"    class="drawer-link">Contact</a>
+      <a href="#properties"    class="drawer-link" data-i18n="nav.properties">Properties</a>
+      <a href="#services"      class="drawer-link" data-i18n="nav.services">Services</a>
+      <a href="about.html"     class="drawer-link" data-i18n="nav.about">About</a>
+      <a href="valuation.html" class="drawer-link" data-i18n="nav.valuation">Free Valuation</a>
+      <a href="#contact"       class="drawer-link" data-i18n="nav.contact">Contact</a>
     </nav>
     <div class="drawer-foot">
       <a href="#" class="drawer-phone tel-js" data-a="+34" data-b="628" data-c="02" data-d="04" data-e="34"></a>
@@ -72,17 +124,17 @@
     <div class="banner-slider" id="banner-slider">
       <div class="banner-slide active">
         <div class="banner-float">
-          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=85&auto=format" alt="Luxury Interior Barcelona" loading="eager" fetchpriority="high" />
+          <img src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg" alt="Garden Residence in Gràcia" loading="eager" fetchpriority="high" />
         </div>
       </div>
       <div class="banner-slide">
         <div class="banner-float">
-          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=85&auto=format" alt="Luxury Villa" loading="lazy" />
+          <img src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/imagen-4-logo-1.jpg" alt="Garden area" loading="lazy" />
         </div>
       </div>
       <div class="banner-slide">
         <div class="banner-float">
-          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=85&auto=format" alt="Barcelona Property" loading="lazy" />
+          <img src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-02-logo-1.jpg" alt="Gràcia Barcelona" loading="lazy" />
         </div>
       </div>
     </div>
@@ -90,13 +142,13 @@
     <div class="banner-main">
       <div class="holder">
         <div class="banner-block">
-          <p class="banner-eyebrow">Barcelona <span class="beo-sep">—</span> Since 2012</p>
+          <p class="banner-eyebrow" data-i18n="hero.eyebrow">Barcelona <span class="beo-sep">—</span> Since 2012</p>
           <h1 class="banner-h1">
-            <span class="text-wrap"><span class="text-inner">Your Finest</span></span>
-            <span class="text-wrap"><span class="text-inner"><em>Address.</em></span></span>
+            <span class="text-wrap"><span class="text-inner" data-i18n="hero.h1.1">Your Finest</span></span>
+            <span class="text-wrap"><span class="text-inner" data-i18n="hero.h1.2"><em>Address.</em></span></span>
           </h1>
-          <p class="banner-sub">Connecting finest homes with discerning buyers across Barcelona's most prestigious neighbourhoods.</p>
-          <a href="#properties" class="button">Explore Properties</a>
+          <p class="banner-sub" data-i18n="hero.sub">Connecting finest homes with discerning buyers across Barcelona's most prestigious neighbourhoods.</p>
+          <a href="#properties" class="button" data-i18n="hero.cta">Explore Properties</a>
         </div>
       </div>
     </div>
@@ -116,20 +168,20 @@
         <div class="about-team-col reveal">
           <div class="key-wrap"><div class="key"></div></div>
           <h2 class="at-heading">
-            <span class="text-wrap"><span class="text-inner">connect exceptional</span></span>
-            <span class="text-wrap"><span class="text-inner">homes with</span></span>
-            <span class="text-wrap"><span class="text-inner">exceptional people.</span></span>
+            <span class="text-wrap"><span class="text-inner" data-i18n="about.h.1">connect exceptional</span></span>
+            <span class="text-wrap"><span class="text-inner" data-i18n="about.h.2">homes with</span></span>
+            <span class="text-wrap"><span class="text-inner" data-i18n="about.h.3">exceptional people.</span></span>
           </h2>
-          <p class="at-sub">AN Real Estate · Since 2012</p>
+          <p class="at-sub" data-i18n="about.since">AN Real Estate · Since 2012</p>
         </div>
         <div class="about-team-col at-img-col">
           <div class="at-img img-float">
-            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=700&q=80&auto=format" alt="Álvaro Navarro, Founder" loading="lazy" />
+            <img src="images/alvaro-navarro.jpg" alt="Álvaro Navarro, Founder" loading="lazy" />
           </div>
         </div>
         <div class="about-team-col reveal">
-          <p class="at-text">With over a decade of experience in Barcelona's luxury real estate market, I specialise in exclusive high-end properties — whether meticulously renovated or ready to be transformed. From modernist gems to contemporary masterpieces, dedicated to providing personalised guidance at every step.</p>
-          <a href="about.html" class="link-flash">Meet Álvaro <span aria-hidden="true">→</span></a>
+          <p class="at-text" data-i18n="about.text">With over a decade of experience in Barcelona's luxury real estate market, I specialise in exclusive high-end properties — whether meticulously renovated or ready to be transformed. From modernist gems to contemporary masterpieces, dedicated to providing personalised guidance at every step.</p>
+          <a href="about.html" class="link-flash"><span data-i18n="about.link">Meet Álvaro</span> <span aria-hidden="true">→</span></a>
         </div>
       </div>
 
@@ -137,24 +189,22 @@
       <div class="info" id="properties">
         <div class="info-top reveal">
           <h2 class="info-heading">
-            <span class="text-wrap"><span class="text-inner">Featured</span></span>
-            <span class="text-wrap"><span class="text-inner">Properties</span></span>
+            <span class="text-wrap"><span class="text-inner" data-i18n="props.h1">Featured</span></span>
+            <span class="text-wrap"><span class="text-inner" data-i18n="props.h2">Properties</span></span>
           </h2>
           <p class="subheading">Eixample · Pedralbes · Sarrià · Gràcia · El Born</p>
         </div>
         <div class="info-content">
           <div class="info-block">
             <div class="filter-tabs" role="tablist">
-              <button class="ftab active" data-filter="all">All</button>
-              <button class="ftab" data-filter="sale">For Sale</button>
-              <button class="ftab" data-filter="rent">For Rent</button>
-              <button class="ftab" data-filter="penthouse">Penthouse</button>
-              <button class="ftab" data-filter="villa">Villa</button>
+              <button class="ftab active" data-filter="all" data-i18n="filter.all">All</button>
+              <button class="ftab" data-filter="sale" data-i18n="prop.for_sale">For Sale</button>
+              <button class="ftab" data-filter="rent" data-i18n="prop.for_rent">For Rent</button>
             </div>
             <div class="props-grid" id="props-grid">
             </div>
             <div class="info-footer-link">
-              <a href="#" class="link-flash">View all properties <span aria-hidden="true">→</span></a>
+              <a href="#properties" class="link-flash"><span data-i18n="props.view_all">View all properties</span> <span aria-hidden="true">→</span></a>
             </div>
           </div>
 
@@ -162,47 +212,47 @@
           <div class="invest-info" id="services">
             <div class="invest-info-top reveal">
               <h2 class="invest-heading">
-                <span class="text-wrap"><span class="text-inner">The AN</span></span>
-                <span class="text-wrap"><span class="text-inner">Difference</span></span>
+                <span class="text-wrap"><span class="text-inner" data-i18n="svc.h1">The AN</span></span>
+                <span class="text-wrap"><span class="text-inner" data-i18n="svc.h2">Difference</span></span>
               </h2>
-              <p class="subheading">Why Choose Us</p>
+              <p class="subheading" data-i18n="svc.sub">Why Choose Us</p>
             </div>
             <div class="invest-info-block">
               <div class="invest-info-img img-float">
-                <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=700&q=80&auto=format" alt="Barcelona Luxury" loading="lazy" />
+                <img src="https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/imagen3-logo-2.jpg" alt="Barcelona Luxury" loading="lazy" />
               </div>
               <div class="invest-info-content">
                 <div class="services-list">
                   <div class="svc-item">
                     <span class="svc-num">01</span>
                     <div class="svc-body">
-                      <h3 class="svc-name">Unwavering Integrity</h3>
-                      <p class="svc-desc">We prioritise trust and transparency, ensuring a secure and confident process for all our clients — no exceptions.</p>
+                      <h3 class="svc-name" data-i18n="svc.01.name">Unwavering Integrity</h3>
+                      <p class="svc-desc" data-i18n="svc.01.desc">We prioritise trust and transparency, ensuring a secure and confident process for all our clients — no exceptions.</p>
                     </div>
                   </div>
                   <div class="svc-item">
                     <span class="svc-num">02</span>
                     <div class="svc-body">
-                      <h3 class="svc-name">Bespoke Service</h3>
-                      <p class="svc-desc">Our tailor-made strategies maximise value and opportunity, personalised to your goals — from first enquiry to final signature.</p>
+                      <h3 class="svc-name" data-i18n="svc.02.name">Bespoke Service</h3>
+                      <p class="svc-desc" data-i18n="svc.02.desc">Our tailor-made strategies maximise value and opportunity, personalised to your goals — from first enquiry to final signature.</p>
                     </div>
                   </div>
                   <div class="svc-item">
                     <span class="svc-num">03</span>
                     <div class="svc-body">
-                      <h3 class="svc-name">Global Reach, Local Expertise</h3>
-                      <p class="svc-desc">Our extensive international network connects you to exclusive properties and buyers, leveraging global connections with deep local insights.</p>
+                      <h3 class="svc-name" data-i18n="svc.03.name">Global Reach, Local Expertise</h3>
+                      <p class="svc-desc" data-i18n="svc.03.desc">Our extensive international network connects you to exclusive properties and buyers, leveraging global connections with deep local insights.</p>
                     </div>
                   </div>
                   <div class="svc-item">
                     <span class="svc-num">04</span>
                     <div class="svc-body">
-                      <h3 class="svc-name">Strategic Expertise</h3>
-                      <p class="svc-desc">Deep knowledge of Barcelona's luxury market and Catalonia's real estate trends, bringing a results-driven approach to every transaction.</p>
+                      <h3 class="svc-name" data-i18n="svc.04.name">Strategic Expertise</h3>
+                      <p class="svc-desc" data-i18n="svc.04.desc">Deep knowledge of Barcelona's luxury market and Catalonia's real estate trends, bringing a results-driven approach to every transaction.</p>
                     </div>
                   </div>
                 </div>
-                <a href="#contact" class="link-flash">Get in touch <span aria-hidden="true">→</span></a>
+                <a href="#contact" class="link-flash"><span data-i18n="svc.cta">Get in touch</span> <span aria-hidden="true">→</span></a>
               </div>
             </div>
           </div>
@@ -218,23 +268,23 @@
     <div class="holder">
       <div class="testi-top reveal">
         <div class="key-wrap"><div class="key"></div></div>
-        <p class="testi-eyebrow">Client Stories</p>
+        <p class="testi-eyebrow" data-i18n="testi.eyebrow">Client Stories</p>
       </div>
       <div class="testi-list">
 
         <div class="testi-item">
-          <blockquote class="testi-big-quote">"Álvaro is a rare professional. I hired his service, and both the accurate property valuation and his commitment to achieving a quick sale were outstanding. His passion for doing things right is invaluable."</blockquote>
-          <p class="testi-attr">— Maribel Puig &nbsp;·&nbsp; Property Owner</p>
+          <blockquote class="testi-big-quote" data-i18n="testi.1.q">"Álvaro is a rare professional. I hired his service, and both the accurate property valuation and his commitment to achieving a quick sale were outstanding. His passion for doing things right is invaluable."</blockquote>
+          <p class="testi-attr" data-i18n="testi.1.a">— Maribel Puig &nbsp;·&nbsp; Property Owner</p>
         </div>
 
         <div class="testi-item">
-          <blockquote class="testi-big-quote">"I sold an apartment in a very short time and under the agreed conditions. The professionalism and experience of Álvaro Navarro, who advised me throughout the entire process, were excellent."</blockquote>
-          <p class="testi-attr">— Joan Casanovas &nbsp;·&nbsp; Investor &amp; Buyer</p>
+          <blockquote class="testi-big-quote" data-i18n="testi.2.q">"I sold an apartment in a very short time and under the agreed conditions. The professionalism and experience of Álvaro Navarro, who advised me throughout the entire process, were excellent."</blockquote>
+          <p class="testi-attr" data-i18n="testi.2.a">— Joan Casanovas &nbsp;·&nbsp; Investor &amp; Buyer</p>
         </div>
 
         <div class="testi-item">
-          <blockquote class="testi-big-quote">"We were very satisfied with Álvaro Navarro's work. He met all our expectations in both price estimation and sale time. In my opinion, he is a reference in Barcelona's high-end residential sector."</blockquote>
-          <p class="testi-attr">— Enrique Cucurella &nbsp;·&nbsp; Property Owner</p>
+          <blockquote class="testi-big-quote" data-i18n="testi.3.q">"We were very satisfied with Álvaro Navarro's work. He met all our expectations in both price estimation and sale time. In my opinion, he is a reference in Barcelona's high-end residential sector."</blockquote>
+          <p class="testi-attr" data-i18n="testi.3.a">— Enrique Cucurella &nbsp;·&nbsp; Property Owner</p>
         </div>
 
       </div>
@@ -261,8 +311,8 @@
     <div class="holder">
       <div class="join-top reveal">
         <h2 class="join-heading">
-          <span class="text-wrap"><span class="text-inner">Let's Find Your</span></span>
-          <span class="text-wrap"><span class="text-inner">Perfect Home.</span></span>
+          <span class="text-wrap"><span class="text-inner" data-i18n="contact.h1">Let's Find Your</span></span>
+          <span class="text-wrap"><span class="text-inner" data-i18n="contact.h2">Perfect Home.</span></span>
         </h2>
       </div>
       <div class="join-body">
@@ -270,34 +320,34 @@
         <form class="join-form" id="contact-form" novalidate>
           <div class="form-row">
             <div class="fg">
-              <label class="flabel">Name</label>
-              <input type="text" class="finput" placeholder="John Smith" required />
+              <label class="flabel" data-i18n="form.name">Name</label>
+              <input type="text" name="name" class="finput" placeholder="John Smith" data-i18n="contact.name_ph" required />
             </div>
             <div class="fg">
-              <label class="flabel">Email</label>
-              <input type="email" class="finput" placeholder="john@example.com" required />
+              <label class="flabel" data-i18n="form.email">Email</label>
+              <input type="email" name="email" class="finput" placeholder="john@example.com" data-i18n="contact.email_ph" required />
             </div>
           </div>
           <div class="fg">
-            <label class="flabel">I'm interested in</label>
-            <select class="finput">
-              <option value="">Select…</option>
-              <option>Buying a property</option>
-              <option>Selling my property</option>
-              <option>Renting</option>
-              <option>Free valuation</option>
-              <option>Other</option>
+            <label class="flabel" data-i18n="contact.interest">I'm interested in</label>
+            <select name="interest" class="finput">
+              <option value="" data-i18n="contact.select">Select…</option>
+              <option data-i18n="contact.buy">Buying a property</option>
+              <option data-i18n="contact.sell">Selling my property</option>
+              <option data-i18n="contact.rent.label">Renting</option>
+              <option data-i18n="contact.valuation">Free valuation</option>
+              <option data-i18n="contact.other">Other</option>
             </select>
           </div>
           <div class="fg">
-            <label class="flabel">Message</label>
-            <textarea class="finput ftextarea" rows="4" placeholder="Tell us about your needs…"></textarea>
+            <label class="flabel" data-i18n="form.message">Message</label>
+            <textarea name="message" class="finput ftextarea" rows="4" placeholder="Tell us about your needs…" data-i18n="contact.msg_ph"></textarea>
           </div>
           <div class="join-submit">
-            <button type="submit" class="button">Send Message</button>
+            <button type="submit" class="button" data-i18n="contact.submit">Send Message</button>
             <div class="join-contact-links">
               <a href="#" class="jcl tel-js" data-a="+34" data-b="628" data-c="02" data-d="04" data-e="34"></a>
-              <a href="mailto:info@anrealestate.es" class="jcl">info@anrealestate.es</a>
+              <a href="mailto:alvaro@anrealestate.es" class="jcl">alvaro@anrealestate.es</a>
             </div>
           </div>
         </form>
@@ -313,23 +363,24 @@
           <img src="logo.svg" alt="AN Real Estate" class="header-logo-img" />
         </a>
         <nav class="footer-nav">
-          <a href="#properties" class="fn-link">Properties</a>
-          <a href="#services"   class="fn-link">Services</a>
-          <a href="about.html"      class="fn-link">About</a>
-          <a href="#contact"    class="fn-link">Contact</a>
+          <a href="#properties"    class="fn-link" data-i18n="nav.properties">Properties</a>
+          <a href="#services"      class="fn-link" data-i18n="nav.services">Services</a>
+          <a href="about.html"     class="fn-link" data-i18n="nav.about">About</a>
+          <a href="valuation.html" class="fn-link" data-i18n="nav.valuation">Free Valuation</a>
+          <a href="#contact"       class="fn-link" data-i18n="nav.contact">Contact</a>
         </nav>
       </div>
       <div class="footer-text">
-        <p>AN High End Real Estate is a licensed property agency specialising in luxury residential real estate in Barcelona and Catalonia. Registered with the Registro de Agentes Inmobiliarios de Cataluña: AICAT 13069. All properties are subject to availability. Prices shown are indicative and subject to change without notice. We operate in full compliance with Spanish property law.</p>
+        <p data-i18n="footer.disclaimer">AN High End Real Estate is a licensed property agency specialising in luxury residential real estate in Barcelona and Catalonia. Registered with the Registro de Agentes Inmobiliarios de Cataluña: AICAT 13069. All properties are subject to availability. Prices shown are indicative and subject to change without notice. We operate in full compliance with Spanish property law.</p>
       </div>
       <div class="footer-bottom">
         <div class="footer-copy">
           <span>© 2026 AN High End Real Estate · Barcelona</span>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Legal Notice</a>
-          <a href="#">Cookie Policy</a>
+          <a href="privacy.html" data-i18n="footer.privacy">Privacy Policy</a>
+          <a href="legal.html" data-i18n="footer.legal">Legal Notice</a>
+          <a href="cookies.html" data-i18n="footer.cookies">Cookie Policy</a>
         </div>
-        <div class="footer-studio">anrealestate.es</div>
+        <div class="footer-studio">anrealestate.es &nbsp;·&nbsp; <a href="admin/index.html" class="footer-admin-link">Admin</a></div>
       </div>
     </div>
   </footer>
@@ -337,7 +388,7 @@
 </div><!-- /#wrapper -->
 
 <!-- WhatsApp FAB -->
-<a href="https://wa.me/34600000000" class="wa-fab" aria-label="WhatsApp" target="_blank" rel="noopener">
+<a href="https://wa.me/34628020434" class="wa-fab" aria-label="WhatsApp" target="_blank" rel="noopener">
   <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
 </a>
 
@@ -350,6 +401,7 @@
 {
   "listings": [
     {
+      "slug": "gracia-garden",
       "title": "Exquisite Brand-New Garden Residence in Gràcia",
       "price": "€830,000",
       "neighbourhood": "Gràcia, Barcelona",
@@ -358,24 +410,299 @@
       "beds": 2,
       "baths": 2,
       "size": "94",
-      "image": "https://anrealestate.es/wp-content/uploads/2026/03/Imagen-01-logo-1.jpg",
-      "published": true
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/gracia-garden/Imagen-01-logo-1.jpg",
+      "published": true,
+      "translations": {
+        "es": {
+          "title": "Exquisita residencia con jardín a estrenar en Gràcia"
+        },
+        "ca": {
+          "title": "Exquisita Residència Jardí a estrenar a Gràcia"
+        },
+        "fr": {
+          "title": "Exquise résidence de jardin flambant neuve à Gràcia"
+        },
+        "de": {
+          "title": "Exquisite brandneue Gartenresidenz in Gràcia"
+        },
+        "it": {
+          "title": "Squisita nuovissima residenza con giardino a Gràcia"
+        },
+        "ru": {
+          "title": "Изысканная новая резиденция с садом в Грасиа"
+        }
+      }
+    },
+    {
+      "slug": "eixample-golden-square-rent",
+      "title": "Refined Luxury in Barcelona's Golden Square",
+      "price": "€7,700",
+      "neighbourhood": "Eixample, Barcelona",
+      "type": "apartment",
+      "status": "rent",
+      "beds": 3,
+      "baths": 3,
+      "size": "145",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404776/an-realestate/eixample-golden-square-rent/2026-02-24_Rambla_de_Catalunya_45_Ppal_2_Barcelona_08-3.jpg",
+      "published": true,
+      "translations": {
+        "es": {
+          "title": "Lujo refinado en la Plaza Dorada de Barcelona"
+        },
+        "ca": {
+          "title": "Luxe refinat a la Plaça Daurada de Barcelona"
+        },
+        "fr": {
+          "title": "Luxe raffiné dans le Carré d'Or de Barcelone"
+        },
+        "de": {
+          "title": "Raffinierter Luxus am Goldenen Platz von Barcelona"
+        },
+        "it": {
+          "title": "Lusso raffinato nella Piazza d'Oro di Barcellona"
+        },
+        "ru": {
+          "title": "Изысканная роскошь на Золотой площади Барселоны"
+        }
+      }
+    },
+    {
+      "slug": "sant-gervasi-galvany",
+      "title": "Renovated Residence with Historic Charm in Sant Gervasi",
+      "price": "€520,000",
+      "neighbourhood": "Sant Gervasi, Barcelona",
+      "type": "apartment",
+      "status": "sale",
+      "sold": true,
+      "beds": 2,
+      "baths": 1,
+      "size": "86",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404786/an-realestate/sant-gervasi-galvany/PHOTO-2025-01-24-13-29-42-2.jpg",
+      "published": true,
+      "translations": {
+        "es": {
+          "title": "Residencia renovada con encanto histórico en Sant Gervasi"
+        },
+        "ca": {
+          "title": "Residencia reformada amb encant històric a Sant Gervasi"
+        },
+        "fr": {
+          "title": "Résidence rénovée avec charme historique à Sant Gervasi"
+        },
+        "de": {
+          "title": "Renovierte Residenz mit historischem Charme in Sant Gervasi"
+        },
+        "it": {
+          "title": "Residenza ristrutturata dal fascino storico a Sant Gervasi"
+        },
+        "ru": {
+          "title": "Отремонтированная резиденция с историческим шармом в Сан-Жерваси"
+        }
+      }
+    },
+    {
+      "slug": "el-born-corner",
+      "title": "Sunny 4-Bedroom Corner Apartment in Historic El Born",
+      "price": "€1,095,000",
+      "neighbourhood": "El Born, Barcelona",
+      "type": "apartment",
+      "status": "sale",
+      "sold": true,
+      "beds": 4,
+      "baths": 3,
+      "size": "144",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404790/an-realestate/el-born-corner/PHOTO-2025-01-20-15-19-11-1.jpg",
+      "published": true,
+      "translations": {
+        "es": {
+          "title": "Soleado apartamento esquinero de 4 dormitorios en el histórico El Born"
+        },
+        "ca": {
+          "title": "Assolellat apartament cantoner de 4 habitacions al Born històric"
+        },
+        "fr": {
+          "title": "Appartement d'angle ensoleillé de 4 chambres dans le quartier historique d'El Born"
+        },
+        "de": {
+          "title": "Sonniges Eckapartment mit 4 Schlafzimmern im historischen El Born"
+        },
+        "it": {
+          "title": "Soleggiato appartamento ad angolo con 4 camere da letto nel centro storico di El Born"
+        },
+        "ru": {
+          "title": "Солнечная угловая квартира с 4 спальнями в историческом районе Эль Борн"
+        }
+      }
+    },
+    {
+      "slug": "rambla-catalunya-corner",
+      "title": "Stunning Refurbished Corner Apartment on Rambla de Catalunya",
+      "price": "€1,395,000",
+      "neighbourhood": "Eixample, Barcelona",
+      "type": "apartment",
+      "status": "sale",
+      "sold": true,
+      "beds": 3,
+      "baths": 3,
+      "size": "150",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404790/an-realestate/rambla-catalunya-corner/RAMBLA_CATALUNYA-2_Pagina_01_Imagen_0001-scaled.jpg",
+      "published": true,
+      "translations": {
+        "es": {
+          "title": "Impresionante apartamento reformado en esquina en Rambla de Catalunya"
+        },
+        "ca": {
+          "title": "Impressionant pis cantoner reformat a la Rambla de Catalunya"
+        },
+        "fr": {
+          "title": "Superbe appartement d'angle rénové sur la Rambla de Catalunya"
+        },
+        "de": {
+          "title": "Atemberaubende renovierte Eckwohnung an der Rambla de Catalunya"
+        },
+        "it": {
+          "title": "Splendido appartamento d'angolo ristrutturato sulla Rambla de Catalunya"
+        },
+        "ru": {
+          "title": "Потрясающая отремонтированная угловая квартира на Рамбла де Каталония"
+        }
+      }
+    },
+    {
+      "slug": "eixample-golden-mile",
+      "title": "Elegant Renovated Apartment in Eixample's Golden Mile",
+      "price": "€1,200,000",
+      "neighbourhood": "Dreta de l'Eixample, Barcelona",
+      "type": "apartment",
+      "status": "sale",
+      "sold": true,
+      "beds": 3,
+      "baths": 3,
+      "size": "140",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404792/an-realestate/eixample-golden-mile/P_2456_Julia-Angli_Habitatge_02_Salon-EFA.jpg",
+      "published": true,
+      "translations": {
+        "es": {
+          "title": "Elegante apartamento reformado en la Milla de Oro del Eixample"
+        },
+        "ca": {
+          "title": "Elegant pis reformat a la Milla d'Or de l'Eixample"
+        },
+        "fr": {
+          "title": "Élégant appartement rénové dans le Golden Mile de l'Eixample"
+        },
+        "de": {
+          "title": "Elegant renoviertes Apartment an der Goldenen Meile von Eixample"
+        },
+        "it": {
+          "title": "Elegante appartamento ristrutturato nel Miglio d'Oro dell'Eixample"
+        },
+        "ru": {
+          "title": "Элегантная отремонтированная квартира на Золотой Миле Эшампле"
+        }
+      }
+    },
+    {
+      "slug": "vallvidrera-villa",
+      "title": "Exquisite Modern Villa with 360° Views Over Barcelona",
+      "price": "€5,500,000",
+      "neighbourhood": "Vallvidrera, Barcelona",
+      "type": "villa",
+      "status": "sale",
+      "beds": 6,
+      "baths": 6,
+      "size": "634",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404793/an-realestate/vallvidrera-villa/Mont-dorsa-68_17.jpg",
+      "published": true,
+      "translations": {
+        "es": {
+          "title": "Exquisita villa moderna con vistas de 360° sobre Barcelona"
+        },
+        "ca": {
+          "title": "Exquisita vila moderna amb vistes de 360° sobre Barcelona"
+        },
+        "fr": {
+          "title": "Exquise villa moderne avec vue à 360° sur Barcelone"
+        },
+        "de": {
+          "title": "Exquisite moderne Villa mit 360°-Blick über Barcelona"
+        },
+        "it": {
+          "title": "Splendida villa moderna con vista a 360° su Barcellona"
+        },
+        "ru": {
+          "title": "Изысканная современная вилла с 360-градусным видом на Барселону"
+        }
+      }
+    },
+    {
+      "slug": "eixample-villarroel",
+      "title": "Newly Renovated 3-Bedroom Apartment with Timeless Elegance in Eixample",
+      "price": "€820,000",
+      "neighbourhood": "Eixample, Barcelona",
+      "type": "apartment",
+      "status": "sale",
+      "sold": true,
+      "beds": 3,
+      "baths": 2,
+      "size": "104",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777404801/an-realestate/eixample-villarroel/villarroel.jpg",
+      "published": true,
+      "translations": {
+        "es": {
+          "title": "Apartamento de 3 dormitorios recientemente renovado con elegancia atemporal en el Eixample"
+        },
+        "ca": {
+          "title": "Apartament de 3 habitacions recentment reformat amb una elegància atemporal a l'Eixample"
+        },
+        "fr": {
+          "title": "Appartement de 3 chambres récemment rénové avec une élégance intemporelle dans l'Eixample"
+        },
+        "de": {
+          "title": "Neu renoviertes Apartment mit 3 Schlafzimmern und zeitloser Eleganz in Eixample"
+        },
+        "it": {
+          "title": "Appartamento con 3 camere da letto recentemente ristrutturato con eleganza senza tempo nell'Eixample"
+        },
+        "ru": {
+          "title": "Недавно отремонтированная 3-комнатная квартира с неподвластной времени элегантностью в Эшампле"
+        }
+      }
     }
   ]
 }
 </script>
 <script src="listings.js"></script>
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+<!-- Cookie Banner -->
+<div class="cookie-banner is-hidden" id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <p id="cookie-text"></p>
+  <div class="cookie-btns">
+    <button class="cookie-btn-accept" id="cookie-accept"></button>
+    <button class="cookie-btn-reject" id="cookie-reject"></button>
+  </div>
+</div>
 <script>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on('init', user => {
-      if (!user) {
-        window.netlifyIdentity.on('login', () => {
-          document.location.href = '/admin/'
-        })
-      }
-    })
+;(function(){
+  var lang = (typeof getLang === 'function') ? getLang() : 'en'
+  var t = function(k){ return (window.I18N&&window.I18N[lang]&&window.I18N[lang][k]) || (window.I18N&&window.I18N.en&&window.I18N.en[k]) || k }
+  var p = document.getElementById('cookie-text')
+  var ba = document.getElementById('cookie-accept')
+  var br = document.getElementById('cookie-reject')
+  if (p)  p.innerHTML   = t('cookie.text')
+  if (ba) ba.textContent = t('cookie.accept')
+  if (br) br.textContent = t('cookie.essential')
+  if (!localStorage.getItem('an_cookie_consent')) {
+    setTimeout(function(){ var b=document.getElementById('cookie-banner'); if(b) b.classList.remove('is-hidden') }, 800)
   }
+  function dismiss(val) {
+    localStorage.setItem('an_cookie_consent', val)
+    var b = document.getElementById('cookie-banner')
+    if (b) b.classList.add('is-hidden')
+  }
+  document.getElementById('cookie-accept').addEventListener('click', function(){ dismiss('accepted') })
+  document.getElementById('cookie-reject').addEventListener('click', function(){ dismiss('essential') })
+})()
 </script>
 </body>
 </html>

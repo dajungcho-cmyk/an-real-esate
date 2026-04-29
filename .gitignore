@@ -1,0 +1,7 @@
+.netlify/
+.claude/
+*.DS_Store
+/tmp/
+_*.py
+_cloudinary_urls.json
+images/

@@ -78,27 +78,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .loader-inner {
   display: flex;
-  align-items: baseline;
-  gap: .6rem;
+  align-items: center;
+  justify-content: center;
 }
-.loader-mark {
-  font-family: var(--serif);
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 300;
-  color: var(--gold);
-  letter-spacing: .06em;
-  line-height: 1;
-}
-.loader-sep {
-  color: var(--border);
-  font-size: 1rem;
-}
-.loader-sub {
-  font-size: var(--fs-xs);
-  font-weight: 400;
-  letter-spacing: .25em;
-  text-transform: uppercase;
-  color: var(--cream-dim);
+.loader-logo {
+  width: clamp(120px, 15vw, 180px);
+  height: auto;
+  display: block;
 }
 
 /* ================================
@@ -161,7 +147,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   position: relative;
   font-size: max(14px, 0.832vw);
   font-weight: 400;
-  letter-spacing: 1.6px;
+  letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--cream-dim);
   transition: color var(--fast);
@@ -200,7 +186,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   justify-content: center;
 }
 .header-logo-img {
-  height: 32px;
+  height: clamp(36px, 3.2vw, 48px);
   width: auto;
   display: block;
 }
@@ -338,7 +324,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .banner-h1 {
   font-family: var(--serif);
-  font-size: max(40px, 6.656vw);
+  font-size: clamp(40px, 6.656vw, 88px);
   font-weight: 300;
   line-height: .935;
   letter-spacing: -.2vw;
@@ -441,9 +427,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: inline-flex;
   align-items: center;
   gap: .5rem;
-  padding: .875rem 2rem;
+  padding: 1rem 2.25rem;
   font-family: var(--sans);
-  font-size: var(--fs-xs);
+  font-size: var(--fs-sm);
   font-weight: 500;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -467,45 +453,104 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* --- About Team (flex, TREF overlay) --- */
 .about-team {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  position: relative;
   padding-block: clamp(5rem, 10vw, 8rem);
   border-top: 1px solid var(--border);
+  gap: clamp(3rem, 6vw, 5rem);
 }
+
+/* vertical dividing line */
+.at-line {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+}
+.at-line-inner {
+  width: 1px;
+  height: 0%;
+  background: var(--border);
+  transition: height 1.5s cubic-bezier(0.46, 0.03, 0.52, 0.96);
+}
+.at-line-inner.animate { height: 100%; }
 
 .about-team-col {
   width: 100%;
-  margin-bottom: clamp(2.5rem, 5vw, 4rem);
 }
 
 .at-heading {
   font-family: var(--serif);
-  font-size: max(32px, 4.992vw);
+  font-size: clamp(32px, 3.8vw, 56px);
   font-weight: 300;
   line-height: 1;
-  letter-spacing: -.15vw;
+  letter-spacing: -.02em;
   color: var(--cream);
-  margin-bottom: .75rem;
+  margin-bottom: 1.5rem;
+  white-space: nowrap;
 }
 .at-heading em { font-style: italic; }
+
+.at-role {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: .75rem;
+}
+.at-role-dash {
+  display: block;
+  width: 2rem;
+  height: 1px;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+.at-role-label {
+  font-family: var(--sans);
+  font-size: var(--fs-xs);
+  font-weight: 400;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
 
 .at-sub {
   font-size: var(--fs-xs);
   letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--gold);
+  margin-bottom: 2rem;
 }
 
 .at-img {
   aspect-ratio: 3/4;
   overflow: hidden;
+  margin-bottom: 1rem;
+}
+.at-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.at-caption {
+  font-size: var(--fs-xs);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  opacity: .5;
 }
 
 .at-text {
   font-size: var(--fs-sm);
   color: var(--cream-dim);
   line-height: 1.8;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
+.at-text--second { opacity: .75; }
 
 /* --- Slogan --- */
 .slogan {
@@ -515,7 +560,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .slogan-text {
   font-family: var(--serif);
-  font-size: max(32px, 4.992vw);
+  font-size: clamp(32px, 4.992vw, 72px);
   font-weight: 300;
   line-height: 1.2;
   letter-spacing: -.15vw;
@@ -531,12 +576,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 
 .info-top {
-  margin-bottom: 2.5rem;
+  margin-bottom: 3.5rem;
 }
 
 .info-heading {
   font-family: var(--serif);
-  font-size: max(32px, 4.992vw);
+  font-size: clamp(32px, 4.992vw, 72px);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -.15vw;
@@ -644,6 +689,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   color: var(--cream);
 }
 .prop-tag.rent { background: var(--gold); color: var(--bg); }
+.prop-tag.sold { background: #4a4a4a; color: var(--cream); }
 
 .prop-meta {
   display: flex;
@@ -667,7 +713,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .prop-title {
   font-family: var(--serif);
   font-size: var(--fs-lg);
-  font-weight: 400;
+  font-weight: 300;
   color: var(--cream);
   line-height: 1.25;
   margin-bottom: .35rem;
@@ -691,7 +737,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .invest-heading {
   font-family: var(--serif);
-  font-size: max(32px, 4.992vw);
+  font-size: clamp(32px, 4.992vw, 72px);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -.15vw;
@@ -736,7 +782,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .svc-name {
   font-family: var(--serif);
-  font-size: max(22px, 2.4vw);
+  font-size: clamp(22px, 2.4vw, 38px);
   font-weight: 300;
   color: var(--cream);
   margin-bottom: .5rem;
@@ -920,7 +966,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .testi-big-quote {
   font-family: var(--serif);
-  font-size: max(32px, 5vw);
+  font-size: clamp(32px, 5vw, 72px);
   font-weight: 300;
   font-style: italic;
   color: rgba(240,235,224,.10);
@@ -968,7 +1014,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .join-heading {
   font-family: var(--serif);
-  font-size: max(32px, 4.992vw);
+  font-size: clamp(32px, 4.992vw, 72px);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -.15vw;
@@ -1101,6 +1147,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   letter-spacing: .12em;
   text-transform: uppercase;
 }
+.footer-admin-link {
+  color: transparent;
+  text-decoration: none;
+  transition: color .3s;
+}
+.footer-admin-link:hover { color: rgba(240,235,224,.9); }
 
 /* ================================
    WhatsApp FAB
@@ -1148,30 +1200,30 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .mobile-drawer { display: none !important; }
 
   .about-team {
-    align-items: flex-end;
+    flex-direction: row;
+    align-items: flex-start;
     justify-content: space-between;
+    gap: 0;
   }
+
+  .at-line { display: block; }
 
   .about-team-col {
-    width: calc(50% - 1.04vw);
-    margin-bottom: 3.12vw;
+    width: calc(50% - 2rem);
+    margin-bottom: 0;
   }
 
-  /* col 3: sit under the image, right-aligned, narrower */
-  .about-team-col:last-child {
-    width: calc(40% - 1.04vw);
-    margin-left: auto;
+  .at-img-col {
+    width: calc(50% - 2rem);
   }
 
   .at-img {
     aspect-ratio: unset;
-    height: max(360px, 28.08vw);
+    height: clamp(480px, 52vw, 720px);
   }
 
   .at-heading {
-    width: 200%;
-    position: relative;
-    z-index: 10;
+    font-size: clamp(36px, 3.8vw, 56px);
   }
 
   .props-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1191,4 +1243,155 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
    ================================ */
 @media (min-width: 1280px) {
   .banner-main { padding-bottom: 5rem; }
+}
+
+/* ================================
+   Language Switcher
+   ================================ */
+.lang-switcher {
+  position: relative;
+  margin-left: .75rem;
+}
+.lang-btn {
+  background: none;
+  border: 1px solid rgba(201,169,110,.35);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: .7rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  padding: .28rem .55rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  min-width: 2.6rem;
+  text-align: center;
+}
+.lang-btn:hover { border-color: var(--gold); background: var(--gold-dim); }
+.lang-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: #0d2b48;
+  border: 1px solid rgba(201,169,110,.18);
+  border-radius: 6px;
+  min-width: 10rem;
+  z-index: 200;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  overflow: hidden;
+}
+.lang-dropdown.open { display: block; }
+.lang-opt {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--cream-dim);
+  font-family: var(--sans);
+  font-size: .78rem;
+  letter-spacing: .04em;
+  padding: .55rem .9rem;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.lang-opt:hover { background: rgba(201,169,110,.12); color: var(--cream); }
+.lang-opt.active { color: var(--gold); font-weight: 500; }
+
+@media (max-width: 767px) {
+  .lang-switcher { margin-left: .4rem; }
+  .lang-btn { font-size: .65rem; padding: .22rem .42rem; }
+}
+
+/* ================================
+   Cookie Consent Banner
+   ================================ */
+.cookie-banner {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  max-width: 520px;
+  background: var(--bg2);
+  border: 1px solid rgba(240,235,224,.12);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  z-index: 9999;
+  box-shadow: 0 8px 40px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transform: translateY(0);
+  transition: transform .4s var(--ease), opacity .4s;
+}
+.cookie-banner.is-hidden {
+  transform: translateY(120%);
+  opacity: 0;
+  pointer-events: none;
+}
+.cookie-banner p {
+  font-size: var(--fs-xs);
+  color: rgba(240,235,224,.7);
+  line-height: 1.6;
+  margin: 0;
+}
+.cookie-banner a { color: var(--gold); }
+.cookie-btns {
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+.cookie-btn-accept {
+  background: var(--gold);
+  color: var(--bg);
+  border: none;
+  border-radius: 4px;
+  padding: .55rem 1.25rem;
+  font-size: var(--fs-xs);
+  font-family: var(--sans);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity .2s;
+}
+.cookie-btn-accept:hover { opacity: .85; }
+.cookie-btn-reject {
+  background: transparent;
+  color: rgba(240,235,224,.5);
+  border: 1px solid rgba(240,235,224,.15);
+  border-radius: 4px;
+  padding: .55rem 1.25rem;
+  font-size: var(--fs-xs);
+  font-family: var(--sans);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+}
+.cookie-btn-reject:hover { color: var(--cream); border-color: rgba(240,235,224,.35); }
+
+/* ── Toast notification ── */
+#an-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(1rem);
+  background: var(--gold);
+  color: var(--bg);
+  padding: .75rem 1.75rem;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: var(--fs-xs);
+  letter-spacing: .06em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s, transform .35s;
+  z-index: 9999;
+  white-space: nowrap;
+}
+#an-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }

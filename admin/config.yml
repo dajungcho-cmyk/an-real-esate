@@ -30,8 +30,62 @@ collections:
 
               - label: "Neighbourhood"
                 name: "neighbourhood"
-                widget: "string"
-                hint: "e.g. Pedralbes, Eixample, Sarrià, Gràcia, El Born"
+                widget: "select"
+                options:
+                  - { label: "— Barcelona Ciudad —",             value: "" }
+                  - { label: "Eixample, Barcelona",              value: "Eixample, Barcelona" }
+                  - { label: "Dreta de l'Eixample, Barcelona",   value: "Dreta de l'Eixample, Barcelona" }
+                  - { label: "Pedralbes, Barcelona",             value: "Pedralbes, Barcelona" }
+                  - { label: "Sarrià, Barcelona",                value: "Sarrià, Barcelona" }
+                  - { label: "Sant Gervasi, Barcelona",          value: "Sant Gervasi, Barcelona" }
+                  - { label: "La Bonanova, Barcelona",           value: "La Bonanova, Barcelona" }
+                  - { label: "Les Tres Torres, Barcelona",       value: "Les Tres Torres, Barcelona" }
+                  - { label: "Gràcia, Barcelona",                value: "Gràcia, Barcelona" }
+                  - { label: "Vila de Gràcia, Barcelona",        value: "Vila de Gràcia, Barcelona" }
+                  - { label: "El Born, Barcelona",               value: "El Born, Barcelona" }
+                  - { label: "Barri Gòtic, Barcelona",           value: "Barri Gòtic, Barcelona" }
+                  - { label: "Les Corts, Barcelona",             value: "Les Corts, Barcelona" }
+                  - { label: "Diagonal Mar, Barcelona",          value: "Diagonal Mar, Barcelona" }
+                  - { label: "Poblenou, Barcelona",              value: "Poblenou, Barcelona" }
+                  - { label: "Poble Sec, Barcelona",             value: "Poble Sec, Barcelona" }
+                  - { label: "Vallvidrera, Barcelona",           value: "Vallvidrera, Barcelona" }
+                  - { label: "— Área Metropolitana —",           value: "" }
+                  - { label: "Sant Cugat del Vallès",            value: "Sant Cugat del Vallès" }
+                  - { label: "La Floresta, Sant Cugat",          value: "La Floresta, Sant Cugat" }
+                  - { label: "Esplugues de Llobregat",           value: "Esplugues de Llobregat" }
+                  - { label: "Sant Just Desvern",                value: "Sant Just Desvern" }
+                  - { label: "El Papiol",                        value: "El Papiol" }
+                  - { label: "Alella",                           value: "Alella" }
+                  - { label: "Teià",                             value: "Teià" }
+                  - { label: "Cabrils",                          value: "Cabrils" }
+                  - { label: "Premià de Dalt",                   value: "Premià de Dalt" }
+                  - { label: "El Masnou",                        value: "El Masnou" }
+                  - { label: "— Costa Garraf —",                 value: "" }
+                  - { label: "Sitges",                           value: "Sitges" }
+                  - { label: "Castelldefels",                    value: "Castelldefels" }
+                  - { label: "Gavà Mar",                         value: "Gavà Mar" }
+                  - { label: "Begues",                           value: "Begues" }
+                  - { label: "— Costa Brava —",                  value: "" }
+                  - { label: "Begur",                            value: "Begur" }
+                  - { label: "Cadaqués",                         value: "Cadaqués" }
+                  - { label: "Calella de Palafrugell",           value: "Calella de Palafrugell" }
+                  - { label: "Llafranc",                         value: "Llafranc" }
+                  - { label: "Tamariu",                          value: "Tamariu" }
+                  - { label: "Pals",                             value: "Pals" }
+                  - { label: "Peratallada",                      value: "Peratallada" }
+                  - { label: "S'Agaró",                          value: "S'Agaró" }
+                  - { label: "Platja d'Aro",                     value: "Platja d'Aro" }
+                  - { label: "Sant Feliu de Guíxols",            value: "Sant Feliu de Guíxols" }
+                  - { label: "L'Escala",                         value: "L'Escala" }
+                  - { label: "Roses",                            value: "Roses" }
+                  - { label: "Empuriabrava",                     value: "Empuriabrava" }
+                  - { label: "— Cataluña Interior —",            value: "" }
+                  - { label: "Vic",                              value: "Vic" }
+                  - { label: "Cardedeu",                         value: "Cardedeu" }
+                  - { label: "La Garriga",                       value: "La Garriga" }
+                  - { label: "Tarragona",                        value: "Tarragona" }
+                  - { label: "Cambrils",                         value: "Cambrils" }
+                  - { label: "Salou",                            value: "Salou" }
 
               - label: "Type"
                 name: "type"

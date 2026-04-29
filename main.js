@@ -1,4 +1,20 @@
 /* ================================
+   Toast notification
+   ================================ */
+function showToast(msg) {
+  let t = document.getElementById('an-toast')
+  if (!t) {
+    t = document.createElement('div')
+    t.id = 'an-toast'
+    document.body.appendChild(t)
+  }
+  t.textContent = msg
+  t.classList.add('is-visible')
+  clearTimeout(t._tid)
+  t._tid = setTimeout(() => t.classList.remove('is-visible'), 4000)
+}
+
+/* ================================
    Phone assembly — keeps number out of plain HTML
    ================================ */
 document.querySelectorAll('.tel-js').forEach(el => {
@@ -84,19 +100,55 @@ if (bannerSlides.length > 1) resetBannerTimer()
 /* ================================
    Contact form
    ================================ */
-document.getElementById('contact-form')?.addEventListener('submit', e => {
+document.getElementById('contact-form')?.addEventListener('submit', async e => {
   e.preventDefault()
-  const btn = e.target.querySelector('button[type="submit"]')
-  const orig = btn.textContent
-  btn.textContent = 'Message Sent ✓'
-  btn.style.background = 'var(--gold)'
-  btn.style.borderColor = 'var(--gold)'
-  btn.style.color = 'var(--bg)'
-  setTimeout(() => {
-    btn.textContent = orig
-    btn.style.background = ''
-    btn.style.borderColor = ''
-    btn.style.color = ''
-    e.target.reset()
-  }, 3000)
+  const form = e.target
+  const btn  = form.querySelector('button[type="submit"]')
+  const name  = form.querySelector('[name="name"]').value.trim()
+  const email = form.querySelector('[name="email"]').value.trim()
+
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  if (!name || !emailOk) {
+    form.querySelector('[name="name"]').style.borderColor  = name    ? '' : 'var(--gold)'
+    form.querySelector('[name="email"]').style.borderColor = emailOk ? '' : 'var(--gold)'
+    return
+  }
+
+  const lang = (typeof getLang === 'function') ? getLang() : 'en'
+  const t = k => window.I18N?.[lang]?.[k] || window.I18N?.en?.[k] || k
+  btn.textContent = t('form.sending')
+  btn.disabled    = true
+
+  try {
+    const res = await fetch('https://formsubmit.co/ajax/alvaro@anrealestate.es', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        name,
+        email,
+        interest: form.querySelector('[name="interest"]').value,
+        message:  form.querySelector('[name="message"]').value.trim(),
+        _subject:  'Nuevo contacto web — AN Real Estate',
+        _captcha:  'false',
+        _template: 'table',
+      }),
+    })
+    if (!res.ok) throw new Error()
+    btn.textContent       = t('form.sent')
+    btn.style.background  = 'var(--gold)'
+    btn.style.borderColor = 'var(--gold)'
+    btn.style.color       = 'var(--bg)'
+    form.reset()
+    showToast(t('form.toast_contact'))
+    setTimeout(() => {
+      btn.textContent       = t('contact.submit')
+      btn.style.background  = ''
+      btn.style.borderColor = ''
+      btn.style.color       = ''
+      btn.disabled          = false
+    }, 4000)
+  } catch {
+    btn.textContent = t('form.error')
+    btn.disabled    = false
+  }
 })

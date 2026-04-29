@@ -126,22 +126,9 @@
   margin-bottom: clamp(5rem, 14vw, 14rem);
 }
 
-/* at-text width for TREF overlap effect */
-.at-text {
-  font-size: var(--fs-sm);
-  color: var(--cream-dim);
-  opacity: .8;
-  line-height: 1.75;
-  margin-bottom: 2rem;
-}
-
 /* mob-hidden helper */
 .mob-hidden { display: none; }
-
-@media (min-width: 1024px) {
-  .mob-hidden { display: block; }
-  .at-text { width: 155%; }
-}
+@media (min-width: 1024px) { .mob-hidden { display: block; } }
 
 /* ================================
    CREDENTIALS / HISTORY
