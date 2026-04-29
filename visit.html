@@ -83,6 +83,13 @@
           </label>
           <input type="file" id="vs-photo-input" accept="image/*" capture="environment" class="vs-photo-input-hidden">
           <p class="vs-field-hint">Fotografíe el anverso del documento. Es confidencial — solo la verá el agente para verificar su identidad.</p>
+          <div id="vs-ai-verify-wrap" hidden>
+            <button type="button" id="vs-ai-verify-btn" class="vs-ai-verify-btn">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+              Verificar documento con IA
+            </button>
+            <div id="vs-ai-result" class="vs-ai-result" hidden></div>
+          </div>
         </div>
 
         <div class="vs-field-row">
@@ -389,10 +396,68 @@
           document.getElementById('vs-photo-placeholder').hidden = true
           document.getElementById('vs-photo-change').hidden = false
           document.getElementById('vs-photo-wrap').classList.remove('vs-photo--err')
+          document.getElementById('vs-ai-verify-wrap').hidden = false
+          document.getElementById('vs-ai-result').hidden = true
+          document.getElementById('vs-ai-result').className = 'vs-ai-result'
         }
         img.src = ev.target.result
       }
       reader.readAsDataURL(file)
+    })
+
+    /* ── AI document verification ── */
+    document.getElementById('vs-ai-verify-btn').addEventListener('click', function () {
+      var name    = document.getElementById('vs-name').value.trim()
+      var docType = document.getElementById('vs-doctype').value
+      var btn     = document.getElementById('vs-ai-verify-btn')
+      var result  = document.getElementById('vs-ai-result')
+
+      if (!dniPhotoDataUrl) return
+      if (!name) { result.className = 'vs-ai-result vs-ai-result--warn'; result.textContent = 'Introduzca el nombre completo antes de verificar.'; result.hidden = false; return }
+
+      btn.disabled = true
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-dasharray="60" stroke-dashoffset="20"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur=".8s" repeatCount="indefinite"/></circle></svg> Verificando…'
+      result.hidden = true
+
+      fetch('/api/verify-id', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64: dniPhotoDataUrl, name: name, docType: docType })
+      })
+      .then(function (r) { return r.json() })
+      .then(function (data) {
+        btn.disabled = false
+        btn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> Verificar de nuevo'
+        result.hidden = false
+
+        if (data.error) {
+          result.className = 'vs-ai-result vs-ai-result--info'
+          result.textContent = 'La verificación IA no está disponible ahora. El agente comprobará el documento manualmente.'
+          return
+        }
+
+        if (!data.isIdDocument) {
+          result.className = 'vs-ai-result vs-ai-result--warn'
+          result.textContent = '⚠ ' + (data.message || 'No se ha detectado un documento de identidad válido. Por favor, fotografíe el anverso del DNI/NIE/Pasaporte.')
+          return
+        }
+
+        if (data.nameMatch === false) {
+          result.className = 'vs-ai-result vs-ai-result--warn'
+          result.textContent = '⚠ Documento detectado (' + (data.docType || 'ID') + '), pero el nombre no coincide. Nombre en el documento: ' + (data.nameOnDoc || '—') + '. Por favor, revise los datos introducidos.'
+          return
+        }
+
+        result.className = 'vs-ai-result vs-ai-result--ok'
+        result.textContent = '✓ ' + (data.message || 'Documento verificado correctamente.')
+      })
+      .catch(function () {
+        btn.disabled = false
+        btn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> Verificar de nuevo'
+        result.className = 'vs-ai-result vs-ai-result--info'
+        result.textContent = 'Sin conexión — verificación IA no disponible. El agente comprobará el documento en persona.'
+        result.hidden = false
+      })
     })
 
     /* ── SHA-256 ── */
