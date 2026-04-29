@@ -1380,3 +1380,67 @@ details[open] .vl-import-toggle::before { transform: rotate(90deg); }
 .vl-import-input { flex: 1; min-width: 260px; font-size: .78rem; }
 .vl-import-btn { padding: .45rem 1rem; font-size: .78rem; white-space: nowrap; }
 .vl-import-msg { font-size: .75rem; min-height: 1.2em; }
+
+/* ── RADIO GROUP ─────────────────────────────── */
+.radio-group { display: flex; gap: .5rem; padding-top: .3rem; }
+.radio-opt {
+  display: flex; align-items: center; gap: .45rem;
+  padding: .45rem .9rem; border-radius: var(--r);
+  border: 1px solid var(--border); cursor: pointer;
+  font-size: var(--fs-sm); color: var(--cream); transition: border-color var(--trans), background var(--trans);
+}
+.radio-opt:has(input:checked) { border-color: var(--gold); background: rgba(201,169,110,.1); }
+.radio-opt input { display: none; }
+
+/* ── PRICE WRAP ──────────────────────────────── */
+.price-wrap { display: flex; align-items: stretch; gap: 0; }
+.price-sym {
+  display: flex; align-items: center; padding: 0 .6rem;
+  background: var(--bg3); border: 1px solid var(--border); border-right: none;
+  border-radius: var(--r) 0 0 var(--r); color: var(--gold); font-size: var(--fs-sm);
+}
+.price-input {
+  flex: 1; border-radius: 0 !important;
+  border-left: none !important; border-right: none !important;
+}
+.price-postfix {
+  border-radius: 0 var(--r) var(--r) 0 !important;
+  border-left: none !important;
+  min-width: 110px;
+}
+
+/* ── FEATURES GRID (checkboxes) ──────────────── */
+.feats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
+  padding: .25rem 0;
+}
+.feat-group {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 1rem;
+}
+.feat-group-title {
+  font-size: .72rem; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: .75rem;
+}
+.feat-group-title em { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--muted); }
+.feat-checks { display: flex; flex-direction: column; gap: .35rem; }
+.feat-checks label {
+  display: flex; align-items: center; gap: .5rem;
+  font-size: var(--fs-sm); color: var(--cream); cursor: pointer;
+  padding: .2rem .3rem; border-radius: 4px; transition: background var(--trans);
+}
+.feat-checks label:hover { background: rgba(201,169,110,.06); }
+.feat-checks input[type=checkbox] {
+  width: 14px; height: 14px; flex-shrink: 0;
+  accent-color: var(--gold); cursor: pointer;
+}
+.feat-group--custom { grid-column: 1 / -1; }
+.feat-group--custom textarea {
+  width: 100%; background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--r); color: var(--cream); font-family: inherit;
+  font-size: var(--fs-sm); padding: .6rem .8rem; resize: vertical;
+  line-height: 1.6; margin-top: .25rem;
+}
+.feat-group--custom textarea:focus { outline: none; border-color: var(--gold); }

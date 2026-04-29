@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="admin.css" />
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg7_3UefA_rzfXRAwCMS42A4Z7lx4BUTc&libraries=places" async defer></script>
 </head>
 <body>
 
@@ -136,6 +137,7 @@
         <!-- TAB: básico -->
         <div class="tab-panel active" id="tab-basic">
           <div class="form-grid">
+
             <div class="fg fg-2">
               <label>Título</label>
               <input type="text" id="f-title" placeholder="Ej: Elegant Penthouse with Sea Views" />
@@ -148,57 +150,174 @@
               <label>Referencia</label>
               <input type="text" id="f-ref" placeholder="ej: AN-2026-001" />
             </div>
+
             <div class="fg">
-              <label>Precio</label>
-              <input type="text" id="f-price" placeholder="€830,000 o €7,700" />
+              <label>Estado</label>
+              <div class="radio-group">
+                <label class="radio-opt"><input type="radio" name="f-status" value="sale" checked /> En venta</label>
+                <label class="radio-opt"><input type="radio" name="f-status" value="rent" /> En alquiler</label>
+              </div>
             </div>
             <div class="fg">
-              <label>Barrio</label>
-              <input type="text" id="f-neighbourhood" placeholder="ej: Gràcia, Barcelona" />
-            </div>
-            <div class="fg fg-2">
-              <label>Dirección exacta <em>(solo visible en admin y hoja de visita)</em></label>
-              <input type="text" id="f-address" placeholder="ej: Carrer de Verdi, 45, 3º 2ª, 08012 Barcelona" />
-            </div>
-            <div class="fg">
-              <label>Tipo</label>
+              <label>Tipo de propiedad</label>
               <select id="f-type">
                 <option value="apartment">Apartamento</option>
                 <option value="penthouse">Ático</option>
                 <option value="villa">Villa</option>
                 <option value="house">Casa</option>
                 <option value="townhouse">Casa adosada</option>
-                <option value="office">Oficina</option>
+                <option value="studio">Estudio</option>
+                <option value="office">Oficina / Comercial</option>
+                <option value="land">Solar / Terreno</option>
               </select>
             </div>
+
             <div class="fg">
-              <label>Estado</label>
-              <select id="f-status">
-                <option value="sale">En venta</option>
-                <option value="rent">En alquiler</option>
+              <label>Precio</label>
+              <div class="price-wrap">
+                <span class="price-sym">€</span>
+                <input type="text" id="f-price-num" class="price-input" placeholder="830,000" />
+                <select id="f-price-postfix" class="price-postfix">
+                  <option value="">— venta —</option>
+                  <option value="/mes">/mes</option>
+                  <option value="/semana">/semana</option>
+                  <option value="/noche">/noche</option>
+                </select>
+              </div>
+            </div>
+            <div class="fg">
+              <label>Barrio</label>
+              <select id="f-neighbourhood">
+                <option value="">— Selecciona —</option>
+                <option value="Gràcia, Barcelona">Gràcia</option>
+                <option value="Eixample, Barcelona">Eixample</option>
+                <option value="Dreta de l'Eixample, Barcelona">Dreta de l'Eixample</option>
+                <option value="Sant Gervasi, Barcelona">Sant Gervasi</option>
+                <option value="Sant Gervasi-Galvany, Barcelona">Sant Gervasi-Galvany</option>
+                <option value="Sant Gervasi-La Bonanova, Barcelona">Sant Gervasi-La Bonanova</option>
+                <option value="El Born, Barcelona">El Born</option>
+                <option value="Diagonal Mar, Barcelona">Diagonal Mar</option>
+                <option value="Pedralbes, Barcelona">Pedralbes</option>
+                <option value="Poble Nou, Barcelona">Poble Nou</option>
+                <option value="Vallvidrera, Barcelona">Vallvidrera</option>
+                <option value="Sarrià, Barcelona">Sarrià</option>
+                <option value="Les Corts, Barcelona">Les Corts</option>
+                <option value="Barceloneta, Barcelona">Barceloneta</option>
+                <option value="L'Ametlla de Mar, Tarragona">L'Ametlla de Mar</option>
               </select>
             </div>
-            <div class="fg">
-              <label>Badge tipo</label>
-              <input type="text" id="f-badge-type" placeholder="ej: Apartment" />
+
+            <div class="fg fg-2">
+              <label>Dirección exacta <em>(solo visible en admin y hoja de visita)</em></label>
+              <input type="text" id="f-address" placeholder="Busca la dirección…" autocomplete="off" />
             </div>
+            <div class="fg">
+              <label>Código postal</label>
+              <input type="text" id="f-zip" placeholder="ej: 08012" maxlength="10" />
+            </div>
+
+            <div class="fg">
+              <label>Superficie construida (m²)</label>
+              <input type="number" id="f-size" min="0" placeholder="ej: 94" />
+            </div>
+            <div class="fg">
+              <label>Superficie terreno (m²) <em>(opcional)</em></label>
+              <input type="number" id="f-land" min="0" placeholder="ej: 450" />
+            </div>
+
             <div class="fg">
               <label>Habitaciones</label>
-              <input type="number" id="f-beds" min="0" value="1" />
+              <select id="f-beds">
+                <option value="0">Estudio / 0</option>
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8+</option>
+              </select>
             </div>
             <div class="fg">
               <label>Baños</label>
-              <input type="number" id="f-baths" min="0" value="1" />
+              <select id="f-baths">
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6+</option>
+              </select>
             </div>
             <div class="fg">
-              <label>Superficie (m²)</label>
-              <input type="text" id="f-size" placeholder="ej: 94" />
+              <label>Garaje</label>
+              <select id="f-garage">
+                <option value="">No</option>
+                <option value="1">1 plaza</option>
+                <option value="2">2 plazas</option>
+                <option value="3">3 plazas</option>
+                <option value="4">4 plazas</option>
+                <option value="7">7 plazas</option>
+              </select>
             </div>
             <div class="fg">
               <label>Planta</label>
-              <input type="text" id="f-floor" placeholder="ej: Ground, 2nd, Principal" />
+              <select id="f-floor">
+                <option value="">— Selecciona —</option>
+                <option value="Ground">Planta baja</option>
+                <option value="Mezzanine">Entresuelo</option>
+                <option value="Principal">Principal</option>
+                <option value="1st">1ª</option>
+                <option value="2nd">2ª</option>
+                <option value="3rd">3ª</option>
+                <option value="4th">4ª</option>
+                <option value="5th">5ª</option>
+                <option value="Upper">Planta alta</option>
+                <option value="Penthouse">Ático</option>
+                <option value="3 levels">3 niveles</option>
+                <option value="4 levels">4 niveles</option>
+              </select>
             </div>
+
+            <div class="fg">
+              <label>Año de construcción</label>
+              <input type="number" id="f-year" min="1800" max="2030" placeholder="ej: 1920" />
+            </div>
+            <div class="fg">
+              <label>Año de renovación <em>(opcional)</em></label>
+              <input type="number" id="f-year-renovated" min="1900" max="2030" placeholder="ej: 2022" />
+            </div>
+            <div class="fg">
+              <label>Condición</label>
+              <select id="f-condition">
+                <option value="">— Selecciona —</option>
+                <option value="New construction">Nueva construcción</option>
+                <option value="New — under renovation">En renovación</option>
+                <option value="Newly renovated">Recién renovado</option>
+                <option value="Turn-key renovation">Reforma llave en mano</option>
+                <option value="Good condition">Buen estado</option>
+                <option value="To renovate">A reformar</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Clase energética</label>
+              <select id="f-energy">
+                <option value="">— N/A —</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+              </select>
+            </div>
+
           </div>
+
+          <input type="hidden" id="f-badge-type" />
+
           <div class="toggles-row">
             <label class="toggle-wrap">
               <span>Publicada en la web</span>
@@ -259,13 +378,127 @@
 
         <!-- TAB: características -->
         <div class="tab-panel" id="tab-feats">
-          <p class="tab-hint">Agrupa características por categoría (Interior, Exterior, Climatización…)</p>
-          <div class="list-block">
-            <div class="list-hd">
-              <span class="list-title">Categorías</span>
-              <button type="button" class="btn-add" id="add-feat-cat">+ Categoría</button>
+          <div class="feats-grid">
+
+            <div class="feat-group">
+              <h3 class="feat-group-title">Interior</h3>
+              <div class="feat-checks">
+                <label><input type="checkbox" value="High Ceilings"> High Ceilings</label>
+                <label><input type="checkbox" value="Vaulted Ceiling(s)"> Vaulted Ceiling(s)</label>
+                <label><input type="checkbox" value="Volta Catalana"> Volta Catalana</label>
+                <label><input type="checkbox" value="Ceilings with moldings"> Ceilings with moldings</label>
+                <label><input type="checkbox" value="Open Floorplan"> Open Floorplan</label>
+                <label><input type="checkbox" value="Natural Light"> Natural Light</label>
+                <label><input type="checkbox" value="Period Features"> Period Features</label>
+                <label><input type="checkbox" value="French Doors"> French Doors</label>
+                <label><input type="checkbox" value="Sliding Doors"> Sliding Doors</label>
+                <label><input type="checkbox" value="Walk-In Closet(s)"> Walk-In Closet(s)</label>
+                <label><input type="checkbox" value="Walk-in wardrobe(s)"> Walk-in wardrobe(s)</label>
+                <label><input type="checkbox" value="Library"> Library</label>
+                <label><input type="checkbox" value="Playroom"> Playroom</label>
+                <label><input type="checkbox" value="Utility room"> Utility room</label>
+                <label><input type="checkbox" value="Storage"> Storage</label>
+                <label><input type="checkbox" value="Split Bedroom"> Split Bedroom</label>
+              </div>
             </div>
-            <div id="feats-list" class="dyn-list"></div>
+
+            <div class="feat-group">
+              <h3 class="feat-group-title">Suelos</h3>
+              <div class="feat-checks">
+                <label><input type="checkbox" value="Solid Wooden Floor"> Solid Wooden Floor</label>
+                <label><input type="checkbox" value="Wooden Flooring"> Wooden Flooring</label>
+                <label><input type="checkbox" value="Marble Flooring"> Marble Flooring</label>
+                <label><input type="checkbox" value="Ceramic Tile Flooring"> Ceramic Tile Flooring</label>
+                <label><input type="checkbox" value="Mosaic tile flooring"> Mosaic tile flooring</label>
+              </div>
+            </div>
+
+            <div class="feat-group">
+              <h3 class="feat-group-title">Cocina</h3>
+              <div class="feat-checks">
+                <label><input type="checkbox" value="Equipped Kitchen"> Equipped Kitchen</label>
+                <label><input type="checkbox" value="Open kitchen"> Open kitchen</label>
+                <label><input type="checkbox" value="Oven"> Oven</label>
+                <label><input type="checkbox" value="Convection Oven"> Convection Oven</label>
+                <label><input type="checkbox" value="Refrigerator"> Refrigerator</label>
+                <label><input type="checkbox" value="Dishwasher"> Dishwasher</label>
+                <label><input type="checkbox" value="Microwave"> Microwave</label>
+                <label><input type="checkbox" value="Freezer"> Freezer</label>
+                <label><input type="checkbox" value="Wine Refrigerator"> Wine Refrigerator</label>
+                <label><input type="checkbox" value="Range Hood"> Range Hood</label>
+                <label><input type="checkbox" value="Exhaust Fan"> Exhaust Fan</label>
+                <label><input type="checkbox" value="Wet Bar"> Wet Bar</label>
+                <label><input type="checkbox" value="Solid Surface Counters"> Solid Surface Counters</label>
+                <label><input type="checkbox" value="Stone Counters"> Stone Counters</label>
+                <label><input type="checkbox" value="Solid Wood Cabinets"> Solid Wood Cabinets</label>
+              </div>
+            </div>
+
+            <div class="feat-group">
+              <h3 class="feat-group-title">Climatización</h3>
+              <div class="feat-checks">
+                <label><input type="checkbox" value="Air conditioning"> Air conditioning</label>
+                <label><input type="checkbox" value="Heating"> Heating</label>
+                <label><input type="checkbox" value="Electric Water Heater"> Electric Water Heater</label>
+                <label><input type="checkbox" value="Gas Water Heater"> Gas Water Heater</label>
+                <label><input type="checkbox" value="Tankless Water Heater"> Tankless Water Heater</label>
+                <label><input type="checkbox" value="Thermostat"> Thermostat</label>
+                <label><input type="checkbox" value="Central Vaccum"> Central Vaccum</label>
+                <label><input type="checkbox" value="Washer"> Washer</label>
+                <label><input type="checkbox" value="Dryer"> Dryer</label>
+                <label><input type="checkbox" value="Water Filtration System"> Water Filtration System</label>
+                <label><input type="checkbox" value="Water Purifier"> Water Purifier</label>
+                <label><input type="checkbox" value="Water Softener"> Water Softener</label>
+              </div>
+            </div>
+
+            <div class="feat-group">
+              <h3 class="feat-group-title">Exterior</h3>
+              <div class="feat-checks">
+                <label><input type="checkbox" value="Balcony"> Balcony</label>
+                <label><input type="checkbox" value="Terrace"> Terrace</label>
+                <label><input type="checkbox" value="Communal terrace"> Communal terrace</label>
+                <label><input type="checkbox" value="Garden"> Garden</label>
+                <label><input type="checkbox" value="Outdoor Kitchen"> Outdoor Kitchen</label>
+                <label><input type="checkbox" value="Outdoor Shower"> Outdoor Shower</label>
+                <label><input type="checkbox" value="Swimming Pool"> Swimming Pool</label>
+                <label><input type="checkbox" value="Sauna"> Sauna</label>
+                <label><input type="checkbox" value="Chill out area"> Chill out area</label>
+                <label><input type="checkbox" value="Barbaque"> Barbaque</label>
+                <label><input type="checkbox" value="Fence"> Fence</label>
+                <label><input type="checkbox" value="Tennis Court(s)"> Tennis Court(s)</label>
+                <label><input type="checkbox" value="Parking"> Parking</label>
+              </div>
+            </div>
+
+            <div class="feat-group">
+              <h3 class="feat-group-title">Edificio</h3>
+              <div class="feat-checks">
+                <label><input type="checkbox" value="Elevator"> Elevator</label>
+                <label><input type="checkbox" value="Concierge Service"> Concierge Service</label>
+                <label><input type="checkbox" value="Modernist building"> Modernist building</label>
+                <label><input type="checkbox" value="Alarm"> Alarm</label>
+                <label><input type="checkbox" value="Double Glazing"> Double Glazing</label>
+                <label><input type="checkbox" value="Exterior"> Exterior</label>
+                <label><input type="checkbox" value="Sidewalk"> Sidewalk</label>
+              </div>
+            </div>
+
+            <div class="feat-group">
+              <h3 class="feat-group-title">Vistas & Entorno</h3>
+              <div class="feat-checks">
+                <label><input type="checkbox" value="City Views"> City Views</label>
+                <label><input type="checkbox" value="Sea Views"> Sea Views</label>
+                <label><input type="checkbox" value="Transport Nearby"> Transport Nearby</label>
+                <label><input type="checkbox" value="Renovated"> Renovated</label>
+              </div>
+            </div>
+
+            <div class="feat-group feat-group--custom">
+              <h3 class="feat-group-title">Características adicionales <em>(una por línea)</em></h3>
+              <textarea id="f-feats-custom" rows="4" placeholder="Smart home automation&#10;Radiant floor heating&#10;Finnish sauna"></textarea>
+            </div>
+
           </div>
         </div>
 

@@ -301,19 +301,46 @@ function _showForm(slug) {
   document.getElementById('f-title').value         = l.title || ''
   document.getElementById('f-slug').value          = l.slug || ''
   document.getElementById('f-ref').value           = l.ref || ''
-  document.getElementById('f-price').value         = l.price || ''
-  document.getElementById('f-neighbourhood').value = l.neighbourhood || ''
+
+  // Price: parse "€830,000" or "€7,700/mes" back into num + postfix
+  const _priceStr = l.price || ''
+  const _pricePostfixMatch = _priceStr.match(/(\/\S+)$/)
+  document.getElementById('f-price-num').value     = _priceStr.replace(/^€/, '').replace(/(\/\S+)$/, '').trim()
+  document.getElementById('f-price-postfix').value = _pricePostfixMatch ? _pricePostfixMatch[1] : ''
+
+  // Neighbourhood: try exact match, fallback keeps value
+  const _nbEl = document.getElementById('f-neighbourhood')
+  _nbEl.value = l.neighbourhood || ''
+  if (!_nbEl.value && l.neighbourhood) {
+    const _opt = document.createElement('option')
+    _opt.value = l.neighbourhood; _opt.textContent = l.neighbourhood
+    _nbEl.appendChild(_opt); _nbEl.value = l.neighbourhood
+  }
+
   const _storedAddrs = JSON.parse(localStorage.getItem('an_addresses') || '{}')
   document.getElementById('f-address').value       = l.address || _storedAddrs[l.slug] || ''
+  document.getElementById('f-zip').value           = l.zip || ''
   document.getElementById('f-type').value          = l.type || 'apartment'
-  document.getElementById('f-status').value        = l.status || 'sale'
+
+  const _statusRadio = document.querySelector(`input[name="f-status"][value="${l.status || 'sale'}"]`)
+  if (_statusRadio) _statusRadio.checked = true
+
   document.getElementById('f-badge-type').value    = l.badge_type || ''
-  document.getElementById('f-beds').value          = l.beds ?? 1
-  document.getElementById('f-baths').value         = l.baths ?? 1
+  document.getElementById('f-beds').value          = String(l.beds ?? 2)
+  document.getElementById('f-baths').value         = String(l.baths ?? 1)
   document.getElementById('f-size').value          = l.size || ''
+  document.getElementById('f-land').value          = l.land || ''
+  document.getElementById('f-garage').value        = l.garage || ''
   document.getElementById('f-floor').value         = l.floor || ''
+  document.getElementById('f-year').value          = l.year || ''
+  document.getElementById('f-year-renovated').value = l.year_renovated || ''
+  document.getElementById('f-condition').value     = l.condition || ''
+  document.getElementById('f-energy').value        = l.energy || ''
   document.getElementById('f-published').checked   = l.published !== false
   document.getElementById('f-sold').checked        = l.sold === true
+
+  // Init Google Maps autocomplete on address field (once)
+  initAddressAutocomplete()
 
   // Gallery — ALL images including main (first card = main)
   const galleryEl = document.getElementById('gallery-list')
@@ -331,11 +358,19 @@ function _showForm(slug) {
   detailsEl.innerHTML = ''
   ;(l.details || []).forEach(d => addDetailRow(d))
 
-  // Features
-  const featsEl = document.getElementById('feats-list')
-  featsEl.innerHTML = ''
+  // Features: check matching checkboxes, put extras in custom textarea
+  document.querySelectorAll('#tab-feats input[type=checkbox]').forEach(cb => cb.checked = false)
+  document.getElementById('f-feats-custom').value = ''
   if (l.features) {
-    Object.entries(l.features).forEach(([cat, items]) => addFeatCat(cat, items))
+    const allItems = Object.values(l.features).flat()
+    const checkboxValues = new Set([...document.querySelectorAll('#tab-feats input[type=checkbox]')].map(cb => cb.value))
+    const unmatched = []
+    allItems.forEach(item => {
+      const cb = document.querySelector(`#tab-feats input[type=checkbox][value="${CSS.escape(item)}"]`)
+      if (cb) cb.checked = true
+      else if (!checkboxValues.has(item)) unmatched.push(item)
+    })
+    if (unmatched.length) document.getElementById('f-feats-custom').value = unmatched.join('\n')
   }
 
   // Nearby
@@ -399,15 +434,26 @@ function saveProperty() {
     val: r.querySelector('.det-val').value.trim()
   })).filter(d => d.key)
 
-  // Build features
-  const featCats = document.querySelectorAll('#feats-list .feat-cat-row')
+  // Build features from checkboxes grouped by category
+  const FEAT_CATS = {
+    'Interior':       ['High Ceilings','Vaulted Ceiling(s)','Volta Catalana','Ceilings with moldings','Open Floorplan','Natural Light','Period Features','French Doors','Sliding Doors','Walk-In Closet(s)','Walk-in wardrobe(s)','Library','Playroom','Utility room','Storage','Split Bedroom'],
+    'Flooring':       ['Solid Wooden Floor','Wooden Flooring','Marble Flooring','Ceramic Tile Flooring','Mosaic tile flooring'],
+    'Kitchen':        ['Equipped Kitchen','Open kitchen','Oven','Convection Oven','Refrigerator','Dishwasher','Microwave','Freezer','Wine Refrigerator','Range Hood','Exhaust Fan','Wet Bar','Solid Surface Counters','Stone Counters','Solid Wood Cabinets'],
+    'Climate':        ['Air conditioning','Heating','Electric Water Heater','Gas Water Heater','Tankless Water Heater','Thermostat','Central Vaccum','Washer','Dryer','Water Filtration System','Water Purifier','Water Softener'],
+    'Outdoor':        ['Balcony','Terrace','Communal terrace','Garden','Outdoor Kitchen','Outdoor Shower','Swimming Pool','Sauna','Chill out area','Barbaque','Fence','Tennis Court(s)','Parking'],
+    'Building':       ['Elevator','Concierge Service','Modernist building','Alarm','Double Glazing','Exterior','Sidewalk'],
+    'Views':          ['City Views','Sea Views','Transport Nearby','Renovated']
+  }
+  const checkedValues = new Set([...document.querySelectorAll('#tab-feats input[type=checkbox]:checked')].map(cb => cb.value))
   const features = {}
-  featCats.forEach(cat => {
-    const catName = cat.querySelector('.feat-cat-name').value.trim()
-    if (!catName) return
-    const pills = cat.querySelectorAll('.feat-pill-text')
-    features[catName] = [...pills].map(p => p.textContent).filter(Boolean)
+  Object.entries(FEAT_CATS).forEach(([cat, items]) => {
+    const matched = items.filter(i => checkedValues.has(i))
+    if (matched.length) features[cat] = matched
   })
+  const customRaw = document.getElementById('f-feats-custom').value.trim()
+  if (customRaw) {
+    features['Additional'] = customRaw.split('\n').map(s => s.trim()).filter(Boolean)
+  }
 
   // Build nearby
   const nearbyRows = document.querySelectorAll('#nearby-list .nearby-row')
@@ -416,20 +462,41 @@ function saveProperty() {
     dist: r.querySelector('.nb-dist').value.trim()
   })).filter(n => n.name)
 
+  // Price
+  const _priceNum = document.getElementById('f-price-num').value.trim()
+  const _pricePost = document.getElementById('f-price-postfix').value
+  const price = _priceNum ? `€${_priceNum}${_pricePost}` : ''
+
+  // Status from radio
+  const _statusChecked = document.querySelector('input[name="f-status"]:checked')
+  const status = _statusChecked ? _statusChecked.value : 'sale'
+
+  // Badge type auto from type
+  const BADGE_MAP = { apartment:'Apartment', penthouse:'Penthouse', villa:'Villa', house:'House', townhouse:'Townhouse', studio:'Studio', office:'Office', land:'Land' }
+  const type = document.getElementById('f-type').value
+  const badge_type = BADGE_MAP[type] || type.charAt(0).toUpperCase() + type.slice(1)
+
   const listing = {
     slug,
-    title:        document.getElementById('f-title').value.trim(),
-    price:        document.getElementById('f-price').value.trim(),
-    ref:          document.getElementById('f-ref').value.trim(),
-    neighbourhood:document.getElementById('f-neighbourhood').value.trim(),
-    address:      document.getElementById('f-address').value.trim() || undefined,
-    type:         document.getElementById('f-type').value,
-    status:       document.getElementById('f-status').value,
-    badge_type:   document.getElementById('f-badge-type').value.trim() || undefined,
-    beds:         parseInt(document.getElementById('f-beds').value) || 0,
-    baths:        parseInt(document.getElementById('f-baths').value) || 0,
-    size:         document.getElementById('f-size').value.trim(),
-    floor:        document.getElementById('f-floor').value.trim() || undefined,
+    title:         document.getElementById('f-title').value.trim(),
+    price,
+    ref:           document.getElementById('f-ref').value.trim(),
+    neighbourhood: document.getElementById('f-neighbourhood').value.trim(),
+    address:       document.getElementById('f-address').value.trim() || undefined,
+    zip:           document.getElementById('f-zip').value.trim() || undefined,
+    type,
+    status,
+    badge_type,
+    beds:          parseInt(document.getElementById('f-beds').value) || 0,
+    baths:         parseInt(document.getElementById('f-baths').value) || 0,
+    size:          document.getElementById('f-size').value.trim(),
+    land:          document.getElementById('f-land').value.trim() || undefined,
+    garage:        document.getElementById('f-garage').value || undefined,
+    floor:         document.getElementById('f-floor').value || undefined,
+    year:          document.getElementById('f-year').value ? parseInt(document.getElementById('f-year').value) : undefined,
+    year_renovated:document.getElementById('f-year-renovated').value ? parseInt(document.getElementById('f-year-renovated').value) : undefined,
+    condition:     document.getElementById('f-condition').value || undefined,
+    energy:        document.getElementById('f-energy').value || undefined,
     image:        mainImage || undefined,
     images:       images.length ? images : undefined,
     description:  description.length ? description : undefined,
@@ -728,6 +795,29 @@ function dlFile(content, filename, type) {
 
 function cacheListings() {
   localStorage.setItem('an_listings_cache', JSON.stringify({ listings: _listings }))
+}
+
+// ── GOOGLE MAPS AUTOCOMPLETE ───────────────────
+let _mapsACInited = false
+function initAddressAutocomplete() {
+  if (_mapsACInited) return
+  if (!window.google?.maps?.places) {
+    window.addEventListener('load', initAddressAutocomplete, { once: true })
+    return
+  }
+  const input = document.getElementById('f-address')
+  if (!input) return
+  const ac = new google.maps.places.Autocomplete(input, {
+    types: ['address'],
+    componentRestrictions: { country: 'es' }
+  })
+  ac.addListener('place_changed', () => {
+    const place = ac.getPlace()
+    const comps = place.address_components || []
+    const zip = comps.find(c => c.types.includes('postal_code'))?.long_name || ''
+    if (zip) document.getElementById('f-zip').value = zip
+  })
+  _mapsACInited = true
 }
 
 // ── WATERMARK TOOL ────────────────────────────
