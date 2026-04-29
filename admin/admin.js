@@ -1087,9 +1087,9 @@ function renderMediaGrid() {
 const TRANSLATE_LANGS = ['es', 'en', 'ca', 'fr', 'de', 'it', 'ru']
 const LANG_NAMES = { es:'Español', en:'English', ca:'Català', fr:'Français', de:'Deutsch', it:'Italiano', ru:'Русский' }
 
-async function gtranslate(text, targetLang) {
+async function gtranslate(text, targetLang, sourceLang = 'auto') {
   if (!text || !text.trim()) return text
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`
   try {
     const res = await fetch(url)
     const data = await res.json()
@@ -1106,47 +1106,66 @@ async function translateListing() {
     toast('Rellena el título y la descripción antes de traducir', 'error'); return
   }
 
+  const sourceLang = document.getElementById('f-source-lang')?.value || 'auto'
   const btn = document.getElementById('btn-translate')
   btn.disabled = true
 
-  const existing = (() => { try { const v = document.getElementById('f-translations').value; return v ? JSON.parse(v) : {} } catch { return {} } })()
+  // Collect features from checkboxes grouped by category
+  const FEAT_CATS_TR = {
+    'Interior':    ['High Ceilings','Vaulted Ceiling(s)','Volta Catalana','Ceilings with moldings','Open Floorplan','Natural Light','Period Features','French Doors','Sliding Doors','Walk-In Closet(s)','Walk-in wardrobe(s)','Library','Playroom','Utility room','Storage','Split Bedroom'],
+    'Flooring':    ['Solid Wooden Floor','Wooden Flooring','Marble Flooring','Ceramic Tile Flooring','Mosaic tile flooring'],
+    'Kitchen':     ['Equipped Kitchen','Open kitchen','Oven','Convection Oven','Refrigerator','Dishwasher','Microwave','Freezer','Wine Refrigerator','Range Hood','Exhaust Fan','Wet Bar','Solid Surface Counters','Stone Counters','Solid Wood Cabinets'],
+    'Climate':     ['Air conditioning','Heating','Electric Water Heater','Gas Water Heater','Tankless Water Heater','Thermostat','Central Vaccum','Washer','Dryer','Water Filtration System','Water Purifier','Water Softener'],
+    'Outdoor':     ['Balcony','Terrace','Communal terrace','Garden','Outdoor Kitchen','Outdoor Shower','Swimming Pool','Sauna','Chill out area','Barbaque','Fence','Tennis Court(s)','Parking'],
+    'Building':    ['Elevator','Concierge Service','Modernist building','Alarm','Double Glazing','Exterior','Sidewalk'],
+    'Views':       ['City Views','Sea Views','Transport Nearby','Renovated']
+  }
+  const checkedVals = new Set([...document.querySelectorAll('#tab-feats input[type=checkbox]:checked')].map(cb => cb.value))
+  const currentFeatures = {}
+  Object.entries(FEAT_CATS_TR).forEach(([cat, items]) => {
+    const matched = items.filter(i => checkedVals.has(i))
+    if (matched.length) currentFeatures[cat] = matched
+  })
+  const customRaw = document.getElementById('f-feats-custom').value.trim()
+  if (customRaw) currentFeatures['Additional'] = customRaw.split('\n').map(s => s.trim()).filter(Boolean)
+
   const translations = {}
 
   for (const lang of TRANSLATE_LANGS) {
+    if (lang === sourceLang) continue
     btn.textContent = `⏳ ${lang.toUpperCase()}…`
     translations[lang] = {}
 
-    if (title) translations[lang].title = await gtranslate(title, lang)
+    if (title) translations[lang].title = await gtranslate(title, lang, sourceLang)
 
     if (description.length) {
       const translated = []
-      for (const para of description) {
-        translated.push(await gtranslate(para, lang))
-      }
+      for (const para of description) translated.push(await gtranslate(para, lang, sourceLang))
       translations[lang].description = translated
     }
 
-    // Translate feature category names and items
-    const featCats = document.querySelectorAll('#feats-list .feat-cat-row')
-    if (featCats.length) {
+    if (Object.keys(currentFeatures).length) {
       const features = {}
-      for (const cat of featCats) {
-        const catName = cat.querySelector('.feat-cat-name').value.trim()
-        if (!catName) continue
-        const translatedCat = await gtranslate(catName, lang)
-        const pills = [...cat.querySelectorAll('.feat-pill-text')].map(p => p.textContent)
-        const translatedPills = []
-        for (const pill of pills) translatedPills.push(await gtranslate(pill, lang))
-        features[translatedCat] = translatedPills
+      for (const [cat, items] of Object.entries(currentFeatures)) {
+        const translatedCat = await gtranslate(cat, lang, sourceLang)
+        const translatedItems = []
+        for (const item of items) translatedItems.push(await gtranslate(item, lang, sourceLang))
+        features[translatedCat] = translatedItems
       }
-      if (Object.keys(features).length) translations[lang].features = features
+      translations[lang].features = features
     }
+  }
+
+  // If writing in a specific language, store the source content too
+  if (sourceLang !== 'auto') {
+    translations[sourceLang] = { title, description }
+    if (Object.keys(currentFeatures).length) translations[sourceLang].features = currentFeatures
   }
 
   document.getElementById('f-translations').value = JSON.stringify(translations)
   btn.disabled = false
   btn.textContent = '🌐 Traducir'
-  toast('¡Traducido a 7 idiomas! Guarda para conservar.', 'success')
+  toast(`¡Traducido a ${TRANSLATE_LANGS.length} idiomas! Guarda para conservar.`, 'success')
 }
 
 // ── TOAST ─────────────────────────────────────
