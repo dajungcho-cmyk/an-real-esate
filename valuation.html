@@ -664,7 +664,8 @@
 
     function scrollBottom() {
       msgsEl.scrollTo({ top: msgsEl.scrollHeight, behavior: 'smooth' })
-      /* Pin input area to thumb zone — skip when input is empty (mid-transition) */
+      /* Mobile only: pin input area to thumb zone */
+      if (window.innerWidth > 768) return
       setTimeout(function() {
         if (!inputEl.firstChild) return
         var rect = inputEl.getBoundingClientRect()
