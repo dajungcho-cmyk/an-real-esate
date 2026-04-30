@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active', 'hidden'))
       tab.classList.add('active')
       document.getElementById('tab-' + tab.dataset.tab).classList.add('active')
+      if (tab.dataset.tab === 'nearby') openMapPickerTab()
     })
   })
 
@@ -1366,74 +1367,80 @@ function cacheListings() {
 }
 
 // ── MAP PICKER ────────────────────────────────
-let _mapPickerInstance = null
-let _mapPickerMarker   = null
+let _mapPickerMap    = null
+let _mapPickerMarker = null
+let _mapPickerPending = null  // {lat, lng, address} saved until tab is opened
 
-function initMapPicker(lat, lng, address) {
+function _buildMapAt(coord) {
   const mapEl = document.getElementById('admin-map-picker')
-  if (!mapEl) return
-
-  function buildMap(coord) {
-    if (!window.google?.maps) return
-    mapEl.innerHTML = ''
-    const map = new google.maps.Map(mapEl, {
-      center: coord,
-      zoom: 15,
-      disableDefaultUI: true,
-      zoomControl: true,
-      gestureHandling: 'cooperative',
-    })
-    const marker = new google.maps.Marker({
-      position: coord,
-      map,
-      draggable: true,
-      cursor: 'move',
-    })
-    marker.addListener('dragend', () => {
-      const pos = marker.getPosition()
-      document.getElementById('f-lat').value = pos.lat().toFixed(7)
-      document.getElementById('f-lng').value = pos.lng().toFixed(7)
-      _formDirty = true
-    })
-    map.addListener('click', e => {
-      marker.setPosition(e.latLng)
-      document.getElementById('f-lat').value = e.latLng.lat().toFixed(7)
-      document.getElementById('f-lng').value = e.latLng.lng().toFixed(7)
-      _formDirty = true
-    })
-    _mapPickerInstance = map
-    _mapPickerMarker   = marker
+  if (!mapEl || !window.google?.maps) return
+  mapEl.innerHTML = ''
+  const map = new google.maps.Map(mapEl, {
+    center: coord, zoom: 15,
+    disableDefaultUI: true, zoomControl: true,
+    gestureHandling: 'cooperative',
+  })
+  const marker = new google.maps.Marker({ position: coord, map, draggable: true, cursor: 'move' })
+  function updateCoords(pos) {
+    document.getElementById('f-lat').value = pos.lat().toFixed(7)
+    document.getElementById('f-lng').value = pos.lng().toFixed(7)
+    _formDirty = true
   }
+  marker.addListener('dragend', () => updateCoords(marker.getPosition()))
+  map.addListener('click', e => { marker.setPosition(e.latLng); updateCoords(e.latLng) })
+  _mapPickerMap    = map
+  _mapPickerMarker = marker
+  // Force repaint after layout settles
+  setTimeout(() => google.maps.event.trigger(map, 'resize'), 50)
+}
 
-  function geocodeAndBuild(addr) {
-    if (!window.google?.maps) return
-    new google.maps.Geocoder().geocode({ address: addr }, (results, status) => {
-      if (status === 'OK' && results[0]) {
-        const loc = results[0].geometry.location
-        buildMap({ lat: loc.lat(), lng: loc.lng() })
-        document.getElementById('f-lat').value = loc.lat().toFixed(7)
-        document.getElementById('f-lng').value = loc.lng().toFixed(7)
-      }
-    })
-  }
-
-  function tryInit() {
-    if (!window.google?.maps) { setTimeout(tryInit, 400); return }
-    if (lat && lng) {
-      buildMap({ lat: parseFloat(lat), lng: parseFloat(lng) })
-    } else if (address) {
-      geocodeAndBuild(address)
-    } else {
-      buildMap({ lat: 41.3874, lng: 2.1686 }) // Barcelona default
+function _geocodeAndBuild(addr) {
+  if (!window.google?.maps) return
+  new google.maps.Geocoder().geocode({ address: addr }, (results, status) => {
+    if (status === 'OK' && results[0]) {
+      const loc = results[0].geometry.location
+      const coord = { lat: loc.lat(), lng: loc.lng() }
+      _buildMapAt(coord)
+      document.getElementById('f-lat').value = loc.lat().toFixed(7)
+      document.getElementById('f-lng').value = loc.lng().toFixed(7)
     }
-  }
-  tryInit()
-
-  document.getElementById('btn-map-reset')?.addEventListener('click', () => {
-    const addr = document.getElementById('f-address').value.trim()
-    if (addr) geocodeAndBuild(addr)
   })
 }
+
+function initMapPicker(lat, lng, address) {
+  // Store pending state — actual render happens when tab-nearby becomes visible
+  _mapPickerPending = { lat, lng, address }
+  _mapPickerMap = null
+  _mapPickerMarker = null
+}
+
+function openMapPickerTab() {
+  if (_mapPickerMap) {
+    // Already built — just trigger resize in case of reflow
+    google.maps.event.trigger(_mapPickerMap, 'resize')
+    return
+  }
+  if (!_mapPickerPending) return
+  const { lat, lng, address } = _mapPickerPending
+  function tryRender() {
+    if (!window.google?.maps) { setTimeout(tryRender, 300); return }
+    if (lat && lng) {
+      _buildMapAt({ lat: parseFloat(lat), lng: parseFloat(lng) })
+    } else if (address) {
+      _geocodeAndBuild(address)
+    } else {
+      _buildMapAt({ lat: 41.3874, lng: 2.1686 })
+    }
+  }
+  tryRender()
+}
+
+// "↺ Desde dirección" button
+document.addEventListener('click', e => {
+  if (e.target.id !== 'btn-map-reset') return
+  const addr = document.getElementById('f-address')?.value.trim()
+  if (addr) _geocodeAndBuild(addr)
+})
 
 // ── GOOGLE MAPS AUTOCOMPLETE ───────────────────
 let _mapsACInited = false
@@ -1452,6 +1459,19 @@ function initAddressAutocomplete() {
   ac.addListener('place_changed', () => {
     const place = ac.getPlace()
     const comps = place.address_components || []
+
+    // Auto-update map picker from selected address
+    if (place.geometry?.location) {
+      const loc = place.geometry.location
+      const coord = { lat: loc.lat(), lng: loc.lng() }
+      document.getElementById('f-lat').value = loc.lat().toFixed(7)
+      document.getElementById('f-lng').value = loc.lng().toFixed(7)
+      _mapPickerPending = { lat: loc.lat(), lng: loc.lng(), address: place.formatted_address }
+      if (_mapPickerMap) {
+        _mapPickerMap.setCenter(coord)
+        _mapPickerMarker?.setPosition(coord)
+      }
+    }
 
     // Zip
     const zip = comps.find(c => c.types.includes('postal_code'))?.long_name || ''
