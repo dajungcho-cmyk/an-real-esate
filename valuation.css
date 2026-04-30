@@ -333,3 +333,59 @@
 .pac-matched { color: var(--gold); }
 .pac-icon { display: none; }
 .pac-logo::after { display: none; }
+
+/* ── Agent avatar ─────────────── */
+.chat-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: 4px;
+}
+.chat-avatar span {
+  font-family: var(--serif);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--bg);
+  letter-spacing: .04em;
+}
+
+/* ── Direct contact strip ─────── */
+.val-direct {
+  border-top: 1px solid var(--border);
+  padding: 1.25rem 0;
+}
+.val-direct-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .5rem 1rem;
+}
+.val-direct-label {
+  font-size: var(--fs-xs);
+  letter-spacing: .08em;
+  color: var(--muted);
+}
+.val-direct-link {
+  font-size: var(--fs-xs);
+  letter-spacing: .08em;
+  color: var(--cream-dim);
+  transition: color var(--fast);
+  text-decoration: none;
+}
+.val-direct-link:hover { color: var(--gold); }
+.val-direct-sep {
+  color: var(--border);
+}
+
+/* ── Trust strip sup ──────────── */
+.val-trust-num sup {
+  font-size: .45em;
+  color: var(--gold);
+  vertical-align: super;
+}
