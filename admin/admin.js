@@ -1448,16 +1448,10 @@ function _paintPreview() {
   const empty  = document.getElementById('wm-live-empty')
   if (!canvas || !empty || !_cachedSampleImg || !_cachedLogoImg) return
 
-  const wrap   = document.getElementById('wm-live-canvas-wrap')
-  const maxW   = wrap.clientWidth || 600
-  const maxH   = 460
-  let w = _cachedSampleImg.width, h = _cachedSampleImg.height
-  const ratio  = w / h
-  if (w > maxW) { w = maxW; h = w / ratio }
-  if (h > maxH) { h = maxH; w = h * ratio }
-  w = Math.round(w); h = Math.round(h)
+  // Render at native resolution — CSS (width:100%) scales for display, output is pixel-perfect
+  const w = _cachedSampleImg.naturalWidth  || _cachedSampleImg.width
+  const h = _cachedSampleImg.naturalHeight || _cachedSampleImg.height
 
-  // Force-reset canvas (assigning same value doesn't always clear in Chrome)
   canvas.width = 0
   canvas.width  = w
   canvas.height = h
