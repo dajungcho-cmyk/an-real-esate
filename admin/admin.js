@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Dynamic list add buttons
   document.getElementById('add-gallery-url').addEventListener('click', () => addGalleryCard())
+  document.getElementById('apply-logo-gallery').addEventListener('click', applyLogoToGallery)
   document.getElementById('add-para').addEventListener('click', () => addDescRow())
   document.getElementById('add-detail').addEventListener('click', () => addDetailRow())
   document.getElementById('add-feat-cat')?.addEventListener('click', () => addFeatCat())
@@ -1587,6 +1588,92 @@ function processWatermark(file, logoDataUrl) {
     }
     reader.readAsDataURL(file)
   })
+}
+
+function processWatermarkFromUrl(url, logoDataUrl) {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      canvas.width  = img.naturalWidth  || img.width
+      canvas.height = img.naturalHeight || img.height
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0)
+      const logo = new Image()
+      logo.onload = () => {
+        const sizeRatio = parseInt(document.getElementById('wm-size').value) / 100
+        const opacity   = parseInt(document.getElementById('wm-opacity').value) / 100
+        const logoW  = canvas.width * sizeRatio
+        const logoH  = logo.height * (logoW / logo.width)
+        const margin = canvas.width * 0.025
+        const pos    = _wmPosition
+        let x = margin, y = canvas.height - logoH - margin
+        if (pos.includes('right'))                          x = canvas.width - logoW - margin
+        if (pos.includes('center') && !pos.includes('mid')) x = (canvas.width - logoW) / 2
+        if (pos.includes('top'))                            y = margin
+        if (pos.includes('mid'))                            y = (canvas.height - logoH) / 2
+        if (pos === 'center') { x = (canvas.width - logoW) / 2; y = (canvas.height - logoH) / 2 }
+        ctx.globalAlpha = opacity
+        ctx.drawImage(logo, x, y, logoW, logoH)
+        ctx.globalAlpha = 1
+        resolve(canvas.toDataURL('image/jpeg', 0.92))
+      }
+      logo.onerror = () => reject(new Error('Logo load failed'))
+      logo.src = logoDataUrl
+    }
+    img.onerror = () => reject(new Error('Image load failed'))
+    img.src = url
+  })
+}
+
+async function applyLogoToGallery() {
+  const cards = [...document.querySelectorAll('#gallery-list .gal-card')].filter(c => {
+    const img = c.querySelector('img')
+    return img && img.src && !img.src.startsWith('data:image/svg')
+  })
+  if (!cards.length) { toast('No hay fotos en la galería', 'error'); return }
+
+  const confirmed = await showConfirmAsync(
+    `¿Aplicar logo AN a las ${cards.length} foto${cards.length > 1 ? 's' : ''} de la galería?`,
+    { okText: 'Sí, aplicar', okClass: 'btn-gold' }
+  )
+  if (!confirmed) return
+
+  const logoDataUrl = await getLogoDataUrl()
+  const progressWrap = document.getElementById('upload-gallery-progress')
+  const statusEl     = document.getElementById('upload-gallery-status')
+  const total = cards.length
+  let successCount = 0
+
+  progressWrap.classList.remove('hidden')
+  try {
+    for (let i = 0; i < cards.length; i++) {
+      const card = cards[i]
+      const img  = card.querySelector('img')
+      statusEl.textContent = `Procesando ${i + 1} de ${total}…`
+      setProgress('upload-gallery-fill', Math.round((i / total) * 100))
+      try {
+        const watermarkedDataUrl = await processWatermarkFromUrl(img.src, logoDataUrl)
+        const filename = (img.src.split('/').pop()?.split('?')[0] || `photo-${i + 1}`) + '.jpg'
+        const file = dataUrlToFile(watermarkedDataUrl, filename)
+        const newUrl = await uploadFile(file, null, 'upload-gallery-fill', null)
+        if (newUrl) {
+          img.src = newUrl
+          card.dataset.src = newUrl
+          successCount++
+        }
+      } catch (err) {
+        console.warn('[apply-logo] skipped:', err.message)
+      }
+    }
+  } finally {
+    setProgress('upload-gallery-fill', 100)
+    setTimeout(() => progressWrap.classList.add('hidden'), 600)
+  }
+
+  if (successCount > 0) toast(`Logo aplicado a ${successCount} foto${successCount > 1 ? 's' : ''}`, 'success')
+  else toast('No se pudo aplicar el logo (¿CORS?)', 'error')
 }
 
 function renderWmResult({ name, dataUrl }) {
