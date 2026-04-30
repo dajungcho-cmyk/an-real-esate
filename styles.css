@@ -167,6 +167,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hn-link:hover { color: var(--cream); }
 .hn-link:hover::before { transform: scaleX(1); }
 
+.hn-link--cta {
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: .45em 1.1em;
+  letter-spacing: .14em;
+  transition: color var(--fast), background var(--fast), border-color var(--fast);
+}
+.hn-link--cta::before { display: none; }
+.hn-link--cta:hover {
+  background: var(--gold);
+  color: var(--bg);
+}
+
 .header-phone {
   display: none;
   font-size: max(14px, 0.832vw);
