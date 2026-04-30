@@ -1722,3 +1722,13 @@ details[open] .vl-import-toggle::before { transform: rotate(90deg); }
 
 /* ── LOCATION CASCADE ────────────────────────── */
 select:disabled { opacity: .45; cursor: default; }
+
+/* ── DEPLOY HINT ─────────────────────────────── */
+.sb-deploy-hint {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin: .25rem 0 .5rem;
+  padding: 0 .25rem;
+  opacity: .7;
+}

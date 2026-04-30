@@ -1117,7 +1117,7 @@ async function publishToWeb() {
     })
     const d = await r.json()
     if (d.ok) {
-      toast(`✓ Web actualizada — ${d.count} propiedades publicadas. Netlify desplegará en ~30 segundos.`, 'success')
+      toast(`✓ Cambios subidos — ${d.count} propiedades. La web se actualizará en ~30 s.`, 'success')
     } else {
       toast('Error al publicar: ' + (d.error || 'respuesta inesperada'), 'error')
     }
