@@ -1492,10 +1492,11 @@ input[type="range"] {
 
 /* ── MOBILE (≤600px) ─────────────────────────── */
 @media (max-width: 600px) {
-  /* Bottom nav */
+
+  /* ── Bottom nav bar ───────────────────────── */
   .sidebar {
     width: 100%;
-    height: 54px;
+    height: 56px;
     min-height: auto;
     overflow: visible;
     position: fixed;
@@ -1518,48 +1519,131 @@ input[type="range"] {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: .4rem .25rem;
-    gap: .15rem;
-    font-size: .52rem;
+    padding: .45rem .2rem;
+    gap: .18rem;
+    font-size: .5rem;
     letter-spacing: .03em;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    min-height: 56px;
   }
-  .sb-link svg { width: 17px; height: 17px; flex-shrink: 0; }
+  .sb-link svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-  /* Main scrollable area clears bottom nav */
-  .main { padding-bottom: 64px; }
+  /* ── Main: clears bottom nav, tighter padding ─ */
+  .main { padding-bottom: 72px; }
   .view { padding: 1rem .85rem 1.5rem; }
 
-  /* View header stacks */
+  /* ── View header ──────────────────────────── */
   .view-hd {
     flex-direction: column;
     align-items: flex-start;
-    gap: .65rem;
+    gap: .6rem;
+    margin-bottom: 1.25rem;
   }
-  .view-hd h1 { font-size: 1.15rem; }
-  .hd-actions { width: 100%; flex-wrap: wrap; }
+  .view-hd h1 { font-size: 1.1rem; }
+  .view-sub   { font-size: .68rem; }
+  .hd-actions { width: 100%; flex-wrap: wrap; gap: .4rem; }
+  .hd-actions .btn-gold,
+  .hd-actions .btn-outline,
+  .hd-actions .btn-danger { flex: 1 1 auto; text-align: center; justify-content: center; min-height: 40px; }
 
-  /* Property table scrolls horizontally */
-  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .prop-table { min-width: 480px; }
+  /* ── Props summary ────────────────────────── */
+  #props-summary { font-size: .68rem; }
 
-  /* Price wrap */
+  /* ── Property table → card layout ─────────── */
+  .table-wrap { overflow-x: visible; background: transparent; border: none; border-radius: 0; }
+  .prop-table { display: block; min-width: 0; }
+  .prop-table thead { display: none; }
+  .prop-table tbody { display: flex; flex-direction: column; gap: .4rem; }
+
+  /* Each row becomes a 2-row grid card */
+  .prop-table tr {
+    display: grid;
+    grid-template-columns: 48px 44px 1fr auto;
+    grid-template-rows: auto auto;
+    column-gap: .5rem;
+    row-gap: .25rem;
+    align-items: center;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: .7rem .75rem;
+  }
+  .prop-table td {
+    padding: 0;
+    border: none !important;
+    background: none !important;
+    vertical-align: unset;
+  }
+  /* col1 rows 1-2: order controls */
+  .prop-table td:nth-child(1) { grid-column: 1; grid-row: 1 / 3; justify-self: center; align-self: center; }
+  /* col2 rows 1-2: thumbnail */
+  .prop-table td:nth-child(2) { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+  /* col3 row1: title + location */
+  .prop-table td:nth-child(3) { grid-column: 3; grid-row: 1; min-width: 0; }
+  /* col3 row2: price */
+  .prop-table td:nth-child(4) { grid-column: 3; grid-row: 2; }
+  /* type badge: hidden (not critical on mobile) */
+  .prop-table td:nth-child(5) { display: none; }
+  /* col4 row2: stage */
+  .prop-table td:nth-child(6) { grid-column: 4; grid-row: 2; align-self: center; }
+  /* col4 row1: edit/delete actions */
+  .prop-table td:nth-child(7) { grid-column: 4; grid-row: 1; align-self: center; }
+
+  /* Slightly larger thumb in card */
+  .pt-thumb { width: 44px; height: 33px; }
+
+  /* Action buttons: bigger tap target */
+  .act-btn { width: 34px; height: 34px; }
+
+  /* ── Filter chips: scroll horizontally ────── */
+  .filter-bar { flex-wrap: nowrap; overflow-x: auto; padding-bottom: .25rem; -webkit-overflow-scrolling: touch; }
+  .fchip { white-space: nowrap; flex-shrink: 0; }
+
+  /* ── Form tabs: scroll if they overflow ────── */
+  .form-tabs-bar { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .ftab { padding: .65rem 1rem; font-size: .78rem; }
+
+  /* ── Form grid: single column (already at 900px but reinforce) ── */
+  .form-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .fg-2 { grid-column: span 1; }
+
+  /* ── Price wrap ───────────────────────────── */
   .price-wrap { flex-wrap: wrap; gap: .4rem; }
   .price-sym { border-radius: var(--r) 0 0 var(--r); }
   .price-postfix { min-width: auto; flex: 1; border-radius: 0 var(--r) var(--r) 0 !important; }
 
-  /* Features grid: single column */
+  /* ── Features grid: single column ────────── */
   .feats-grid { grid-template-columns: 1fr; }
 
-  /* Confirm box: full width */
-  .confirm-box { width: 92vw; }
+  /* ── Visit log table: hide less important cols ── */
+  .vl-table thead th:nth-child(3),   /* Doc */
+  .vl-table thead th:nth-child(5),   /* Email */
+  .vl-table tbody td:nth-child(3),
+  .vl-table tbody td:nth-child(5) { display: none; }
+  .vl-table { font-size: .75rem; }
+  .vl-table tbody td { padding: .5rem .4rem; }
 
-  /* Login box */
+  /* Visit row actions wrap cleanly */
+  .visit-actions { gap: .3rem; }
+  .visit-url-input { min-width: 0; flex: 1; font-size: .65rem; }
+
+  /* ── Visit picker ─────────────────────────── */
+  .visit-custom-row { flex-direction: column; }
+  .visit-custom-row .fg { min-width: 0; width: 100%; }
+
+  /* ── Watermark tool: already single-col, just tighten ── */
+  .wm-layout { gap: 1rem; }
+
+  /* ── Confirm / modal boxes: full width ────── */
+  .confirm-box { width: 92vw; padding: 1.5rem; }
+  .agent-modal-box { width: 92vw; }
+
+  /* ── Login box ────────────────────────────── */
   .ls-box { width: 100%; max-width: 340px; padding: 0 1.5rem; }
 
-  /* Prevent iOS zoom on all form inputs */
+  /* ── Prevent iOS auto-zoom on inputs ─────── */
   input[type="text"],
   input[type="url"],
   input[type="number"],
