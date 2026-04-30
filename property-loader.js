@@ -10,6 +10,10 @@
   if (!el) return
   let listings = []
   try { listings = JSON.parse(el.textContent).listings || [] } catch { return }
+  try {
+    const cached = JSON.parse(localStorage.getItem('an_listings_cache') || '{}').listings || []
+    if (cached.length) listings = cached
+  } catch {}
 
   const baseListing = listings.find(l => l.slug === (slug || 'gracia-garden'))
   if (!baseListing) return
