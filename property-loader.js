@@ -114,6 +114,12 @@
     const refEl = document.getElementById('ph-ref')
     if (refEl) refEl.textContent = `Ref. ${listing.ref}`
 
+    /* ── sidebar contact panel ── */
+    const pcPrice = document.querySelector('.pc-price')
+    if (pcPrice) pcPrice.innerHTML = isRent ? `${listing.price}<small>/mo</small>` : listing.price
+    const pcLoc = document.querySelector('.pc-loc')
+    if (pcLoc) pcLoc.textContent = listing.neighbourhood || listing.city || ''
+
     /* ── specs ── */
     const set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val }
     set('spec-beds',  listing.beds)

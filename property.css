@@ -382,6 +382,16 @@
   flex-shrink: 0;
   border: 1px solid var(--border);
 }
+.pc-agent-logo {
+  width: 56px; height: 56px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: rgba(255,255,255,.04);
+  padding: 10px;
+}
+.pc-agent-logo img { width: 100%; height: auto; filter: brightness(0) invert(1); opacity: .8; }
 .pc-agent-name { font-size: var(--fs-sm); font-weight: 500; color: var(--cream); }
 .pc-agent-role { font-size: var(--fs-xs); color: var(--muted); margin-top: 1px; }
 .pc-agent-agency { font-size: var(--fs-xs); color: var(--gold); margin-top: 3px; }
