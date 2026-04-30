@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('add-gallery-url').addEventListener('click', () => addGalleryCard())
   document.getElementById('add-para').addEventListener('click', () => addDescRow())
   document.getElementById('add-detail').addEventListener('click', () => addDetailRow())
-  document.getElementById('add-feat-cat').addEventListener('click', () => addFeatCat())
+  document.getElementById('add-feat-cat')?.addEventListener('click', () => addFeatCat())
   document.getElementById('add-nearby').addEventListener('click', () => addNearbyRow())
 
   // (imagen principal managed via gallery grid — no separate preview button)
@@ -99,35 +99,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Upload: gallery (multiple)
   document.getElementById('upload-gallery-files').addEventListener('change', async e => {
-    const files = [...e.target.files]; if (!files.length) return
+    const files = [...e.target.files]
+    e.target.value = ''  // reset immediately so the same file can be re-selected after any error
+    if (!files.length) return
     const total = files.length
-    for (let i = 0; i < files.length; i++) {
-      document.getElementById('upload-gallery-status').textContent = `Subiendo ${i+1} de ${total}…`
-      const url = await uploadFile(files[i], 'upload-gallery-progress', 'upload-gallery-fill', 'upload-gallery-status')
-      if (url) { addGalleryCard({ src: url, alt: files[i].name.replace(/\.[^.]+$/, '') }); saveToMediaLibrary(url, files[i].name) }
+    let successCount = 0
+    try {
+      for (let i = 0; i < files.length; i++) {
+        document.getElementById('upload-gallery-status').textContent = `Subiendo ${i+1} de ${total}…`
+        const url = await uploadFile(files[i], 'upload-gallery-progress', 'upload-gallery-fill', 'upload-gallery-status')
+        if (url) { successCount++; addGalleryCard({ src: url, alt: files[i].name.replace(/\.[^.]+$/, '') }); saveToMediaLibrary(url, files[i].name) }
+      }
+    } catch (err) {
+      console.error('[gallery upload error]', err)
+      toast('Error al procesar imagen: ' + err.message, 'error')
+    } finally {
+      document.getElementById('upload-gallery-progress').classList.add('hidden')
     }
-    document.getElementById('upload-gallery-progress').classList.add('hidden')
-    toast(`${total} imagen${total>1?'es':''} subida${total>1?'s':''}`, 'success')
-    e.target.value = ''
+    if (successCount > 0) toast(`${successCount} imagen${successCount>1?'es':''} subida${successCount>1?'s':''}`, 'success')
+    else if (successCount === 0 && total > 0) toast('No se pudo subir ninguna imagen', 'error')
   })
 
   // Upload: media repository
   document.getElementById('media-upload-input').addEventListener('change', async e => {
-    const files = [...e.target.files]; if (!files.length) return
-    const total = files.length
-    document.getElementById('media-progress').classList.remove('hidden')
-    for (let i = 0; i < files.length; i++) {
-      document.getElementById('media-progress-status').textContent = `Subiendo ${i+1} de ${total}…`
-      setProgress('media-progress-fill', Math.round((i/total)*100))
-      const url = await uploadFile(files[i], null, null, null)
-      if (url) saveToMediaLibrary(url, files[i].name)
-    }
-    setProgress('media-progress-fill', 100)
-    document.getElementById('media-progress-status').textContent = `${total} imagen${total>1?'es':''} subida${total>1?'s':''}`
-    setTimeout(() => document.getElementById('media-progress').classList.add('hidden'), 2000)
-    renderMediaGrid()
-    toast(`${total} imagen${total>1?'es':''} subida${total>1?'s':''}`, 'success')
+    const files = [...e.target.files]
     e.target.value = ''
+    if (!files.length) return
+    const total = files.length
+    let successCount = 0
+    document.getElementById('media-progress').classList.remove('hidden')
+    try {
+      for (let i = 0; i < files.length; i++) {
+        document.getElementById('media-progress-status').textContent = `Subiendo ${i+1} de ${total}…`
+        setProgress('media-progress-fill', Math.round((i/total)*100))
+        const url = await uploadFile(files[i], null, null, null)
+        if (url) { successCount++; saveToMediaLibrary(url, files[i].name) }
+      }
+    } catch (err) {
+      console.error('[media upload error]', err)
+      toast('Error al procesar imagen: ' + err.message, 'error')
+    } finally {
+      setProgress('media-progress-fill', 100)
+      document.getElementById('media-progress-status').textContent = `${successCount} imagen${successCount>1?'es':''} subida${successCount>1?'s':''}`
+      setTimeout(() => document.getElementById('media-progress').classList.add('hidden'), 2000)
+      renderMediaGrid()
+    }
+    if (successCount > 0) toast(`${successCount} imagen${successCount>1?'es':''} subida${successCount>1?'s':''}`, 'success')
+    else if (successCount === 0 && total > 0) toast('No se pudo subir ninguna imagen', 'error')
   })
 
   // Confirm dialog
