@@ -5,3 +5,4 @@
 _*.py
 _cloudinary_urls.json
 images/
+.vercel
