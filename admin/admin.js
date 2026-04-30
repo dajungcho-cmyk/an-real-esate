@@ -1723,8 +1723,12 @@ async function applyLogoToGallery() {
     setTimeout(() => progressWrap.classList.add('hidden'), 600)
   }
 
-  if (successCount > 0) toast(`Logo aplicado a ${successCount} foto${successCount > 1 ? 's' : ''}`, 'success')
-  else toast('No se pudo aplicar el logo (¿CORS?)', 'error')
+  if (successCount > 0) {
+    _formDirty = true
+    toast(`Logo aplicado a ${successCount} foto${successCount > 1 ? 's' : ''} — guarda y publica para ver los cambios`, 'success')
+  } else {
+    toast('No se pudo aplicar el logo (¿CORS?)', 'error')
+  }
 }
 
 function renderWmResult({ name, dataUrl }) {
