@@ -1457,10 +1457,11 @@ function _paintPreview() {
   if (h > maxH) { h = maxH; w = h * ratio }
   w = Math.round(w); h = Math.round(h)
 
+  // Force-reset canvas (assigning same value doesn't always clear in Chrome)
+  canvas.width = 0
   canvas.width  = w
   canvas.height = h
   const ctx = canvas.getContext('2d')
-  ctx.clearRect(0, 0, w, h)
   ctx.drawImage(_cachedSampleImg, 0, 0, w, h)
 
   const sizeRatio = parseInt(document.getElementById('wm-size').value) / 100
