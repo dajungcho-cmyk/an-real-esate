@@ -42,7 +42,7 @@
       color: rgba(255,255,255,.6);
     }
     .print-bar strong { color: white; font-weight: 500; }
-    .print-bar-actions { margin-left: auto; display: flex; gap: 8px; }
+    .print-bar-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
     .btn-print {
       background: var(--gold);
       color: var(--navy);
@@ -103,28 +103,26 @@
     ════════════════════════════════ */
     .cover {
       display: grid;
-      grid-template-columns: 82mm 1fr;
-      grid-template-rows: 1fr 13mm;
+      grid-template-columns: 80mm 1fr;
+      grid-template-rows: 1fr 12mm;
       height: 100%;
     }
 
     /* LEFT PANEL */
     .cover-panel {
       background: var(--navy);
-      padding: 10mm 9mm 0 10mm;
+      padding: 9mm 9mm 0 10mm;
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
 
-    .cover-logo {
-      margin-bottom: 0;
-    }
+    .cover-logo { flex-shrink: 0; }
     .cover-logo img {
       height: 9mm;
       width: auto;
       filter: brightness(0) invert(1);
-      opacity: .88;
+      opacity: .82;
       display: block;
     }
     .cover-logo-text {
@@ -135,71 +133,86 @@
       color: rgba(255,255,255,.85);
     }
 
-    /* Content block — vertically centered in remaining space */
+    /* Content pushed to bottom third */
     .cover-content {
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding-bottom: 4mm;
+      justify-content: flex-end;
+      padding-bottom: 9mm;
     }
 
+    /* Badge — borderless, text only */
     .cover-badge {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 5px;
       font-size: 6pt;
-      font-weight: 500;
-      letter-spacing: 2px;
+      font-weight: 400;
+      letter-spacing: 2.5px;
       text-transform: uppercase;
-      color: var(--gold);
-      border: 0.25mm solid rgba(200,169,110,.4);
-      padding: 1.5mm 2.5mm;
-      margin-bottom: 5mm;
-      width: fit-content;
+      color: rgba(200,169,110,.75);
+      margin-bottom: 4mm;
+    }
+    .cover-badge-dot {
+      width: 1.2mm;
+      height: 1.2mm;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: .6;
+      flex-shrink: 0;
     }
 
     .cover-title {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 26pt;
+      font-size: 30pt;
       font-weight: 300;
-      line-height: 1.1;
+      line-height: 1.05;
       color: white;
-      margin-bottom: 2.5mm;
+      margin-bottom: 2mm;
       letter-spacing: -.3px;
     }
 
     .cover-location {
-      font-size: 7pt;
+      font-size: 6.5pt;
       font-weight: 400;
-      letter-spacing: 1.8px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--gold);
-      opacity: .85;
+      opacity: .75;
       margin-bottom: 6mm;
     }
 
     .cover-rule {
-      width: 14mm;
+      width: 12mm;
       height: 0.25mm;
-      background: rgba(200,169,110,.45);
-      margin-bottom: 5.5mm;
+      background: rgba(200,169,110,.4);
+      margin-bottom: 5mm;
     }
 
     .cover-price {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 20pt;
+      font-size: 24pt;
       font-weight: 400;
       color: var(--gold);
-      margin-bottom: 5mm;
+      margin-bottom: 5.5mm;
       letter-spacing: -.2px;
     }
 
+    /* Specs — single horizontal row */
     .cover-specs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5mm 4mm;
+      display: flex;
+      align-items: flex-start;
       margin-bottom: 6mm;
+    }
+    .cover-spec {
+      display: flex;
+      flex-direction: column;
+    }
+    .cover-spec + .cover-spec {
+      padding-left: 4mm;
+      margin-left: 4mm;
+      border-left: 0.25mm solid rgba(200,169,110,.25);
     }
     .cover-spec-val {
       font-family: 'Cormorant Garamond', Georgia, serif;
@@ -210,24 +223,23 @@
       line-height: 1;
     }
     .cover-spec-lbl {
-      font-size: 6pt;
+      font-size: 5.5pt;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: rgba(255,255,255,.35);
+      color: rgba(255,255,255,.3);
       display: block;
       margin-top: 1mm;
     }
 
     .cover-desc {
       font-size: 7.5pt;
-      line-height: 1.7;
-      color: rgba(255,255,255,.52);
+      line-height: 1.72;
+      color: rgba(255,255,255,.45);
       font-weight: 300;
       overflow: hidden;
       display: -webkit-box;
-      -webkit-line-clamp: 9;
+      -webkit-line-clamp: 7;
       -webkit-box-orient: vertical;
-      padding-bottom: 8mm;
     }
 
     /* PHOTO */
@@ -246,6 +258,8 @@
       height: 100%;
       background: #0b1e33;
     }
+
+    /* Logo on photo — centered, tasteful size */
     .cover-photo-logo {
       position: absolute;
       inset: 0;
@@ -255,7 +269,7 @@
       pointer-events: none;
     }
     .cover-photo-logo img {
-      width: 52%;
+      width: 36%;
       height: auto;
       object-fit: contain;
       display: block;
@@ -273,7 +287,7 @@
       gap: 4mm;
     }
 
-    .footer-logo img { height: 7mm; width: auto; }
+    .footer-logo img { height: 6.5mm; width: auto; }
     .footer-logo-text {
       font-family: 'Cormorant Garamond', serif;
       font-size: 11pt;
@@ -284,26 +298,28 @@
 
     .footer-sep {
       width: 0.25mm;
-      height: 7mm;
+      height: 6mm;
       background: var(--border);
       margin: 0 2mm;
     }
 
     .footer-agent-name {
-      font-size: 7.5pt;
+      font-size: 7pt;
       font-weight: 500;
       color: var(--text);
+      letter-spacing: .3px;
     }
     .footer-agent-contact {
-      font-size: 6.5pt;
+      font-size: 6pt;
       color: var(--muted);
-      margin-top: .6mm;
+      margin-top: .5mm;
+      letter-spacing: .2px;
     }
 
     .footer-ref {
       margin-left: auto;
-      font-size: 6.5pt;
-      letter-spacing: 1px;
+      font-size: 6pt;
+      letter-spacing: 1.5px;
       color: var(--muted);
       text-transform: uppercase;
     }
@@ -314,7 +330,7 @@
       gap: 2.5mm;
       margin-left: 4mm;
     }
-    .footer-qr img { width: 9mm; height: 9mm; }
+    .footer-qr img { width: 8mm; height: 8mm; }
     .footer-qr-label {
       font-size: 5.5pt;
       color: var(--muted);
@@ -348,15 +364,15 @@
       letter-spacing: -.2px;
     }
     .dossier-hd-loc {
-      font-size: 7pt;
-      letter-spacing: 1.5px;
+      font-size: 6.5pt;
+      letter-spacing: 1.8px;
       text-transform: uppercase;
       color: var(--muted);
       margin-top: 1mm;
     }
     .dossier-ref {
-      font-size: 6.5pt;
-      letter-spacing: 1px;
+      font-size: 6pt;
+      letter-spacing: 1.5px;
       color: var(--muted);
       text-transform: uppercase;
     }
@@ -382,7 +398,7 @@
     /* Description */
     .dossier-section + .dossier-section { margin-top: 5mm; }
     .section-label {
-      font-size: 6pt;
+      font-size: 5.5pt;
       letter-spacing: 2.5px;
       text-transform: uppercase;
       color: var(--gold);
@@ -407,7 +423,7 @@
       gap: 1.5mm;
     }
     .feat-pill {
-      font-size: 6.5pt;
+      font-size: 6pt;
       padding: 1.2mm 3mm;
       border: 0.2mm solid var(--border);
       border-radius: 20mm;
@@ -425,7 +441,7 @@
       align-items: center;
       gap: 4mm;
     }
-    .dossier-foot .footer-logo img { height: 7mm; }
+    .dossier-foot .footer-logo img { height: 6.5mm; }
     .dossier-foot .footer-logo-text {
       font-family: 'Cormorant Garamond', serif;
       font-size: 11pt;
@@ -485,6 +501,7 @@
   const isRent = l.type === 'rent' || l.status === 'rent'
   const priceLabel = isRent ? l.price + '<small>/mo</small>' : l.price
   const saleLabel  = isRent ? 'En Alquiler' : 'En Venta'
+  const typeLabel  = l.badge_type || l.propertyType || ''
 
   const allFeats = l.features ? Object.values(l.features).flat() : []
 
@@ -510,6 +527,8 @@
   const agentContact = [agent.phone, agent.email].filter(Boolean).join(' · ')
     + (agent.license ? ' · ' + agent.license : '')
 
+  const badgeDot = typeLabel ? `<span class="cover-badge-dot"></span> ${typeLabel}` : ''
+
   // ── PAGE 1
   const page1 = `
   <div class="page">
@@ -517,7 +536,7 @@
       <div class="cover-panel">
         <div class="cover-logo">${logoMarkup}</div>
         <div class="cover-content">
-          <span class="cover-badge">${saleLabel} &nbsp;·&nbsp; ${l.badge_type || l.propertyType || ''}</span>
+          <span class="cover-badge">${saleLabel}${badgeDot ? ' ' + badgeDot : ''}</span>
           <h1 class="cover-title">${l.title}</h1>
           <p class="cover-location">${l.neighbourhood || l.city || ''}</p>
           <div class="cover-rule"></div>
