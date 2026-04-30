@@ -204,6 +204,7 @@ body { background: var(--bg); color: var(--cream); min-height: 100vh; }
 .sb-btn--publish:hover { background: var(--gold); color: #1a1a0e; }
 .sb-btn--publish:disabled { opacity: .6; cursor: default; }
 .sb-back-home { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
+.sb-link--web { display: none; }
 
 /* ── MAIN ───────────────────────────────────── */
 .main {
@@ -1529,6 +1530,7 @@ input[type="range"] {
     min-height: 56px;
   }
   .sb-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .sb-link--web { display: flex; }
 
   /* ── Main: clears bottom nav, tighter padding ─ */
   .main { padding-bottom: 72px; overflow-y: visible; }
