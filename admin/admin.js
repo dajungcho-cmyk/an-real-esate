@@ -1739,7 +1739,8 @@ function processWatermarkFromUrl(url, logoDataUrl) {
       logo.src = logoDataUrl
     }
     img.onerror = () => reject(new Error('Image load failed'))
-    img.src = url
+    // Cache-bust forces a fresh CORS fetch — avoids canvas taint from cached non-CORS response
+    img.src = url + (url.includes('?') ? '&' : '?') + '_cors=1'
   })
 }
 
