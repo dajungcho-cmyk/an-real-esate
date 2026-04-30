@@ -370,6 +370,11 @@
                 </button>
               </div>
             </div>
+            <div class="gal-size-row">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              <input type="range" id="gal-size-slider" min="80" max="280" value="120" step="10" />
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            </div>
             <p class="gal-hint" data-i18n="hint.photos">La primera foto es la imagen principal (portada). Arrastra para reordenar.</p>
             <div class="upload-progress hidden" id="upload-gallery-progress">
               <div class="progress-bar"><div class="progress-fill" id="upload-gallery-fill"></div></div>
@@ -765,6 +770,13 @@
 <div id="toast" class="toast hidden"></div>
 
 <!-- CONFIRM DIALOG -->
+<div id="img-preview-overlay" class="img-preview-overlay hidden">
+  <button id="img-preview-close" class="img-preview-close">×</button>
+  <button id="img-preview-prev" class="img-preview-nav img-preview-prev">‹</button>
+  <button id="img-preview-next" class="img-preview-nav img-preview-next">›</button>
+  <img id="img-preview-img" src="" alt="" />
+</div>
+
 <div id="confirm-overlay" class="confirm-overlay hidden">
   <div class="confirm-box">
     <p id="confirm-msg"></p>

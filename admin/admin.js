@@ -98,6 +98,57 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('add-feat-cat')?.addEventListener('click', () => addFeatCat())
   document.getElementById('add-nearby').addEventListener('click', () => addNearbyRow())
 
+  // Gallery thumbnail size slider
+  const galSlider = document.getElementById('gal-size-slider')
+  galSlider.addEventListener('input', () => {
+    document.getElementById('gallery-list').style.setProperty('--gal-w', galSlider.value + 'px')
+  })
+
+  // Gallery image lightbox
+  const previewOverlay = document.getElementById('img-preview-overlay')
+  const previewImg     = document.getElementById('img-preview-img')
+  let _previewSrcs = [], _previewIdx = 0
+
+  function openPreview(srcs, idx) {
+    _previewSrcs = srcs; _previewIdx = idx
+    previewImg.src = srcs[idx]
+    previewOverlay.classList.remove('hidden')
+    document.getElementById('img-preview-prev').style.visibility = srcs.length > 1 ? '' : 'hidden'
+    document.getElementById('img-preview-next').style.visibility = srcs.length > 1 ? '' : 'hidden'
+  }
+  function closePreview() { previewOverlay.classList.add('hidden'); previewImg.src = '' }
+
+  document.getElementById('img-preview-close').addEventListener('click', closePreview)
+  previewOverlay.addEventListener('click', e => { if (e.target === previewOverlay) closePreview() })
+  document.getElementById('img-preview-prev').addEventListener('click', e => {
+    e.stopPropagation()
+    _previewIdx = (_previewIdx - 1 + _previewSrcs.length) % _previewSrcs.length
+    previewImg.src = _previewSrcs[_previewIdx]
+  })
+  document.getElementById('img-preview-next').addEventListener('click', e => {
+    e.stopPropagation()
+    _previewIdx = (_previewIdx + 1) % _previewSrcs.length
+    previewImg.src = _previewSrcs[_previewIdx]
+  })
+  document.addEventListener('keydown', e => {
+    if (previewOverlay.classList.contains('hidden')) return
+    if (e.key === 'Escape') closePreview()
+    if (e.key === 'ArrowLeft')  document.getElementById('img-preview-prev').click()
+    if (e.key === 'ArrowRight') document.getElementById('img-preview-next').click()
+  })
+
+  // Delegate click on gallery images to open lightbox (ignore overlay buttons)
+  document.getElementById('gallery-list').addEventListener('click', e => {
+    if (e.target.closest('.gal-card-overlay')) return
+    const img = e.target.closest('.gal-card-img')?.querySelector('img')
+    if (!img || !img.src) return
+    const allSrcs = [...document.querySelectorAll('#gallery-list .gal-card-img img')]
+      .filter(i => i.src && !i.src.startsWith('data:image/svg'))
+      .map(i => i.src)
+    const idx = allSrcs.indexOf(img.src)
+    openPreview(allSrcs, idx >= 0 ? idx : 0)
+  })
+
   // (imagen principal managed via gallery grid — no separate preview button)
 
   // Slug auto-gen from title
