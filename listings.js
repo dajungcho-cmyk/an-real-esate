@@ -1,6 +1,10 @@
 /* ================================
    Listings — fetch & render
    ================================ */
+function escHtml(str) {
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')
+}
+
 var cachedListings = []
 
 async function initListings() {
@@ -84,19 +88,19 @@ function renderCard(listing) {
   const badgeHTML = badgeText ? `<span class="prop-badge prop-badge--${listing.badge}">${badgeText}</span>` : ''
 
   return `
-    <a href="${href}" class="prop-card" data-type="${dataType}">
+    <a href="${escHtml(href)}" class="prop-card" data-type="${escHtml(dataType)}">
       <div class="prop-img-wrap">
-        <img src="${listing.image}" alt="${listing.title}" class="prop-img" loading="lazy" />
-        <span class="prop-tag ${tagClass}">${tagLabel}</span>
+        <img src="${escHtml(listing.image)}" alt="${escHtml(listing.title)}" class="prop-img" loading="lazy" />
+        <span class="prop-tag ${tagClass}">${escHtml(tagLabel)}</span>
         ${badgeHTML}
       </div>
       <div class="prop-info">
         <div class="prop-meta">
-          <span class="prop-loc">${listing.neighbourhood}</span>
+          <span class="prop-loc">${escHtml(listing.neighbourhood)}</span>
           <span class="prop-price">${priceHTML}</span>
         </div>
-        <h3 class="prop-title">${title}</h3>
-        <p class="prop-specs">${listing.beds} ${L['card.bed']||'bed'} &nbsp;·&nbsp; ${listing.baths} ${L['card.bath']||'bath'} &nbsp;·&nbsp; ${listing.size} m²</p>
+        <h3 class="prop-title">${escHtml(title)}</h3>
+        <p class="prop-specs">${escHtml(String(listing.beds))} ${L['card.bed']||'bed'} &nbsp;·&nbsp; ${escHtml(String(listing.baths))} ${L['card.bath']||'bath'} &nbsp;·&nbsp; ${escHtml(String(listing.size))} m²</p>
       </div>
     </a>`
 }

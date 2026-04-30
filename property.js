@@ -1,4 +1,21 @@
 /* ================================
+   Form field helpers
+   ================================ */
+function showFieldError(input, msg) {
+  clearFieldError(input)
+  input.style.borderColor = 'var(--gold)'
+  const err = document.createElement('p')
+  err.className = 'field-error'
+  err.textContent = msg
+  input.parentNode.appendChild(err)
+}
+function clearFieldError(input) {
+  input.style.borderColor = ''
+  const prev = input.parentNode.querySelector('.field-error')
+  if (prev) prev.remove()
+}
+
+/* ================================
    Build image list from gallery
    ================================ */
 const heroEl = document.querySelector('.pg-hero')
@@ -91,7 +108,7 @@ lbOverlay?.addEventListener('touchstart', e => {
 
 lbOverlay?.addEventListener('touchend', e => {
   const dx = e.changedTouches[0].clientX - touchStartX
-  if (Math.abs(dx) < 50) return
+  if (Math.abs(dx) < 80) return
   dx < 0 ? lbShow(current + 1) : lbShow(current - 1)
 })
 
@@ -103,14 +120,15 @@ document.getElementById('prop-form')?.addEventListener('submit', async e => {
   const form = e.target
   const btn  = form.querySelector('button[type="submit"]')
 
-  const name  = form.querySelector('[name="name"]').value.trim()
-  const email = form.querySelector('[name="email"]').value.trim()
+  const nameInput  = form.querySelector('[name="name"]')
+  const emailInput = form.querySelector('[name="email"]')
+  const name  = nameInput.value.trim()
+  const email = emailInput.value.trim()
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  if (!name || !emailOk) {
-    form.querySelector('[name="name"]').style.borderColor  = name    ? '' : 'var(--gold)'
-    form.querySelector('[name="email"]').style.borderColor = emailOk ? '' : 'var(--gold)'
-    return
-  }
+  let valid = true
+  if (!name)    { showFieldError(nameInput,  'Please enter your name');          valid = false } else clearFieldError(nameInput)
+  if (!emailOk) { showFieldError(emailInput, 'Please enter a valid email address'); valid = false } else clearFieldError(emailInput)
+  if (!valid) return
 
   const lang = (typeof getLang === 'function') ? getLang() : 'en'
   const t = k => window.I18N?.[lang]?.[k] || window.I18N?.en?.[k] || k
@@ -151,6 +169,7 @@ document.getElementById('prop-form')?.addEventListener('submit', async e => {
   } catch {
     btn.textContent = t('form.error')
     btn.disabled    = false
+    setTimeout(() => { btn.textContent = t('form.submit') }, 4000)
   }
 })
 

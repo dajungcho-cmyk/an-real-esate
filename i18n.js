@@ -797,11 +797,16 @@ function toggleLangDropdown(e) {
   if (e) e.stopPropagation()
   var switcher = e && e.target.closest('.lang-switcher')
   var d = switcher ? switcher.querySelector('.lang-dropdown') : document.querySelector('.lang-dropdown')
-  if (d) d.classList.toggle('open')
+  if (d) {
+    var isOpen = d.classList.toggle('open')
+    var btn = switcher ? switcher.querySelector('.lang-btn') : (e && e.target.closest('.lang-btn')) || document.querySelector('#lang-current')
+    if (btn) btn.setAttribute('aria-expanded', String(isOpen))
+  }
 }
 
 function closeLangDropdown() {
   document.querySelectorAll('.lang-dropdown').forEach(function(d) { d.classList.remove('open') })
+  document.querySelectorAll('.lang-btn').forEach(function(btn) { btn.setAttribute('aria-expanded', 'false') })
 }
 
 function pickLang(lang, e) {

@@ -1,5 +1,14 @@
+const ALLOWED_ORIGINS = ['https://anrealestate.es', 'https://www.anrealestate.es']
+
+function isValidEmail(email) {
+  return typeof email === 'string' && /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/.test(email) && !email.includes('\n') && !email.includes('\r')
+}
+
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*')
+  const origin = req.headers.origin || ''
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
+  res.setHeader('Vary', 'Origin')
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
   if (req.method === 'OPTIONS') return res.status(200).end()
@@ -9,6 +18,12 @@ export default async function handler(req, res) {
   if (!RESEND_API_KEY) return res.status(503).json({ error: 'Email service not configured' })
 
   const { clientEmail, clientName, propRef, propTitle, visitDate, clientPdfBase64, agentPdfBase64 } = req.body || {}
+
+  if (clientEmail && !isValidEmail(clientEmail)) return res.status(400).json({ error: 'Invalid email address' })
+
+  const MAX_PDF_B64 = 8 * 1024 * 1024 // 8 MB base64 ≈ 6 MB PDF
+  if (clientPdfBase64 && clientPdfBase64.length > MAX_PDF_B64) return res.status(413).json({ error: 'PDF too large' })
+  if (agentPdfBase64 && agentPdfBase64.length > MAX_PDF_B64) return res.status(413).json({ error: 'PDF too large' })
 
   const send = async (payload) => {
     const r = await fetch('https://api.resend.com/emails', {

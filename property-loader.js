@@ -4,6 +4,9 @@
    property.html dynamically from JSON
    ================================ */
 ;(function () {
+  function esc(str) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')
+  }
   const slug = new URLSearchParams(location.search).get('slug')
 
   const el = document.getElementById('listings-data')
@@ -96,27 +99,27 @@
 
     /* ── title & location ── */
     const titleEl = document.getElementById('ph-title')
-    if (titleEl) titleEl.innerHTML = listing.title
+    if (titleEl) titleEl.textContent = listing.title
 
     const locEl = document.getElementById('ph-location')
     if (locEl) {
       const svg = locEl.querySelector('svg')
-      locEl.innerHTML = (svg ? svg.outerHTML : '') + ' ' + listing.neighbourhood + ', Spain'
+      locEl.innerHTML = (svg ? svg.outerHTML : '') + ' ' + esc(listing.neighbourhood) + ', Spain'
     }
 
     /* ── price bar ── */
     const priceEl = document.getElementById('ph-price')
     if (priceEl) {
       priceEl.innerHTML = isRent
-        ? `${listing.price}<small>/mo</small>`
-        : listing.price
+        ? `${esc(listing.price)}<small>/mo</small>`
+        : esc(listing.price)
     }
     const refEl = document.getElementById('ph-ref')
     if (refEl) refEl.textContent = `Ref. ${listing.ref}`
 
     /* ── sidebar contact panel ── */
     const pcPrice = document.querySelector('.pc-price')
-    if (pcPrice) pcPrice.innerHTML = isRent ? `${listing.price}<small>/mo</small>` : listing.price
+    if (pcPrice) pcPrice.innerHTML = isRent ? `${esc(listing.price)}<small>/mo</small>` : esc(listing.price)
     const pcLoc = document.querySelector('.pc-loc')
     if (pcLoc) pcLoc.textContent = listing.neighbourhood || listing.city || ''
 
@@ -136,14 +139,14 @@
     const descEl = document.getElementById('prop-description')
     if (descEl && listing.description) {
       const paras = Array.isArray(listing.description) ? listing.description : [listing.description]
-      descEl.innerHTML = paras.map(p => `<p>${p}</p>`).join('')
+      descEl.innerHTML = paras.map(p => `<p>${esc(p)}</p>`).join('')
     }
 
     /* ── property details table ── */
     const detailsEl = document.getElementById('prop-details')
     if (detailsEl && listing.details) {
       detailsEl.innerHTML = listing.details.map(d =>
-        `<div class="pd-row"><span class="pd-key">${d.key}</span><span class="pd-val">${d.val}</span></div>`
+        `<div class="pd-row"><span class="pd-key">${esc(d.key)}</span><span class="pd-val">${esc(d.val)}</span></div>`
       ).join('')
     }
 
@@ -154,8 +157,8 @@
       if (listing.features) {
         featEl.innerHTML = Object.entries(listing.features).map(([cat, items]) => `
           <div class="prop-tags-group">
-            <p class="feat-group">${cat}</p>
-            <div class="prop-tags">${items.map(f => `<span class="prop-tag-pill">${f}</span>`).join('')}</div>
+            <p class="feat-group">${esc(cat)}</p>
+            <div class="prop-tags">${items.map(f => `<span class="prop-tag-pill">${esc(f)}</span>`).join('')}</div>
           </div>`).join('')
         featSec.style.display = ''
       } else {
@@ -172,8 +175,8 @@
         nearEl.innerHTML = listing.nearby.map(n => `
           <div class="nearby-item">
             <span class="nearby-icon"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg></span>
-            <span class="nearby-name">${n.name}</span>
-            <span class="nearby-dist">${n.dist}</span>
+            <span class="nearby-name">${esc(n.name)}</span>
+            <span class="nearby-dist">${esc(n.dist)}</span>
           </div>`).join('')
       } else {
         nearEl.style.display = 'none'
@@ -342,9 +345,11 @@
     })
   }
 
+  var _mapAttempts = 0
   function tryInitMap() {
-    if (window.google && window.google.maps) initPropertyMap()
-    else setTimeout(tryInitMap, 400)
+    if (window.google && window.google.maps) { initPropertyMap(); return }
+    if (++_mapAttempts < 25) setTimeout(tryInitMap, 400)
+    else { const coord = COORDS[slug || 'gracia-garden']; if (coord) renderOsmMap(coord) }
   }
   tryInitMap()
 
