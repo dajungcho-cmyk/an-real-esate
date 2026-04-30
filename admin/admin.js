@@ -27,8 +27,9 @@ let _editSlug    = null
 let _filter      = 'all'
 let _formDirty   = false
 let _wmPosition  = 'bottom-left'
-let _wmAutoApply   = localStorage.getItem('an_wm_auto') === '1'
+let _wmAutoApply     = localStorage.getItem('an_wm_auto') === '1'
 let _wmSampleDataUrl = localStorage.getItem('an_wm_sample') || null
+let _previewGen      = 0
 let _mediaItems  = []
 let _wmProcessed = []
 let _visitSort   = 'date'
@@ -1440,6 +1441,7 @@ async function reprocessAll() {
 }
 
 async function renderLivePreview() {
+  const gen     = ++_previewGen
   const canvas  = document.getElementById('wm-preview-canvas')
   const empty   = document.getElementById('wm-live-empty')
   if (!canvas || !empty) return
@@ -1451,8 +1453,11 @@ async function renderLivePreview() {
   }
 
   const logoDataUrl = await getLogoDataUrl()
+  if (gen !== _previewGen) return
+
   const loadImg = src => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = src })
   const [sampleImg, logoImg] = await Promise.all([loadImg(_wmSampleDataUrl), loadImg(logoDataUrl)])
+  if (gen !== _previewGen) return
 
   const wrap  = document.getElementById('wm-live-canvas-wrap')
   const maxW  = wrap.clientWidth || 600
