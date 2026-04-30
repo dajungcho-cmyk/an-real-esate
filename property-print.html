@@ -456,6 +456,11 @@
   const dataEl = document.getElementById('listings-data')
   let listings = []
   try { listings = JSON.parse(dataEl.textContent).listings || [] } catch {}
+  // Prefer localStorage cache (has unsaved fields like pdf_hero not yet published)
+  try {
+    const cached = JSON.parse(localStorage.getItem('an_listings_cache') || '{}').listings || []
+    if (cached.length) listings = cached
+  } catch {}
 
   const l = listings.find(x => x.slug === slug)
   if (!l) { document.getElementById('root').innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif">Propiedad no encontrada</div>'; return }
