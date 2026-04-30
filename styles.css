@@ -162,7 +162,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background: var(--cream);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.55s cubic-bezier(0.19,1,0.22,1);
+  transition: transform 0.32s cubic-bezier(0.19,1,0.22,1);
 }
 .hn-link:hover { color: var(--cream); }
 .hn-link:hover::before { transform: scaleX(1); }
@@ -565,6 +565,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-size: var(--fs-sm);
   color: var(--cream-dim);
   line-height: 1.8;
+  letter-spacing: .03em;
   margin-bottom: 1.5rem;
 }
 .at-text--second { opacity: .75; }
@@ -1063,7 +1064,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-weight: 500;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: rgba(240,235,224,.35);
+  color: rgba(240,235,224,.55);
 }
 
 .finput {
@@ -1077,8 +1078,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   appearance: none;
   transition: border-color var(--fast);
 }
-.finput::placeholder { color: rgba(240,235,224,.18); }
-.finput:focus { outline: none; border-color: var(--gold); }
+.finput::placeholder { color: rgba(240,235,224,.25); }
+.finput:focus { outline: none; border-color: var(--gold); box-shadow: 0 1px 0 var(--gold); }
 
 .ftextarea { resize: none; min-height: 100px; }
 
@@ -1205,6 +1206,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background: #25d366;
   color: #fff;
   border-radius: 50%;
+  border: 2px solid rgba(201,169,110,.3);
   box-shadow: 0 4px 18px rgba(0,0,0,.35);
   transition: transform var(--mid) var(--ease), box-shadow var(--mid) var(--ease);
 }
@@ -1354,7 +1356,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   max-width: 520px;
   background: var(--bg-2);
   border: 1px solid rgba(240,235,224,.12);
-  border-radius: 10px;
+  border-radius: 6px;
   padding: 1.25rem 1.5rem;
   z-index: 9999;
   box-shadow: 0 8px 40px rgba(0,0,0,.5);
@@ -1653,11 +1655,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .ps-num       { width: 2.5rem; font-size: 1.8rem; }
 
   /* Testimonials: 32px italic for 3-sentence quotes is too large on mobile */
-  .testi-big-quote { font-size: clamp(17px, 4.8vw, 22px); line-height: 1.6; }
+  .testi-big-quote { font-size: clamp(24px, 5.5vw, 28px); line-height: 1.55; }
   .testi-list      { min-height: 160px; }
 
   /* Form inputs: iOS auto-zooms on focus if font-size < 16px */
   .finput { font-size: 16px; }
+  .button { font-size: 15px; }
 }
 
 /* ================================
