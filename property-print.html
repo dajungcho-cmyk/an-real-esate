@@ -364,7 +364,32 @@
   const isRent    = l.type === 'rent' || l.status === 'rent'
   const saleLabel = isRent ? 'En Alquiler' : 'En Venta'
   const typeLabel = l.badge_type || l.propertyType || ''
-  const allFeats  = l.features ? Object.values(l.features).flat() : []
+  const FEAT_ES = {
+    'High Ceilings':'Techos altos','Vaulted Ceiling(s)':'Techo(s) abovedado(s)','Volta Catalana':'Volta Catalana',
+    'Ceilings with moldings':'Techos con molduras','Open Floorplan':'Distribución abierta','Natural Light':'Luz natural',
+    'Period Features':'Elementos de época','French Doors':'Puertas francesas','Sliding Doors':'Puertas correderas',
+    'Walk-In Closet(s)':'Vestidor(es)','Walk-in wardrobe(s)':'Armario empotrado','Library':'Biblioteca',
+    'Playroom':'Sala de juegos','Utility room':'Cuarto de servicio','Storage':'Trastero','Split Bedroom':'Habitaciones separadas',
+    'Solid Wooden Floor':'Tarima maciza','Wooden Flooring':'Suelo de madera','Marble Flooring':'Suelo de mármol',
+    'Ceramic Tile Flooring':'Suelo cerámico','Mosaic tile flooring':'Suelo de mosaico',
+    'Equipped Kitchen':'Cocina equipada','Open kitchen':'Cocina americana','Oven':'Horno','Convection Oven':'Horno de convección',
+    'Refrigerator':'Frigorífico','Dishwasher':'Lavavajillas','Microwave':'Microondas','Freezer':'Congelador',
+    'Wine Refrigerator':'Vinoteca','Range Hood':'Campana extractora','Exhaust Fan':'Extractor',
+    'Wet Bar':'Barra / Bar','Solid Surface Counters':'Encimera compacta','Stone Counters':'Encimera de piedra',
+    'Solid Wood Cabinets':'Muebles de madera maciza',
+    'Air conditioning':'Aire acondicionado','Heating':'Calefacción','Electric Water Heater':'Calentador eléctrico',
+    'Gas Water Heater':'Calentador de gas','Tankless Water Heater':'Calentador instantáneo','Thermostat':'Termostato',
+    'Central Vaccum':'Aspiración centralizada','Washer':'Lavadora','Dryer':'Secadora',
+    'Water Filtration System':'Filtro de agua','Water Purifier':'Purificador de agua','Water Softener':'Descalcificador',
+    'Balcony':'Balcón','Terrace':'Terraza','Communal terrace':'Terraza comunitaria','Garden':'Jardín',
+    'Outdoor Kitchen':'Cocina exterior','Outdoor Shower':'Ducha exterior','Swimming Pool':'Piscina','Sauna':'Sauna',
+    'Chill out area':'Zona chill out','Barbaque':'Barbacoa','Fence':'Valla',
+    'Tennis Court(s)':'Pista(s) de tenis','Parking':'Parking',
+    'Elevator':'Ascensor','Concierge Service':'Conserjería','Modernist building':'Edificio modernista',
+    'Alarm':'Alarma','Double Glazing':'Doble acristalamiento','Exterior':'Fachada exterior','Sidewalk':'Acera',
+    'City Views':'Vistas a la ciudad','Sea Views':'Vistas al mar','Transport Nearby':'Transporte cercano','Renovated':'Reformado',
+  }
+  const allFeats  = l.features ? Object.values(l.features).flat().map(f => FEAT_ES[f] || f) : []
 
   const propUrl = 'https://anrealestate.es/property.html?slug=' + slug
   const qrSrc   = 'https://api.qrserver.com/v1/create-qr-code/?size=90x90&color=091F38&bgcolor=ffffff&data=' + encodeURIComponent(propUrl)
