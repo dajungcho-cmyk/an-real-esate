@@ -1366,64 +1366,70 @@ function cacheListings() {
   localStorage.setItem('an_listings_cache', JSON.stringify({ listings: _listings }))
 }
 
-// ── MAP PICKER ────────────────────────────────
+// ── MAP PICKER (Leaflet / OpenStreetMap — no API key needed) ──────────
 let _mapPickerMap    = null
 let _mapPickerMarker = null
-let _mapPickerPending = null  // {lat, lng, address} saved until tab is opened
+let _mapPickerPending = null
 
 function _buildMapAt(coord) {
   const mapEl = document.getElementById('admin-map-picker')
-  if (!mapEl || !window.google?.maps) return
+  if (!mapEl || !window.L) return
   mapEl.innerHTML = ''
-  const map = new google.maps.Map(mapEl, {
-    center: coord, zoom: 15,
-    disableDefaultUI: true, zoomControl: true,
-    gestureHandling: 'cooperative',
+
+  if (_mapPickerMap) { _mapPickerMap.remove(); _mapPickerMap = null }
+
+  const map = L.map(mapEl, { zoomControl: true }).setView([coord.lat, coord.lng], 15)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap',
+    maxZoom: 19,
+  }).addTo(map)
+
+  const icon = L.divIcon({
+    html: '<div style="width:14px;height:14px;background:#c8a96e;border:2px solid #091F38;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.5)"></div>',
+    iconSize: [14, 14], iconAnchor: [7, 7], className: '',
   })
-  const marker = new google.maps.Marker({ position: coord, map, draggable: true, cursor: 'move' })
-  function updateCoords(pos) {
-    document.getElementById('f-lat').value = pos.lat().toFixed(7)
-    document.getElementById('f-lng').value = pos.lng().toFixed(7)
+  const marker = L.marker([coord.lat, coord.lng], { draggable: true, icon }).addTo(map)
+
+  function updateCoords(latlng) {
+    document.getElementById('f-lat').value = latlng.lat.toFixed(7)
+    document.getElementById('f-lng').value = latlng.lng.toFixed(7)
     _formDirty = true
   }
-  marker.addListener('dragend', () => updateCoords(marker.getPosition()))
-  map.addListener('click', e => { marker.setPosition(e.latLng); updateCoords(e.latLng) })
+  marker.on('dragend', () => updateCoords(marker.getLatLng()))
+  map.on('click', e => { marker.setLatLng(e.latlng); updateCoords(e.latlng) })
+
+  setTimeout(() => map.invalidateSize(), 80)
   _mapPickerMap    = map
   _mapPickerMarker = marker
-  // Force repaint after layout settles
-  setTimeout(() => google.maps.event.trigger(map, 'resize'), 50)
 }
 
 function _geocodeAndBuild(addr) {
-  if (!window.google?.maps) return
-  new google.maps.Geocoder().geocode({ address: addr }, (results, status) => {
-    if (status === 'OK' && results[0]) {
-      const loc = results[0].geometry.location
-      const coord = { lat: loc.lat(), lng: loc.lng() }
-      _buildMapAt(coord)
-      document.getElementById('f-lat').value = loc.lat().toFixed(7)
-      document.getElementById('f-lng').value = loc.lng().toFixed(7)
-    }
+  fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addr)}&format=json&limit=1`, {
+    headers: { 'Accept-Language': 'es', 'User-Agent': 'AN-RealEstate-Admin/1.0' }
   })
+  .then(r => r.json())
+  .then(results => {
+    if (!results.length) return
+    const coord = { lat: parseFloat(results[0].lat), lng: parseFloat(results[0].lon) }
+    _buildMapAt(coord)
+    document.getElementById('f-lat').value = coord.lat.toFixed(7)
+    document.getElementById('f-lng').value = coord.lng.toFixed(7)
+  })
+  .catch(() => {})
 }
 
 function initMapPicker(lat, lng, address) {
-  // Store pending state — actual render happens when tab-nearby becomes visible
   _mapPickerPending = { lat, lng, address }
   _mapPickerMap = null
   _mapPickerMarker = null
 }
 
 function openMapPickerTab() {
-  if (_mapPickerMap) {
-    // Already built — just trigger resize in case of reflow
-    google.maps.event.trigger(_mapPickerMap, 'resize')
-    return
-  }
+  if (_mapPickerMap) { setTimeout(() => _mapPickerMap.invalidateSize(), 80); return }
   if (!_mapPickerPending) return
   const { lat, lng, address } = _mapPickerPending
   function tryRender() {
-    if (!window.google?.maps) { setTimeout(tryRender, 300); return }
+    if (!window.L) { setTimeout(tryRender, 200); return }
     if (lat && lng) {
       _buildMapAt({ lat: parseFloat(lat), lng: parseFloat(lng) })
     } else if (address) {
@@ -1463,13 +1469,13 @@ function initAddressAutocomplete() {
     // Auto-update map picker from selected address
     if (place.geometry?.location) {
       const loc = place.geometry.location
-      const coord = { lat: loc.lat(), lng: loc.lng() }
-      document.getElementById('f-lat').value = loc.lat().toFixed(7)
-      document.getElementById('f-lng').value = loc.lng().toFixed(7)
-      _mapPickerPending = { lat: loc.lat(), lng: loc.lng(), address: place.formatted_address }
+      const lat = loc.lat(), lng = loc.lng()
+      document.getElementById('f-lat').value = lat.toFixed(7)
+      document.getElementById('f-lng').value = lng.toFixed(7)
+      _mapPickerPending = { lat, lng, address: place.formatted_address }
       if (_mapPickerMap) {
-        _mapPickerMap.setCenter(coord)
-        _mapPickerMarker?.setPosition(coord)
+        _mapPickerMap.setView([lat, lng], 15)
+        _mapPickerMarker?.setLatLng([lat, lng])
       }
     }
 
