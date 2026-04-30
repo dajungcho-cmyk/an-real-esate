@@ -1352,15 +1352,17 @@
       "year": 1981,
       "condition": "To renovate",
       "energy": "E",
-      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556768/an-realestate/og7lfxqmqbos58vxa8pi.jpg",
+      "image": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556770/an-realestate/vpv7xuldg6xtygxuqnan.jpg",
       "images": [
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556768/an-realestate/og7lfxqmqbos58vxa8pi.jpg",
-          "alt": "AN202602-01"
+          "alt": "AN202602-01",
+          "hidden": true
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556769/an-realestate/z90cv9ytfr0zdxvjvz5h.jpg",
-          "alt": "AN202602-02"
+          "alt": "AN202602-02",
+          "hidden": true
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556770/an-realestate/vpv7xuldg6xtygxuqnan.jpg",
@@ -1400,7 +1402,8 @@
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556779/an-realestate/b9gyur5fbxhxtyowfrxq.jpg",
-          "alt": "AN202602-12"
+          "alt": "AN202602-12",
+          "hidden": true
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556780/an-realestate/f0qph9ibocgll3oz46rv.jpg",
@@ -1509,15 +1512,18 @@
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556805/an-realestate/vko6tw2kdlywnxtwwqh9.jpg",
-          "alt": "AN202602-39"
+          "alt": "AN202602-39",
+          "hidden": true
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556806/an-realestate/b5xn7qkjdalirngjwy3g.jpg",
-          "alt": "AN202602-40"
+          "alt": "AN202602-40",
+          "hidden": true
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556807/an-realestate/hmsesb7djmvinxs4khvk.jpg",
-          "alt": "AN202602-41"
+          "alt": "AN202602-41",
+          "hidden": true
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556808/an-realestate/rfvbd3wlei0r0wck30rc.jpg",
@@ -1581,11 +1587,13 @@
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556824/an-realestate/cuuefk9nlqqmft8sispp.jpg",
-          "alt": "AN202602-57"
+          "alt": "AN202602-57",
+          "hidden": true
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556825/an-realestate/xidfwlthpdf3ccyr0yid.jpg",
-          "alt": "AN202602-58"
+          "alt": "AN202602-58",
+          "hidden": true
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556829/an-realestate/d5xd6cr5tbozvnml9dqt.jpg",
@@ -1597,7 +1605,8 @@
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556832/an-realestate/hxlm3zuhxtk8fyxdliwx.jpg",
-          "alt": "AN202602-61"
+          "alt": "AN202602-61",
+          "hidden": true
         },
         {
           "src": "https://res.cloudinary.com/dbume3eak/image/upload/v1777556833/an-realestate/zpxwpykewwetblfqawwj.jpg",
