@@ -97,6 +97,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Slug auto-gen from title
   document.getElementById('f-title').addEventListener('input', autoSlug)
 
+  // Location cascade
+  initLocationCascade()
+  document.getElementById('f-province').addEventListener('change', e => {
+    populateCitySelect(e.target.value)
+    populateZoneDatalist('')
+    document.getElementById('f-zone').value = ''
+  })
+  document.getElementById('f-city').addEventListener('change', e => {
+    populateZoneDatalist(e.target.value)
+    document.getElementById('f-zone').value = ''
+  })
+
   // Watermark tool
   initWatermarkTool()
 
@@ -259,6 +271,16 @@ function loadData() {
       delete l.published
       delete l.sold
       delete l.status
+    }
+    // Migrate neighbourhood string → province/city/zone (if not yet split)
+    if (!l.province && l.neighbourhood && window.LOCATIONS_ES) {
+      const parts = l.neighbourhood.split(',').map(s => s.trim())
+      const maybeCity = parts[parts.length - 1]
+      const maybeZone = parts.length > 1 ? parts.slice(0, -1).join(', ') : ''
+      for (const [prov, cities] of Object.entries(LOCATIONS_ES.cities)) {
+        if (cities.includes(maybeCity)) { l.province = prov; l.city = maybeCity; l.zone = maybeZone; break }
+      }
+      if (!l.province && maybeCity) { l.city = maybeCity; l.zone = maybeZone }
     }
   })
 
@@ -445,13 +467,28 @@ function _showForm(slug) {
   document.getElementById('f-price-num').value     = _priceStr.replace(/^€/, '').replace(/(\/\S+)$/, '').trim()
   document.getElementById('f-price-postfix').value = _pricePostfixMatch ? _pricePostfixMatch[1] : ''
 
-  // Neighbourhood: try exact match, fallback keeps value
-  const _nbEl = document.getElementById('f-neighbourhood')
-  _nbEl.value = l.neighbourhood || ''
-  if (!_nbEl.value && l.neighbourhood) {
-    const _opt = document.createElement('option')
-    _opt.value = l.neighbourhood; _opt.textContent = l.neighbourhood
-    _nbEl.appendChild(_opt); _nbEl.value = l.neighbourhood
+  // Location cascade — populate province/city/zone from stored fields or migrate from old neighbourhood string
+  {
+    let province = l.province || ''
+    let city     = l.city || ''
+    let zone     = l.zone || ''
+    if (!province && l.neighbourhood) {
+      // Migrate "Zone, City" → zone + city (best-effort)
+      const parts = l.neighbourhood.split(',').map(s => s.trim())
+      const maybeCity = parts[parts.length - 1]
+      const maybeZone = parts.length > 1 ? parts.slice(0, -1).join(', ') : ''
+      if (window.LOCATIONS_ES) {
+        for (const [prov, cities] of Object.entries(LOCATIONS_ES.cities)) {
+          if (cities.includes(maybeCity)) { province = prov; city = maybeCity; zone = maybeZone; break }
+        }
+        if (!city) { city = maybeCity; zone = maybeZone }
+      }
+    }
+    document.getElementById('f-province').value = province
+    populateCitySelect(province)
+    document.getElementById('f-city').value = city
+    populateZoneDatalist(city)
+    document.getElementById('f-zone').value = zone
   }
 
   const _storedAddrs = JSON.parse(localStorage.getItem('an_addresses') || '{}')
@@ -525,6 +562,44 @@ function _showForm(slug) {
 
   switchView('form')
 } // end _showForm
+
+/* ── LOCATION CASCADE ─────────────────────────── */
+function initLocationCascade() {
+  const sel = document.getElementById('f-province')
+  if (!sel || !window.LOCATIONS_ES) return
+  LOCATIONS_ES.provinces.forEach(p => {
+    const opt = document.createElement('option')
+    opt.value = opt.textContent = p
+    sel.appendChild(opt)
+  })
+}
+
+function populateCitySelect(province) {
+  const sel = document.getElementById('f-city')
+  if (!sel) return
+  sel.innerHTML = '<option value="">— Selecciona ciudad —</option>'
+  sel.disabled = !province
+  if (!province || !window.LOCATIONS_ES) return
+  const cities = LOCATIONS_ES.cities[province] || []
+  cities.forEach(c => {
+    const opt = document.createElement('option')
+    opt.value = opt.textContent = c
+    sel.appendChild(opt)
+  })
+}
+
+function populateZoneDatalist(city) {
+  const dl = document.getElementById('zone-list')
+  if (!dl) return
+  dl.innerHTML = ''
+  if (!city || !window.LOCATIONS_ES) return
+  const zones = LOCATIONS_ES.zones[city] || []
+  zones.forEach(z => {
+    const opt = document.createElement('option')
+    opt.value = z
+    dl.appendChild(opt)
+  })
+}
 
 function showPropsList() {
   switchView('props')
@@ -627,7 +702,15 @@ async function saveProperty() {
     title:         document.getElementById('f-title').value.trim(),
     price,
     ref:           document.getElementById('f-ref').value.trim(),
-    neighbourhood: document.getElementById('f-neighbourhood').value.trim(),
+    province:      document.getElementById('f-province').value.trim() || undefined,
+    city:          document.getElementById('f-city').value.trim() || undefined,
+    zone:          document.getElementById('f-zone').value.trim() || undefined,
+    neighbourhood: (() => {
+      const z = document.getElementById('f-zone').value.trim()
+      const c = document.getElementById('f-city').value.trim()
+      if (z && c) return `${z}, ${c}`
+      return c || z || ''
+    })(),
     address:       document.getElementById('f-address').value.trim() || undefined,
     doorFloor:     document.getElementById('f-door-floor').value.trim() || undefined,
     doorNum:       document.getElementById('f-door-num').value.trim() || undefined,
@@ -1088,8 +1171,47 @@ function initAddressAutocomplete() {
   ac.addListener('place_changed', () => {
     const place = ac.getPlace()
     const comps = place.address_components || []
+
+    // Zip
     const zip = comps.find(c => c.types.includes('postal_code'))?.long_name || ''
     if (zip) document.getElementById('f-zip').value = zip
+
+    // Province (administrative_area_level_2 in Spain)
+    const provRaw = comps.find(c => c.types.includes('administrative_area_level_2'))?.long_name || ''
+    // City (locality or administrative_area_level_3)
+    const cityRaw = (
+      comps.find(c => c.types.includes('locality'))?.long_name ||
+      comps.find(c => c.types.includes('administrative_area_level_3'))?.long_name || ''
+    )
+    // Zone/neighbourhood
+    const zoneRaw = (
+      comps.find(c => c.types.includes('sublocality_level_1'))?.long_name ||
+      comps.find(c => c.types.includes('sublocality'))?.long_name ||
+      comps.find(c => c.types.includes('neighborhood'))?.long_name || ''
+    )
+
+    if (!window.LOCATIONS_ES || (!provRaw && !cityRaw)) return
+
+    // Normalise string for loose matching (remove accents, lowercase)
+    const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/^provincia de /i, '').trim()
+
+    // Match province
+    const matchedProv = LOCATIONS_ES.provinces.find(p => norm(p) === norm(provRaw)) || ''
+    if (matchedProv) {
+      document.getElementById('f-province').value = matchedProv
+      populateCitySelect(matchedProv)
+    }
+
+    // Match city within province (or across all if province not found)
+    const cityList = matchedProv ? (LOCATIONS_ES.cities[matchedProv] || []) : Object.values(LOCATIONS_ES.cities).flat()
+    const matchedCity = cityList.find(c => norm(c) === norm(cityRaw)) || cityRaw
+    if (matchedCity) {
+      document.getElementById('f-city').value = matchedCity
+      populateZoneDatalist(matchedCity)
+    }
+
+    // Zone — use Google's suggestion, user can edit
+    if (zoneRaw) document.getElementById('f-zone').value = zoneRaw
   })
   _mapsACInited = true
 }

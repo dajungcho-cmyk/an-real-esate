@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="admin.css" />
+  <script src="locations-es.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg7_3UefA_rzfXRAwCMS42A4Z7lx4BUTc&libraries=places" async defer></script>
 </head>
 <body>
@@ -212,25 +213,21 @@
               </div>
             </div>
             <div class="fg">
-              <label data-i18n="label.neighbourhood">Barrio</label>
-              <select id="f-neighbourhood">
-                <option value="" data-i18n="opt.select">— Selecciona —</option>
-                <option value="Gràcia, Barcelona">Gràcia</option>
-                <option value="Eixample, Barcelona">Eixample</option>
-                <option value="Dreta de l'Eixample, Barcelona">Dreta de l'Eixample</option>
-                <option value="Sant Gervasi, Barcelona">Sant Gervasi</option>
-                <option value="Sant Gervasi-Galvany, Barcelona">Sant Gervasi-Galvany</option>
-                <option value="Sant Gervasi-La Bonanova, Barcelona">Sant Gervasi-La Bonanova</option>
-                <option value="El Born, Barcelona">El Born</option>
-                <option value="Diagonal Mar, Barcelona">Diagonal Mar</option>
-                <option value="Pedralbes, Barcelona">Pedralbes</option>
-                <option value="Poble Nou, Barcelona">Poble Nou</option>
-                <option value="Vallvidrera, Barcelona">Vallvidrera</option>
-                <option value="Sarrià, Barcelona">Sarrià</option>
-                <option value="Les Corts, Barcelona">Les Corts</option>
-                <option value="Barceloneta, Barcelona">Barceloneta</option>
-                <option value="L'Ametlla de Mar, Tarragona">L'Ametlla de Mar</option>
+              <label>Provincia</label>
+              <select id="f-province">
+                <option value="">— Selecciona provincia —</option>
               </select>
+            </div>
+            <div class="fg">
+              <label>Ciudad / Municipio</label>
+              <select id="f-city" disabled>
+                <option value="">— Selecciona ciudad —</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label data-i18n="label.neighbourhood">Barrio / Zona</label>
+              <input type="text" id="f-zone" list="zone-list" autocomplete="off" placeholder="Barrio o zona…" />
+              <datalist id="zone-list"></datalist>
             </div>
 
             <div class="fg fg-2">
