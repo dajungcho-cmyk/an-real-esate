@@ -84,7 +84,7 @@ const showBannerSlide = idx => {
 
 const resetBannerTimer = () => {
   clearInterval(bannerTimer)
-  bannerTimer = setInterval(() => showBannerSlide(bannerCur + 1), 5500)
+  bannerTimer = setInterval(() => showBannerSlide(bannerCur + 1), 6500)
 }
 
 bannerDots.forEach(d => d.addEventListener('click', () => {

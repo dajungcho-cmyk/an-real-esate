@@ -658,7 +658,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .prop-card {
   display: block;
   cursor: pointer;
+  transition: transform var(--mid) var(--ease);
 }
+.prop-card:hover { transform: translateY(-4px); }
 .prop-card.hidden { display: none; }
 
 .prop-img-wrap {
@@ -688,8 +690,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background: var(--bg);
   color: var(--cream);
 }
-.prop-tag.rent { background: var(--gold); color: var(--bg); }
-.prop-tag.sold { background: #4a4a4a; color: var(--cream); }
+.prop-tag.rent     { background: var(--gold); color: var(--bg); }
+.prop-tag.sold     { background: #4a4a4a; color: var(--cream); }
+.prop-tag.reserved { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
 
 .prop-meta {
   display: flex;
@@ -1124,6 +1127,25 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   border-bottom: 1px solid var(--border);
   margin-bottom: 1.5rem;
 }
+
+.footer-social {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.fsoc-link {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: var(--fs-xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,.3);
+  transition: color var(--fast);
+}
+.fsoc-link:hover { color: var(--gold); }
 
 .footer-bottom {
   display: flex;

@@ -73,8 +73,15 @@ function renderCard(listing) {
   const dataType  = `${listType} ${propType}`
   const href      = `property.html?slug=${listing.slug || ''}`
 
-  const BADGE_LABELS = { new: 'Nueva', exclusive: 'Exclusiva', reduced: 'Precio reducido', offmarket: 'Off-market' }
-  const badgeHTML = listing.badge ? `<span class="prop-badge prop-badge--${listing.badge}">${BADGE_LABELS[listing.badge] || listing.badge}</span>` : ''
+  const BADGE_LABELS = {
+    new:      { en: 'New',        es: 'Nueva',         ca: 'Nova',      fr: 'Nouveau',  de: 'Neu',         it: 'Nuovo',     ru: 'Новый' },
+    exclusive:{ en: 'Exclusive',  es: 'Exclusiva',     ca: 'Exclusiva', fr: 'Exclusif', de: 'Exklusiv',    it: 'Esclusiva', ru: 'Эксклюзив' },
+    reduced:  { en: 'Reduced',    es: 'Precio reducido',ca:'Preu reduït',fr: 'Prix réduit',de:'Reduziert',  it: 'Ridotto',   ru: 'Снижение' },
+    offmarket:{ en: 'Off-market', es: 'Fuera mercado', ca: 'Fora mercat',fr:'Hors marché',de:'Off-market', it: 'Fuori mercato', ru: 'Off-market' },
+  }
+  const badgeMap = listing.badge ? BADGE_LABELS[listing.badge] : null
+  const badgeText = badgeMap ? (badgeMap[lang] || badgeMap.en) : null
+  const badgeHTML = badgeText ? `<span class="prop-badge prop-badge--${listing.badge}">${badgeText}</span>` : ''
 
   return `
     <a href="${href}" class="prop-card" data-type="${dataType}">
@@ -89,7 +96,7 @@ function renderCard(listing) {
           <span class="prop-price">${priceHTML}</span>
         </div>
         <h3 class="prop-title">${title}</h3>
-        <p class="prop-specs">${listing.beds} bed &nbsp;·&nbsp; ${listing.baths} bath &nbsp;·&nbsp; ${listing.size} m²</p>
+        <p class="prop-specs">${listing.beds} ${L['card.bed']||'bed'} &nbsp;·&nbsp; ${listing.baths} ${L['card.bath']||'bath'} &nbsp;·&nbsp; ${listing.size} m²</p>
       </div>
     </a>`
 }
