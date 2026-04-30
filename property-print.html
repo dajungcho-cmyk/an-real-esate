@@ -423,6 +423,10 @@
 <div class="print-bar">
   <strong id="print-title">Cargando…</strong>
   <div class="print-bar-actions">
+    <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.65);cursor:pointer">
+      <input type="checkbox" id="toggle-logo" checked style="accent-color:var(--gold)" />
+      Logo
+    </label>
     <button class="btn-close" onclick="history.back()">← Volver</button>
     <button class="btn-print" onclick="window.print()">Guardar PDF</button>
   </div>
@@ -451,13 +455,10 @@
   }
   const logoDataUrl = localStorage.getItem('an_wm_logo') || ''
 
-  // For PDF: use ALL images (including hidden) — first one is original unwatermarked
   const allImgs = (l.images || []).map(i => typeof i === 'string' ? { src: i } : i)
   const visibleImgs = allImgs.filter(i => !i.hidden).map(i => i.src)
-  // Hero: prefer first hidden (original) if exists, else first visible
-  const firstHidden = allImgs.find(i => i.hidden)
-  const hero = (firstHidden?.src) || visibleImgs[0] || l.image || ''
-  const galleryImgs = visibleImgs.slice(0, 3)
+  const hero = visibleImgs[0] || l.image || ''
+  const galleryImgs = visibleImgs.slice(1, 4)
 
   const desc = Array.isArray(l.description) ? l.description : l.description ? [l.description] : []
   const isRent = l.type === 'rent' || l.status === 'rent'
@@ -585,6 +586,13 @@
   }
 
   document.getElementById('root').innerHTML = page1 + page2
+
+  // Logo toggle
+  document.getElementById('toggle-logo').addEventListener('change', function () {
+    document.querySelectorAll('.cover-logo, .footer-logo, .dossier-foot .footer-logo').forEach(el => {
+      el.style.visibility = this.checked ? '' : 'hidden'
+    })
+  })
 })()
 </script>
 </body>
