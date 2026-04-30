@@ -65,6 +65,13 @@ export default async function handler(req, res) {
       results.push('index.html ✓')
     }
 
+    // 3 — Update data-listings.js (used by property.html and other detail pages)
+    const dlFile = await getFile('data-listings.js')
+    const dlContent = `/* Shared listings data — auto-generated */\n;(function () {\n  const el = document.getElementById('listings-data')\n  if (el) return\n  const s = document.createElement('script')\n  s.id   = 'listings-data'\n  s.type = 'application/json'\n  s.textContent = JSON.stringify(${JSON.stringify({ listings })})\n  document.head.appendChild(s)\n})()\n`
+    await putFile('data-listings.js', dlContent, dlFile.sha,
+      `Sync data-listings.js (${listings.length} properties)`)
+    results.push('data-listings.js ✓')
+
     return res.json({ ok: true, count: listings.length, updated: results })
   } catch (e) {
     return res.status(502).json({ ok: false, error: e.message })

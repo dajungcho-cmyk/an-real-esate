@@ -169,19 +169,26 @@ document.getElementById('prop-form')?.addEventListener('submit', async e => {
   try { all = JSON.parse(inline.textContent).listings || [] } catch { return }
 
   const currentTitle = document.querySelector('[name="property"]')?.value || ''
-  const others = all.filter(l => l.published && !currentTitle.includes(l.title)).slice(0, 3)
+  const others = all.filter(l => {
+    const stage = l.stage || (l.published ? 'active' : 'draft')
+    return ['active', 'reserved'].includes(stage) && !currentTitle.includes(l.title)
+  }).slice(0, 3)
 
   if (!others.length) return
 
   const simLang = (typeof getLang === 'function') ? getLang() : 'en'
   const simT = k => window.I18N?.[simLang]?.[k] || window.I18N?.en?.[k] || k
   grid.innerHTML = others.map(l => {
-    const tag = l.status === 'rent' ? simT('prop.for_rent') : simT('prop.for_sale')
+    const isRent = l.type === 'rent' || l.status === 'rent'
+    const tag = isRent ? simT('prop.for_rent') : simT('prop.for_sale')
+    const tagClass = isRent ? 'rent' : 'sale'
+    const propType = l.propertyType || l.type || ''
+    const listType = isRent ? 'rent' : 'sale'
     return `
-      <a href="property.html?slug=${l.slug || ''}" class="prop-card" data-type="${l.status} ${l.type}">
+      <a href="property.html?slug=${l.slug || ''}" class="prop-card" data-type="${listType} ${propType}">
         <div class="prop-img-wrap">
           <img src="${l.image}" alt="${l.title}" class="prop-img" loading="lazy" />
-          <span class="prop-tag ${l.status}">${tag}</span>
+          <span class="prop-tag ${tagClass}">${tag}</span>
         </div>
         <div class="prop-info">
           <div class="prop-meta">

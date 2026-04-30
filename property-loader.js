@@ -32,7 +32,8 @@
     const lang = (typeof getLang === 'function') ? getLang() : (localStorage.getItem('an_lang') || 'en')
     const forSale  = window.I18N?.[lang]?.['prop.for_sale']  || (lang === 'es' ? 'En Venta'    : lang === 'fr' ? 'À Vendre'     : lang === 'de' ? 'Zu Verkaufen' : lang === 'it' ? 'In Vendita' : lang === 'ca' ? 'En Venda'  : lang === 'ru' ? 'Продаётся' : 'For Sale')
     const forRent  = window.I18N?.[lang]?.['prop.for_rent']  || (lang === 'es' ? 'En Alquiler' : lang === 'fr' ? 'À Louer'      : lang === 'de' ? 'Zu Vermieten': lang === 'it' ? 'In Affitto' : lang === 'ca' ? 'En Lloguer': lang === 'ru' ? 'В аренду'  : 'For Rent')
-    const priceLabel = listing.status === 'rent' ? listing.price + '/mo' : listing.price
+    const isRent = listing.type === 'rent' || listing.status === 'rent'
+    const priceLabel = isRent ? listing.price + '/mo' : listing.price
 
     /* ── <title> & meta ── */
     document.title = `${listing.title} — ${priceLabel} — AN Real Estate`
@@ -82,11 +83,11 @@
 
     /* ── badges ── */
     const badgeType = document.querySelector('.ph-badge--type')
-    if (badgeType) badgeType.textContent = listing.badge_type || listing.type
+    if (badgeType) badgeType.textContent = listing.badge_type || listing.propertyType || listing.type
     const badgeSale = document.querySelector('.ph-badge--sale, .ph-badge--rent')
     if (badgeSale) {
-      badgeSale.textContent = listing.status === 'rent' ? forRent : forSale
-      badgeSale.className   = `ph-badge ph-badge--${listing.status}`
+      badgeSale.textContent = isRent ? forRent : forSale
+      badgeSale.className   = `ph-badge ph-badge--${isRent ? 'rent' : 'sale'}`
     }
 
     /* ── title & location ── */
@@ -102,7 +103,7 @@
     /* ── price bar ── */
     const priceEl = document.getElementById('ph-price')
     if (priceEl) {
-      priceEl.innerHTML = listing.status === 'rent'
+      priceEl.innerHTML = isRent
         ? `${listing.price}<small>/mo</small>`
         : listing.price
     }
