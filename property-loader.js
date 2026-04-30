@@ -263,9 +263,23 @@
     { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#c8b99a' }] },
   ]
 
+  function renderOsmMap(coord) {
+    const mapEl = document.getElementById('prop-map')
+    if (!mapEl) return
+    const { lat, lng } = coord
+    const d = 0.008
+    const bbox = `${lng - d},${lat - d},${lng + d},${lat + d}`
+    mapEl.innerHTML = `<iframe
+      src="https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}"
+      style="width:100%;height:100%;border:none;filter:invert(1) hue-rotate(200deg) saturate(.6) brightness(.85)"
+      loading="lazy"
+    ></iframe>`
+  }
+
   function renderMap(coord) {
     const mapEl = document.getElementById('prop-map')
     if (!mapEl) return
+    window._propMapCoord = coord  // store for gm_authFailure fallback
     const map = new google.maps.Map(mapEl, {
       center: coord,
       zoom: 15,
@@ -288,6 +302,12 @@
         anchor: new google.maps.Point(12, 22),
       }
     })
+  }
+
+  // Fallback to OSM when Google Maps API key is rejected for this domain
+  window.gm_authFailure = function () {
+    const coord = window._propMapCoord
+    if (coord) renderOsmMap(coord)
   }
 
   function initPropertyMap() {
