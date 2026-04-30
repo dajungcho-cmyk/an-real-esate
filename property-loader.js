@@ -204,6 +204,23 @@
         cell.style.display = 'none'
       }
     })
+
+    // Inject hidden cells for photos beyond the 5 visible — property.js picks them up for the lightbox
+    const pgSide = document.querySelector('.pg-grid-side')
+    if (pgSide && imgs.length > 5) {
+      imgs.slice(5).forEach(img => {
+        const btn = document.createElement('button')
+        btn.className = 'pg-cell'
+        btn.dataset.src = img.src
+        btn.style.display = 'none'
+        const el = document.createElement('img')
+        el.src = img.src
+        el.alt = img.alt || baseListing.title
+        btn.appendChild(el)
+        pgSide.appendChild(btn)
+      })
+    }
+
     const moreText = document.querySelector('.pg-more-overlay')
     if (moreText) {
       moreText.childNodes.forEach(n => {
