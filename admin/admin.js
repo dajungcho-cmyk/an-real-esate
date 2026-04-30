@@ -30,6 +30,8 @@ let _wmPosition  = 'bottom-left'
 let _wmAutoApply     = localStorage.getItem('an_wm_auto') === '1'
 let _wmSampleDataUrl = localStorage.getItem('an_wm_sample') || null
 let _previewGen      = 0
+let _cachedSampleImg = null
+let _cachedLogoImg   = null
 let _mediaItems  = []
 let _wmProcessed = []
 let _visitSort   = 'date'
@@ -1311,13 +1313,13 @@ function initWatermarkTool() {
   sizeSlider.addEventListener('input', () => {
     document.getElementById('wm-size-val').textContent = sizeSlider.value + '%'
     reprocessAll()
-    renderLivePreview()
+    _paintPreview()
   })
 
   opacitySlider.addEventListener('input', () => {
     document.getElementById('wm-opacity-val').textContent = opacitySlider.value + '%'
     reprocessAll()
-    renderLivePreview()
+    _paintPreview()
   })
 
   document.querySelectorAll('.pos-btn').forEach(btn => {
@@ -1326,7 +1328,7 @@ function initWatermarkTool() {
       btn.classList.add('active')
       _wmPosition = btn.dataset.pos
       reprocessAll()
-      renderLivePreview()
+      _paintPreview()
     })
   })
 
@@ -1440,13 +1442,58 @@ async function reprocessAll() {
   // For now just show a hint
 }
 
+// Synchronous paint — always reads current settings, no async race possible
+function _paintPreview() {
+  const canvas = document.getElementById('wm-preview-canvas')
+  const empty  = document.getElementById('wm-live-empty')
+  if (!canvas || !empty || !_cachedSampleImg || !_cachedLogoImg) return
+
+  const wrap   = document.getElementById('wm-live-canvas-wrap')
+  const maxW   = wrap.clientWidth || 600
+  const maxH   = 460
+  let w = _cachedSampleImg.width, h = _cachedSampleImg.height
+  const ratio  = w / h
+  if (w > maxW) { w = maxW; h = w / ratio }
+  if (h > maxH) { h = maxH; w = h * ratio }
+  w = Math.round(w); h = Math.round(h)
+
+  canvas.width  = w
+  canvas.height = h
+  const ctx = canvas.getContext('2d')
+  ctx.clearRect(0, 0, w, h)
+  ctx.drawImage(_cachedSampleImg, 0, 0, w, h)
+
+  const sizeRatio = parseInt(document.getElementById('wm-size').value) / 100
+  const opacity   = parseInt(document.getElementById('wm-opacity').value) / 100
+  const logoW  = w * sizeRatio
+  const logoH  = _cachedLogoImg.height * (logoW / _cachedLogoImg.width)
+  const margin = w * 0.025
+  const pos    = _wmPosition
+
+  let x = margin, y = h - logoH - margin
+  if (pos.includes('right'))                          x = w - logoW - margin
+  if (pos.includes('center') && !pos.includes('mid')) x = (w - logoW) / 2
+  if (pos.includes('top'))                            y = margin
+  if (pos.includes('mid'))                            y = (h - logoH) / 2
+  if (pos === 'center') { x = (w - logoW) / 2; y = (h - logoH) / 2 }
+
+  ctx.globalAlpha = opacity
+  ctx.drawImage(_cachedLogoImg, x, y, logoW, logoH)
+  ctx.globalAlpha = 1
+
+  canvas.classList.remove('hidden')
+  empty.classList.add('hidden')
+}
+
+// Loads/reloads images then paints — call when logo or sample changes
 async function renderLivePreview() {
-  const gen     = ++_previewGen
-  const canvas  = document.getElementById('wm-preview-canvas')
-  const empty   = document.getElementById('wm-live-empty')
+  const gen    = ++_previewGen
+  const canvas = document.getElementById('wm-preview-canvas')
+  const empty  = document.getElementById('wm-live-empty')
   if (!canvas || !empty) return
 
   if (!_wmSampleDataUrl) {
+    _cachedSampleImg = null
     canvas.classList.add('hidden')
     empty.classList.remove('hidden')
     return
@@ -1459,39 +1506,9 @@ async function renderLivePreview() {
   const [sampleImg, logoImg] = await Promise.all([loadImg(_wmSampleDataUrl), loadImg(logoDataUrl)])
   if (gen !== _previewGen) return
 
-  const wrap  = document.getElementById('wm-live-canvas-wrap')
-  const maxW  = wrap.clientWidth || 600
-  const maxH  = 460
-  let w = sampleImg.width, h = sampleImg.height
-  const ratio = w / h
-  if (w > maxW) { w = maxW; h = w / ratio }
-  if (h > maxH) { h = maxH; w = h * ratio }
-  w = Math.round(w); h = Math.round(h)
-
-  canvas.width  = w
-  canvas.height = h
-  const ctx = canvas.getContext('2d')
-  ctx.drawImage(sampleImg, 0, 0, w, h)
-
-  const sizeRatio = parseInt(document.getElementById('wm-size').value) / 100
-  const opacity   = parseInt(document.getElementById('wm-opacity').value) / 100
-  const logoW = w * sizeRatio
-  const logoH = logoImg.height * (logoW / logoImg.width)
-  const margin = w * 0.025
-  const pos = _wmPosition
-  let x = margin, y = h - logoH - margin
-  if (pos.includes('right'))  x = w - logoW - margin
-  if (pos.includes('center') && !pos.includes('mid')) x = (w - logoW) / 2
-  if (pos.includes('top'))    y = margin
-  if (pos.includes('mid'))    y = (h - logoH) / 2
-  if (pos === 'center') { x = (w - logoW) / 2; y = (h - logoH) / 2 }
-
-  ctx.globalAlpha = opacity
-  ctx.drawImage(logoImg, x, y, logoW, logoH)
-  ctx.globalAlpha = 1
-
-  canvas.classList.remove('hidden')
-  empty.classList.add('hidden')
+  _cachedSampleImg = sampleImg
+  _cachedLogoImg   = logoImg
+  _paintPreview()
 }
 
 function getLogoDataUrl() {
