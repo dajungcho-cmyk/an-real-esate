@@ -2,7 +2,11 @@
    AN Real Estate — Admin Panel
    ============================================= */
 
-const ADMIN_PASSWORD    = 'ANadmin2026'  // cambia esto en producción
+const ADMIN_PWD_HASH    = 'fc0888c7f9285ae5f3b0bd21a9cef65c181586fde32c2c9a72631d978515d301'
+const MAX_LOGIN_ATTEMPTS = 5
+const LOCKOUT_MS         = 30 * 60 * 1000
+let _loginAttempts = parseInt(sessionStorage.getItem('an_login_attempts') || '0')
+let _lockoutUntil  = parseInt(sessionStorage.getItem('an_lockout_until')  || '0')
 
 // Si la web está en Hostinger u otro hosting sin serverless,
 // pon aquí la URL completa del endpoint en Vercel:
@@ -292,15 +296,37 @@ document.addEventListener('change', e => {
 })
 
 // ── AUTH ──────────────────────────────────────
-function handleLogin(e) {
+async function handleLogin(e) {
   e.preventDefault()
+  const errEl = document.getElementById('login-error')
+  const now = Date.now()
+  if (now < _lockoutUntil) {
+    const mins = Math.ceil((_lockoutUntil - now) / 60000)
+    errEl.textContent = `Demasiados intentos. Espera ${mins} min.`
+    errEl.classList.remove('hidden')
+    return
+  }
   const val = document.getElementById('pwd-input').value
-  if (val === ADMIN_PASSWORD) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(val))
+  const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('')
+  if (hash === ADMIN_PWD_HASH) {
+    _loginAttempts = 0
+    sessionStorage.removeItem('an_login_attempts')
+    sessionStorage.removeItem('an_lockout_until')
     sessionStorage.setItem(SESSION_KEY, 'ok')
-    document.getElementById('login-error').classList.add('hidden')
+    errEl.classList.add('hidden')
     showApp()
   } else {
-    document.getElementById('login-error').classList.remove('hidden')
+    _loginAttempts++
+    sessionStorage.setItem('an_login_attempts', _loginAttempts)
+    if (_loginAttempts >= MAX_LOGIN_ATTEMPTS) {
+      _lockoutUntil = Date.now() + LOCKOUT_MS
+      sessionStorage.setItem('an_lockout_until', _lockoutUntil)
+      errEl.textContent = 'Cuenta bloqueada 30 minutos por exceso de intentos.'
+    } else {
+      errEl.textContent = `Contraseña incorrecta. Intentos restantes: ${MAX_LOGIN_ATTEMPTS - _loginAttempts}`
+    }
+    errEl.classList.remove('hidden')
     document.getElementById('pwd-input').value = ''
   }
 }

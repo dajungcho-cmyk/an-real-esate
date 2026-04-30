@@ -487,28 +487,28 @@
       <button class="dossier-close" id="dossier-close" aria-label="Cerrar">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
-      <p class="dossier-eyebrow" id="dossier-eyebrow">Dossier exclusivo</p>
-      <h2 class="dossier-title" id="dossier-title">Accede al dossier completo</h2>
-      <p class="dossier-sub">Déjanos tu contacto y descarga el dossier de esta propiedad.</p>
+      <p class="dossier-eyebrow" id="dossier-eyebrow" data-i18n="dossier.eyebrow">Dossier exclusivo</p>
+      <h2 class="dossier-title" id="dossier-title" data-i18n="dossier.title">Accede al dossier completo</h2>
+      <p class="dossier-sub" data-i18n="dossier.sub">Déjanos tu contacto y descarga el dossier de esta propiedad.</p>
       <form class="dossier-form" id="dossier-form" novalidate>
         <input type="hidden" name="_captcha" value="false" />
         <input type="hidden" name="_subject" id="dossier-subject" value="Solicitud de dossier — AN Real Estate" />
         <input type="hidden" name="propiedad" id="dossier-property" value="" />
         <div class="dossier-fg">
-          <input type="text" name="nombre" class="dossier-input" placeholder="Tu nombre" required autocomplete="name" />
+          <input type="text" name="nombre" class="dossier-input" placeholder="Tu nombre" data-i18n="dossier.name_ph" required autocomplete="name" />
         </div>
         <div class="dossier-fg">
           <input type="email" name="email" class="dossier-input" placeholder="Email" autocomplete="email" />
         </div>
         <div class="dossier-fg">
-          <input type="tel" name="telefono" class="dossier-input" placeholder="Teléfono (opcional)" autocomplete="tel" />
+          <input type="tel" name="telefono" class="dossier-input" placeholder="Teléfono (opcional)" data-i18n="dossier.phone_ph" autocomplete="tel" />
         </div>
-        <button type="submit" class="dossier-btn" id="dossier-submit">
+        <button type="submit" class="dossier-btn" id="dossier-submit" data-i18n="dossier.btn">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
           Descargar dossier
         </button>
       </form>
-      <p class="dossier-legal">Tus datos se usan únicamente para enviarte información sobre esta propiedad.</p>
+      <p class="dossier-legal" data-i18n="dossier.legal">Tus datos se usan únicamente para enviarte información sobre esta propiedad.</p>
     </div>
   </div>
 
