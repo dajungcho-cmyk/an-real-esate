@@ -663,8 +663,7 @@
     var inputEl = document.getElementById('chat-input-area')
 
     function scrollBottom() {
-      var bottom = msgsEl.getBoundingClientRect().bottom + window.scrollY
-      window.scrollTo({ top: bottom - window.innerHeight + 60, behavior: 'smooth' })
+      msgsEl.scrollTo({ top: msgsEl.scrollHeight, behavior: 'smooth' })
     }
 
     function addMsg(text, who) {
@@ -864,6 +863,14 @@
       answers   = {}
       msgsEl.innerHTML  = ''
       inputEl.innerHTML = ''
+      /* bring the chat section gently into view on first load */
+      var section = document.querySelector('.val-chat-section')
+      if (section) {
+        setTimeout(function() {
+          var top = section.getBoundingClientRect().top + window.scrollY - 90
+          if (window.scrollY < top - 40) window.scrollTo({ top: top, behavior: 'smooth' })
+        }, 800)
+      }
       showTyping(600).then(function() {
         addMsg(c.greeting, 'agent')
         setTimeout(function() { advance() }, 600)

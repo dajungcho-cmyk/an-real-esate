@@ -128,21 +128,28 @@
   display: flex;
   flex-direction: column;
   gap: .9rem;
-  margin-bottom: 2rem;
+  height: clamp(320px, 54vh, 500px);
+  overflow-y: scroll;
+  scrollbar-width: none;
+  padding: 2rem 0 .25rem;
+  margin-bottom: 1.75rem;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.6) 14%, black 26%);
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.6) 14%, black 26%);
 }
+.chat-messages::-webkit-scrollbar { display: none; }
 
 /* individual message row */
 .chat-msg {
   display: flex;
   align-items: flex-end;
   gap: .6rem;
-  animation: msgIn .35s ease both;
+  animation: msgIn .45s cubic-bezier(.22,.68,0,1.2) both;
 }
 .chat-msg--agent { justify-content: flex-start; }
 .chat-msg--user  { justify-content: flex-end; }
 
 @keyframes msgIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
