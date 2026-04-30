@@ -30,7 +30,9 @@ async function initListings() {
     } catch { return }
   }
 
-  cachedListings = listings.filter(l => ['active', 'reserved', 'sold'].includes(l.stage) || l.published)
+  cachedListings = listings
+    .filter(l => ['active', 'reserved', 'sold'].includes(l.stage) || l.published)
+    .sort((a, b) => (a.order ?? 999) - (b.order ?? 999))
 
   if (!cachedListings.length) {
     grid.innerHTML = '<p style="color:var(--muted);font-size:var(--fs-xs);letter-spacing:.06em;">No listings available at this time.</p>'

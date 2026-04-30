@@ -125,7 +125,8 @@
       "propertyType": "apartment",
       "province": "Barcelona",
       "city": "Barcelona",
-      "zone": "Gràcia"
+      "zone": "Gràcia",
+      "order": 1
     },
     {
       "slug": "eixample-golden-square-rent",
@@ -411,7 +412,8 @@
       "propertyType": "apartment",
       "province": "Barcelona",
       "city": "Barcelona",
-      "zone": "Eixample"
+      "zone": "Eixample",
+      "order": 2
     },
     {
       "slug": "sant-gervasi-galvany",
@@ -590,7 +592,8 @@
       "propertyType": "apartment",
       "province": "Barcelona",
       "city": "Barcelona",
-      "zone": "Sant Gervasi"
+      "zone": "Sant Gervasi",
+      "order": 3
     },
     {
       "slug": "el-born-corner",
@@ -695,7 +698,8 @@
       "propertyType": "apartment",
       "province": "Barcelona",
       "city": "Barcelona",
-      "zone": "El Born"
+      "zone": "El Born",
+      "order": 4
     },
     {
       "slug": "rambla-catalunya-corner",
@@ -812,7 +816,8 @@
       "propertyType": "apartment",
       "province": "Barcelona",
       "city": "Barcelona",
-      "zone": "Eixample"
+      "zone": "Eixample",
+      "order": 5
     },
     {
       "slug": "eixample-golden-mile",
@@ -948,7 +953,8 @@
       "propertyType": "apartment",
       "province": "Barcelona",
       "city": "Barcelona",
-      "zone": "Dreta de l'Eixample"
+      "zone": "Dreta de l'Eixample",
+      "order": 6
     },
     {
       "slug": "vallvidrera-villa",
@@ -1215,7 +1221,8 @@
       "propertyType": "villa",
       "province": "Barcelona",
       "city": "Barcelona",
-      "zone": "Vallvidrera"
+      "zone": "Vallvidrera",
+      "order": 7
     },
     {
       "slug": "eixample-villarroel",
@@ -1331,7 +1338,8 @@
       "propertyType": "apartment",
       "province": "Barcelona",
       "city": "Barcelona",
-      "zone": "Eixample"
+      "zone": "Eixample",
+      "order": 8
     },
     {
       "slug": "villa-cascades",
@@ -1691,7 +1699,8 @@
       },
       "stage": "active",
       "lat": 41.4328796,
-      "lng": 2.0927754
+      "lng": 2.0927754,
+      "order": 9
     }
   ]
 }

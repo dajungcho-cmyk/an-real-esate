@@ -411,6 +411,44 @@ body { background: var(--bg); color: var(--cream); min-height: 100vh; }
   display: block;
 }
 
+/* ── ORDER CONTROLS ────────────────────────── */
+.order-ctrl {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+.order-num {
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--gold);
+  width: 1.4rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+.order-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.order-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  width: 20px;
+  height: 16px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: .55rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: color var(--trans), border-color var(--trans), background var(--trans);
+}
+.order-btn:hover:not(:disabled) { color: var(--gold); border-color: var(--gold); background: rgba(201,169,110,.08); }
+.order-btn.disabled,
+.order-btn:disabled { opacity: .25; cursor: default; }
+
 .pt-title { font-weight: 500; color: var(--cream); }
 .pt-loc { font-size: var(--fs-xs); color: var(--muted); margin-top: 2px; }
 

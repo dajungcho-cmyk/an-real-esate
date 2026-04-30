@@ -426,16 +426,30 @@ function renderTable() {
     return
   }
 
-  tbody.innerHTML = filtered.map(l => {
+  // Sort by order field before rendering
+  const sorted = [...filtered].sort((a, b) => (a.order ?? 999) - (b.order ?? 999))
+
+  tbody.innerHTML = sorted.map((l, idx) => {
     const typeBadge = l.type === 'rent'
       ? `<span class="badge badge-rent">Alquiler</span>`
       : l.propertyType === 'villa' ? `<span class="badge badge-villa">Villa</span>`
       : `<span class="badge badge-sale">Venta</span>`
 
     const stage = l.stage || 'draft'
+    const isFirst = idx === 0
+    const isLast  = idx === sorted.length - 1
 
     return `
     <tr data-slug="${l.slug}">
+      <td>
+        <div class="order-ctrl">
+          <span class="order-num">${l.order ?? '—'}</span>
+          <div class="order-btns">
+            <button class="order-btn${isFirst ? ' disabled' : ''}" title="Subir" onclick="moveListingUp('${l.slug}')" ${isFirst ? 'disabled' : ''}>▲</button>
+            <button class="order-btn${isLast  ? ' disabled' : ''}" title="Bajar" onclick="moveListingDown('${l.slug}')" ${isLast  ? 'disabled' : ''}>▼</button>
+          </div>
+        </div>
+      </td>
       <td><img class="pt-thumb" src="${l.image || ''}" alt="" onerror="this.style.display='none'" /></td>
       <td>
         <div class="pt-title">${l.title}</div>
@@ -463,6 +477,32 @@ function renderTable() {
       </td>
     </tr>`
   }).join('')
+}
+
+function moveListingUp(slug) {
+  const sorted = [..._listings].sort((a, b) => (a.order ?? 999) - (b.order ?? 999))
+  const idx = sorted.findIndex(l => l.slug === slug)
+  if (idx <= 0) return
+  const a = sorted[idx - 1], b = sorted[idx]
+  const tmp = a.order ?? idx
+  a.order = b.order ?? idx + 1
+  b.order = tmp
+  cacheListings()
+  renderTable()
+  toast('Orden actualizado', 'success')
+}
+
+function moveListingDown(slug) {
+  const sorted = [..._listings].sort((a, b) => (a.order ?? 999) - (b.order ?? 999))
+  const idx = sorted.findIndex(l => l.slug === slug)
+  if (idx < 0 || idx >= sorted.length - 1) return
+  const a = sorted[idx], b = sorted[idx + 1]
+  const tmp = a.order ?? idx + 1
+  a.order = b.order ?? idx + 2
+  b.order = tmp
+  cacheListings()
+  renderTable()
+  toast('Orden actualizado', 'success')
 }
 
 function setStage(slug, stage) {
@@ -880,6 +920,14 @@ async function saveProperty() {
     nearby:       nearby.length ? nearby : undefined,
     stage:        getCurrentStage(),
     translations: (() => { try { const v = document.getElementById('f-translations').value; return v ? JSON.parse(v) : undefined } catch { return undefined } })(),
+    order:        (() => {
+      if (original) {
+        const existing = _listings.find(l => l.slug === original)
+        return existing?.order ?? (_listings.length + 1)
+      }
+      const maxOrder = _listings.reduce((m, l) => Math.max(m, l.order ?? 0), 0)
+      return maxOrder + 1
+    })(),
   }
 
   // Remove undefined keys
