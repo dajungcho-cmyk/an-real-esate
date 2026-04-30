@@ -19,6 +19,7 @@ const VISITS_KEY        = 'an_visits'
 let _listings    = []
 let _editSlug    = null
 let _filter      = 'all'
+let _formDirty   = false
 let _wmPosition  = 'bottom-left'
 let _mediaItems  = []
 let _wmProcessed = []
@@ -74,6 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('tab-' + tab.dataset.tab).classList.add('active')
     })
   })
+
+  // Mark form dirty on any input/change inside the form view
+  document.getElementById('view-form').addEventListener('input',  () => { _formDirty = true })
+  document.getElementById('view-form').addEventListener('change', () => { _formDirty = true })
 
   // Dynamic list add buttons
   document.getElementById('add-gallery-url').addEventListener('click', () => addGalleryCard())
@@ -302,6 +307,7 @@ function showForm(slug) {
   try { _showForm(slug) } catch(e) { console.error('[showForm error]', e); alert('Error al abrir formulario: ' + e.message) }
 }
 function _showForm(slug) {
+  _formDirty = false
   _editSlug = slug
   const isNew = slug === null
   const l = isNew ? {} : (_listings.find(x => x.slug === slug) || {})
@@ -416,6 +422,10 @@ function showPropsList() {
 }
 
 function switchView(name) {
+  if (name !== 'form' && _formDirty) {
+    if (!confirm('Tienes cambios sin guardar en la propiedad. ¿Salir sin guardar?')) return
+  }
+  _formDirty = false
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active', 'hidden'))
   document.getElementById('view-' + name)?.classList.add('active')
 }
@@ -556,6 +566,7 @@ async function saveProperty() {
     localStorage.setItem('an_addresses', JSON.stringify(addrs))
   } catch {}
 
+  _formDirty = false
   cacheListings()
   toast('Propiedad guardada. Exporta el JSON para publicar.', 'success')
   showPropsList()
