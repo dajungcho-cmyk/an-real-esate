@@ -1875,7 +1875,10 @@ async function uploadFile(file, progressId, fillId, statusId) {
         const res = JSON.parse(xhr.responseText)
         resolve(res.secure_url)
       } else {
-        toast('Error al subir imagen: ' + xhr.status, 'error')
+        let errMsg = xhr.status
+        try { errMsg = JSON.parse(xhr.responseText)?.error?.message || xhr.status } catch {}
+        console.error('[upload] Cloudinary error:', errMsg, xhr.responseText)
+        toast('Error al subir imagen: ' + errMsg, 'error')
         resolve(null)
       }
     }
