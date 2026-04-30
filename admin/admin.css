@@ -1537,16 +1537,18 @@ input[type="range"] {
   /* ── View header ──────────────────────────── */
   .view-hd {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: .6rem;
     margin-bottom: 1.25rem;
   }
-  .view-hd h1 { font-size: 1.1rem; }
-  .view-sub   { font-size: .68rem; }
+  .view-hd h1 { font-size: 1.1rem; text-align: center; }
+  .view-sub   { font-size: .68rem; text-align: center; }
   .hd-actions { width: 100%; flex-wrap: wrap; gap: .4rem; }
   .hd-actions .btn-gold,
   .hd-actions .btn-outline,
   .hd-actions .btn-danger { flex: 1 1 auto; text-align: center; justify-content: center; min-height: 40px; }
+  .view-hd > .btn-gold,
+  .view-hd > .btn-outline { width: 100%; justify-content: center; min-height: 40px; }
 
   /* ── Props summary ────────────────────────── */
   #props-summary { font-size: .68rem; }
@@ -1641,7 +1643,7 @@ input[type="range"] {
   .agent-modal-box { width: 92vw; }
 
   /* ── Login box ────────────────────────────── */
-  .ls-box { width: 100%; max-width: 340px; padding: 0 1.5rem; }
+  .ls-box { width: 100%; max-width: 340px; padding: 0 1.5rem; margin: 0 auto; text-align: center; }
 
   /* ── Prevent iOS auto-zoom on inputs ─────── */
   input[type="text"],
