@@ -8,6 +8,8 @@ const ADMIN_PASSWORD    = 'ANadmin2026'  // cambia esto en producción
 // pon aquí la URL completa del endpoint en Vercel:
 // const IMPROVE_API = 'https://tu-proyecto.vercel.app/api/improve'
 const IMPROVE_API = '/api/improve'
+const _API_BASE   = location.protocol === 'file:' ? 'https://anrealestate.es' : ''
+const PUBLISH_API = _API_BASE + '/api/publish'
 const DATA_URL          = '/data/listings.json'
 const SESSION_KEY       = 'an_admin_auth'
 const CLD_CLOUD         = 'dbume3eak'
@@ -1108,7 +1110,7 @@ async function publishToWeb() {
   btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-dasharray="60" stroke-dashoffset="20"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur=".8s" repeatCount="indefinite"/></circle></svg> Publicando…'
 
   try {
-    const r = await fetch('/api/publish', {
+    const r = await fetch(PUBLISH_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ listings: _listings })
