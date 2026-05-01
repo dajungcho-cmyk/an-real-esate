@@ -318,6 +318,35 @@
 .chat-send-btn:hover,
 .chat-input-row:focus-within .chat-send-btn { opacity: 1; }
 
+/* ── Seller testimonial ──────────── */
+.val-testi {
+  padding: clamp(3rem, 6vw, 4.5rem) 0;
+  border-top: 1px solid var(--border);
+}
+.val-testi-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+.val-testi-quote {
+  font-family: var(--serif);
+  font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--cream);
+  line-height: 1.7;
+  margin: 0 0 1.25rem;
+  quotes: none;
+}
+.val-testi-cite {
+  font-family: var(--sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-style: normal;
+}
+
 /* skip link */
 .chat-skip {
   display: inline-block;
@@ -393,24 +422,25 @@
 /* ── Direct contact strip ─────── */
 .val-direct {
   border-top: 1px solid var(--border);
-  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border);
+  padding: 1.75rem 0;
 }
 .val-direct-inner {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: .5rem 1rem;
+  gap: .5rem 1.25rem;
 }
 .val-direct-label {
-  font-size: var(--fs-xs);
-  letter-spacing: .08em;
-  color: var(--muted);
+  font-size: var(--fs-sm);
+  letter-spacing: .04em;
+  color: var(--cream-dim);
 }
 .val-direct-link {
-  font-size: var(--fs-xs);
-  letter-spacing: .08em;
-  color: var(--cream-dim);
+  font-size: var(--fs-sm);
+  letter-spacing: .04em;
+  color: var(--cream);
   transition: color var(--fast);
   text-decoration: none;
 }
@@ -433,8 +463,9 @@
 }
 
 .val-why-head {
-  text-align: center;
-  margin-bottom: clamp(3rem, 6vw, 5rem);
+  text-align: left;
+  max-width: 960px;
+  margin: 0 auto clamp(2.5rem, 5vw, 4rem);
 }
 
 .val-why-h2 {
@@ -492,9 +523,9 @@
 
 .val-why-text {
   font-family: var(--sans);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-md);
   color: var(--cream-dim);
-  line-height: 1.7;
+  line-height: 1.65;
   margin: 0;
 }
 
