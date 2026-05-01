@@ -700,10 +700,15 @@
     var msgsEl  = document.getElementById('chat-messages')
     var inputEl = document.getElementById('chat-input-area')
 
+    function chatInView() {
+      var r = msgsEl.getBoundingClientRect()
+      return r.bottom > 0 && r.top < window.innerHeight
+    }
+
     function scrollBottom() {
       msgsEl.scrollTo({ top: msgsEl.scrollHeight, behavior: 'smooth' })
-      /* Mobile only: pin input area to thumb zone */
-      if (window.innerWidth > 768) return
+      /* Mobile only: pin input area to thumb zone — only when chat is already visible */
+      if (window.innerWidth > 768 || !chatInView()) return
       setTimeout(function() {
         if (!inputEl.firstChild) return
         var rect = inputEl.getBoundingClientRect()
@@ -823,7 +828,7 @@
           inputEl.appendChild(skipBtn)
         }
 
-        setTimeout(function() { input.focus() }, 80)
+        setTimeout(function() { if (chatInView()) input.focus({ preventScroll: true }) }, 80)
       }
     }
 
