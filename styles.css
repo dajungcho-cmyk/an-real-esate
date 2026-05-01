@@ -459,6 +459,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   border-color: var(--cream);
   color: var(--bg);
 }
+.button--outline {
+  background: transparent;
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.button--outline:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--bg);
+}
 
 /* ================================
    Main Wrap
