@@ -915,14 +915,6 @@
       answers   = {}
       msgsEl.innerHTML  = ''
       inputEl.innerHTML = ''
-      /* bring the chat section gently into view on first load */
-      var section = document.querySelector('.val-chat-section')
-      if (section) {
-        setTimeout(function() {
-          var top = section.getBoundingClientRect().top + window.scrollY - 90
-          if (window.scrollY < top - 40) window.scrollTo({ top: top, behavior: 'smooth' })
-        }, 800)
-      }
       showTyping(600).then(function() {
         addMsg(c.greeting, 'agent')
         setTimeout(function() { advance() }, 600)
