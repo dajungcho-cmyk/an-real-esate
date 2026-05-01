@@ -9,36 +9,37 @@
 
 /* ── HERO ─────────────────────── */
 .val-top {
-  position: relative;
-  min-height: 74vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 92vh;
+}
+
+.val-top-left {
+  background: var(--bg);
   display: flex;
   align-items: center;
-  text-align: center;
-  background: url('https://res.cloudinary.com/dbume3eak/image/upload/q_auto,f_auto,w_1600/v1777483887/Hero11_qszyft.jpg') center / cover no-repeat;
+  padding: clamp(7rem, 12vw, 10rem) clamp(3rem, 6vw, 6rem) clamp(5rem, 8vw, 7rem);
+  border-right: 1px solid var(--border);
 }
 
-.val-top::after {
-  content: '';
+.val-top-right {
+  position: relative;
+  overflow: hidden;
+}
+
+.val-top-right img {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(9,31,56,.88) 0%,
-    rgba(9,31,56,.52) 50%,
-    rgba(9,31,56,.92) 100%
-  );
-  pointer-events: none;
-}
-
-.val-top .holder {
-  position: relative;
-  z-index: 1;
   width: 100%;
-  padding-top: clamp(4.5rem, 10vw, 8rem);
-  padding-bottom: clamp(3rem, 7vw, 6rem);
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
 }
 
-.val-top-inner { max-width: 840px; margin: 0 auto; }
+.val-top-inner {
+  max-width: 520px;
+  margin: 0;
+}
 
 .val-h1 {
   font-family: var(--serif);
@@ -62,8 +63,8 @@
   font-size: var(--fs-sm);
   color: var(--cream-dim);
   line-height: 1.75;
-  max-width: 500px;
-  margin: 0 auto;
+  max-width: 460px;
+  margin: 0;
 }
 
 /* ── TRUST STRIP ─────────────── */
@@ -116,6 +117,38 @@
 .val-chat-section {
   padding-top: clamp(4rem, 8vw, 6.5rem);
   padding-bottom: clamp(5rem, 12vw, 9rem);
+}
+
+.val-chat-intro {
+  text-align: center;
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.val-chat-h2 {
+  font-family: var(--serif);
+  font-size: max(36px, 5.5vw);
+  font-weight: 300;
+  line-height: .97;
+  letter-spacing: -.15vw;
+  color: var(--cream);
+}
+
+.val-chat-h2 .text-wrap {
+  display: block;
+  overflow: hidden;
+  padding: .1em 0;
+  margin: -.1em 0;
+}
+
+.val-chat-h2 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.val-chat-sub {
+  margin-top: 1rem;
+  font-size: var(--fs-sm);
+  color: var(--cream-dim);
 }
 
 .chat-wrap {
@@ -431,17 +464,23 @@
   list-style: none;
   margin: 0 auto;
   padding: 0;
-  max-width: 760px;
+  max-width: 960px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: clamp(3rem, 6vw, 5rem);
 }
 
 .val-why-item {
   display: flex;
-  align-items: baseline;
-  gap: clamp(1.5rem, 4vw, 3rem);
-  padding: 1.4rem 0;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1.6rem 0;
   border-top: 1px solid var(--border);
 }
-.val-why-item:last-child {
+
+.val-why-item--full {
+  grid-column: 1 / -1;
+  max-width: calc(50% - clamp(1.5rem, 3vw, 2.5rem));
   border-bottom: 1px solid var(--border);
 }
 
@@ -465,6 +504,43 @@
 
 /* ── Mobile ───────────────────── */
 @media (max-width: 767px) {
+  /* Hero: stack vertically — photo on top, text below */
+  .val-top {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .val-top-left {
+    order: 2;
+    padding: 3.5rem 1.5rem 3rem;
+    border-right: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .val-top-right {
+    order: 1;
+    height: 70vw;
+    max-height: 420px;
+  }
+
+  .val-top-right img { object-position: center 20%; }
+
+  .val-top-inner {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .val-sub { margin: 0 auto; }
+
+  /* Why: single column */
+  .val-why-list {
+    grid-template-columns: 1fr;
+  }
+
+  .val-why-item--full {
+    max-width: 100%;
+  }
+
   /* Chat window: slightly shorter on small phones */
   .chat-messages { height: clamp(260px, 50vh, 380px); }
 
@@ -474,6 +550,6 @@
     padding-bottom: clamp(3.5rem, 8vw, 6rem);
   }
 
-  /* Hero headline: tone down on very small viewports */
+  /* Hero headline */
   .val-h1 { font-size: clamp(34px, 10vw, 44px); }
 }
